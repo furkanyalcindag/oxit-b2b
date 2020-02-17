@@ -1,14 +1,14 @@
 from django.conf.urls import url
 
 from inoks.Views import ProductViews, UserViews, OrderViews, ReportViews, EarningsViews, DashboardViews, SettingViews, \
-    TreeViews, RefundViews, CityViews, APIViews, HomeViews
+    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews
 
 app_name = 'inoks'
 
 urlpatterns = [
     # HOME
 
-    url(r'home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
+    url(r'home/customer-home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
     url(r'home/category-product/(?P<pk>\d+)$', HomeViews.get_category_products, name='kategori-urunleri'),
     url(r'home/brand-product/(?P<pk>\d+)$', HomeViews.get_brand_products, name='markanin-urunleri'),
     url(r'home/product-detail/(?P<pk>\d+)$', HomeViews.get_product_detail, name='urun-detay'),
@@ -71,13 +71,6 @@ urlpatterns = [
     url(r'urunler/grupla/(?P<group_id>\d+)$', ProductViews.add_products_to_group, name='urun-grupla'),
     url(r'urunler/grup-urun-sil/(?P<group_id>\d+)/(?P<product_id>\d+)$', ProductViews.delete_product_from_group,
         name='urun-grup-sil'),
-
-    # Stok
-    url(r'urunler/stok-guncelle/$', ProductViews.stock_update, name='stok-guncelle'),
-
-    # Kargo
-    url(r'urunler/kargo-ücret/$', OrderViews.get_cargo, name='kargo-ücret-gör'),
-    url(r'urunler/kargo-guncelle/(?P<pk>\d+)$', OrderViews.cargo_update, name='kargo-guncelle'),
 
     # Siparisler
     url(r'siparisler/siparis-ekle/$', OrderViews.return_add_orders, name='siparis-ekle'),
@@ -142,4 +135,12 @@ urlpatterns = [
     url(r'odeme-basarili/$', OrderViews.basarili_odeme, name='odeme-basarili'),
     url(r'odeme-basarisiz/$', OrderViews.basarisiz_odeme, name='basarisiz-odeme'),
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
+
+    # kupon
+    url(r'kupon-bilgileri/$', CouponViews.coupon_create, name='kupon'),
+    url(r'ödeme-bilgileri/$', CouponViews.review_payments, name='odeme'),
+    url(r'kupon-aktifligi/(?P<pk>\d+)$', CouponViews.coupon_activity, name='kupon-aktiflestir'),
+    url(r'kupon-sil/(?P<pk>\d+)$', CouponViews.coupon_delete, name='kupon-sil'),
+    url(r'kupon-guncelle/(?P<pk>\d+)$', CouponViews.coupon_update, name='kupon-guncelle'),
+
 ]
