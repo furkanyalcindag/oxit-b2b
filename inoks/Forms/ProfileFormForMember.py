@@ -18,7 +18,7 @@ class ProfileForm(ModelForm):
 
         fields = (
             'profileImage', 'address', 'mobilePhone', 'gender', 'tc', 'birthDate', 'job', 'city', 'educationLevel',
-            'sponsor', 'district', 'isContract', 'iban', 'ibanAdSoyad')
+             'district', 'isContract', 'iban', 'ibanAdSoyad')
         widgets = {
             'address': forms.Textarea(
                 attrs={'class': 'form-control ', 'placeholder': 'Adres', 'rows': '2', 'required': 'required'}),
@@ -35,9 +35,7 @@ class ProfileForm(ModelForm):
                 attrs={'class': 'form-control  pull-right', 'type': 'date', 'autocomplete': 'off',
                        }),
 
-            'sponsor': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Sponsor Numarası', 'required': 'required',
-                       'onChange': 'buttonDisabled()'}),
+
 
             'city': forms.Select(attrs={'class': 'form-control select2 select2-hidden-accessible',
                                         'style': 'width: 100%; ', 'required': 'required', "onChange": 'ilceGetir()'}),

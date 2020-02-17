@@ -138,14 +138,14 @@
 
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Tüm Üyeler</h3>
+                            <h3 class="box-title">Bayilerim</h3>
                         </div>
 
                         <div class="box-header with-border">
                             <div class="btn-group">
                                 <a href="{% url "inoks:kullanici-ekle" %}"
                                    type="button" class="btn btn-success"><i
-                                        class="fa fa-edit"></i> Üye Ekle
+                                        class="fa fa-edit"></i>Bayi Ekle
                                 </a>
                             </div>
                         </div>
@@ -154,14 +154,14 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Üye Numarası</th>
-                                <th>Ad</th>
-                                <th>Soyad</th>
+                                <th>Bayi Numarası</th>
+                                <th>Bayi Sahibi </th>
+                                <th>Bayi Adı</th>
                                 <th>E-Mail</th>
                                 <th>Telefon</th>
                                 <th>İl</th>
 
-                                <th>Duzenle/Sıfırla/Detay/Sil</th>
+                                <th>KartBilgileri/Duzenle/Sıfırla/Detay/Sil</th>
 
 
                             </tr>
@@ -178,8 +178,12 @@
                                         <td>{{ profile.mobilePhone }}</td>
                                         <td>{{ profile.city }}</td>
 
+
                                         <td>
                                             <div class="btn-group">
+                                                <a class="btn btn-info"
+                                                   href="{% url 'inoks:kullanici-kart-ekle' profile.user.id %}"><i
+                                                        class="fa fa-credit-card"></i> </a>
                                                 <a class="btn btn-warning"
                                                    href="{% url 'inoks:kullanici-duzenle' profile.user.id %}"><i
                                                         class="fa fa-pencil"></i> </a>

@@ -1,39 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
-from phone_field import PhoneField
-from phonenumber_field.modelfields import PhoneNumberField
 
-from inoks.models import City, Job, District
+from inoks.models import City, Job
+from inoks.models.CreditCard import CreditCard
+from inoks.models.Enum import GENDER_CHOICES, MALE, SCHOOL_CHOICES, ilkokul
 
 
 class Profile(models.Model):
-    MALE = 'Erkek'
-    FEMALE = 'Kadın'
-    UNKNOWN = 'Belirtmek İstemiyorum'
-
-    ilkokul = 'İlkokul'
-    lise = 'Lise'
-    lisans = 'Lisans'
-    master = 'Yüksek Lisans'
-    pre = 'Önlisans'
-
-    GENDER_CHOICES = (
-
-        (MALE, 'Erkek'),
-        (FEMALE, 'Kadın'),
-        (UNKNOWN, 'Belirtmek İstemiyorum')
-    )
-
-    SCHOOL_CHOICES = (
-
-        (ilkokul, 'İlkokul'),
-        (lise, 'Lise'),
-        (lisans, 'Lisans'),
-        (master, 'Yüksek Lisans'),
-        (pre, 'Önlisans'),
-
-    )
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profileImage = models.ImageField(upload_to='profile/', null=True, blank=True, default='profile/user.png',
                                      verbose_name='Profil Resmi')
@@ -48,16 +21,15 @@ class Profile(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, null=False, blank=False,
                              verbose_name='İl')
     district = models.TextField(blank=False, null=False, verbose_name='İlçe')
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, null=False, blank=False, verbose_name='Meslek')
-    educationLevel = models.CharField(max_length=128, null=False, blank=False, verbose_name="Eğitim Düzeyi",
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Meslek')
+    educationLevel = models.CharField(max_length=128, null=True, blank=True, verbose_name="Eğitim Düzeyi",
                                       choices=SCHOOL_CHOICES,
                                       default=ilkokul)
-    sponsor = models.ForeignKey("Profile", on_delete=models.CASCADE, verbose_name='Sponsor', null=True, blank=True,
-                                related_name='sp')
     isApprove = models.BooleanField(default=False, null=False, blank=False)
     isActive = models.BooleanField(default=False)
     isContract = models.BooleanField(default=False)
     activePassiveDate = models.DateTimeField(null=True, blank=True)
+    #creditCard = models.ManyToManyField(CreditCard, null=True, blank=True, verbose_name='Kredi Kartı')
     iban = models.TextField(blank=True, null=True, verbose_name='iban')
     ibanAdSoyad = models.TextField(blank=True, null=True, verbose_name='ibanAdSoyad')
 

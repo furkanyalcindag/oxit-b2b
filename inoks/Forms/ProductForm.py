@@ -13,7 +13,8 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = (
-            'name', 'price', 'stock', 'category', 'info')
+            'name', 'price', 'stock', 'category', 'info', 'code', 'listPrice', 'brand', 'baseWidth', 'speedIndex',
+            'rimDiameter', 'vehicleType','sectionRate',)
         labels = {
             'price': 'Ürün Fiyatı',
 
@@ -21,10 +22,17 @@ class ProductForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={'class': 'form-control ', 'placeholder': 'Ürün Adı', 'required': 'required'}),
+            'brand': forms.Select(
+                attrs={'class': 'form-control select2 select2-hidden-accessible disabled-select',
+                       'style': 'width: 100%; '}),
+            'code': forms.TextInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Ürün Kodu', 'required': 'required'}),
             'price': forms.NumberInput(
                 attrs={'class': 'form-control ', 'placeholder': 'Ürün Fiyatı', 'required': 'required'}),
+            'listPrice': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Ürün Liste Fiyatı', 'required': 'required'}),
             'discountPrice': forms.NumberInput(attrs={'class': 'form-control ', 'placeholder': 'İndirimli Fiyatı'}),
-            'stock': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Stok', 'required': 'required'}),
+            'stock': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Stok', 'required': 'required'}),
 
             'discountStartDate': forms.DateInput(
                 attrs={'class': 'form-control  pull-right', 'id': 'datepicker', 'autocomplete': 'off',
@@ -34,7 +42,23 @@ class ProductForm(ModelForm):
                        'onkeydown': 'return false'}),
 
             'info': forms.Textarea(
-                attrs={'class': 'form-control ', 'placeholder': 'Ürün Bilgileri', 'rows': '4', 'required': 'required'}),
+                attrs={'class': 'form-control ', 'placeholder': 'Ürün Bilgileri', 'required': 'required'}),
+
+            'vehicleType': forms.Select(
+                attrs={'class': 'form-control ', 'placeholder': 'Araç Tipi', 'required': 'required'}),
+
+            'baseWidth': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Taban Genişliği',
+                       'required': 'required'}),
+
+            'sectionRate': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Kesit Oranı', 'required': 'required'}),
+
+            'rimDiameter': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Jant Çapı', 'required': 'required'}),
+
+            'speedIndex': forms.Select(
+                attrs={'class': 'form-control ', 'placeholder': 'Hız Endeksi', 'required': 'required'}),
 
         }
 

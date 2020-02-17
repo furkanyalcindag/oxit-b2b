@@ -65,7 +65,7 @@
 
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Üye Ekle</h3>
+                            <h4 class="box-title">Bayi Ekle</h4>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
@@ -85,12 +85,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label> {{ user_form.first_name.label }}</label>
+                                        <label> Ad Soyad</label>
                                         {{ user_form.first_name }}
                                     </div>
 
                                     <div class="form-group">
-                                        <label> {{ user_form.last_name.label }}</label>
+                                        <label> Bayi Adı</label>
                                         {{ user_form.last_name }}
                                     </div>
 
@@ -137,33 +137,12 @@
                                         {{ profile_form.gender }}
                                     </div>
 
-                                    <div class="form-group">
-                                        <label> {{ profile_form.job.label }}</label>
-                                        {{ profile_form.job }}
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label> {{ profile_form.educationLevel.label }}</label>
-                                        {{ profile_form.educationLevel }}
-                                    </div>
 
                                     <div class="form-group">
                                         <label> {{ profile_form.birthDate.label }}</label>
                                         {{ profile_form.birthDate }}
                                     </div>
 
-                                    <div class="form-group">
-                                        <label> {{ profile_form.sponsor.label }}</label>
-                                        {{ profile_form.sponsor }}
-                                    </div>
-                                    <label> Hesap Bilgileri</label>
-                                    <div class="form-group">
-                                        {{ profile_form.iban }}
-                                    </div>
-                                    <div class="form-group">
-
-                                        {{ profile_form.ibanAdSoyad }}
-                                    </div>
 
                                     <div class="modal fade bd-example-modal-lg" id="sozlesme" tabindex="-1"
                                          role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

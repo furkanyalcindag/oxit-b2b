@@ -15,7 +15,7 @@ class ProfileUpdateForm(ModelForm):
 
         fields = (
             'profileImage', 'address', 'mobilePhone', 'gender', 'tc', 'birthDate', 'job', 'city', 'educationLevel',
-            'sponsor', 'district', 'iban', 'ibanAdSoyad')
+             'district', 'iban', 'ibanAdSoyad')
         widgets = {
             'address': forms.Textarea(
                 attrs={'class': 'form-control ', 'placeholder': 'Adres', 'rows': '2', 'required': 'required'}),
@@ -37,21 +37,6 @@ class ProfileUpdateForm(ModelForm):
             'district': forms.Select(choices=CHOICES_WITH_BLANK,
                                      attrs={'class': 'form-control select2 select2-hidden-accessible',
                                             'style': 'width: 100%; ', 'id': 'ilce_id'}),
-            'sponsor': forms.Select(choices=CHOICES_WITH_BLANK,
-                                    attrs={'class': 'form-control select2 select2-hidden-accessible',
-                                           'style': 'width: 100%;'}),
 
-            'job': forms.Select(attrs={'class': 'form-control select2 select2-hidden-accessible',
-                                       'style': 'width: 100%;', 'required': 'required'}),
 
-            'educationLevel': forms.Select(attrs={'class': 'form-control select2 select2-hidden-accessible',
-                                                  'style': 'width: 100%;', 'required': 'required'}),
-            'iban': forms.TextInput(
-                attrs={'class': 'form-control iban', 'placeholder': 'iban',
-                       'required': 'required',
-                       'maxlength': '11', 'minlength': '11'}),
-            'ibanAdSoyad': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Hesap Adı ve Soyadı'
-
-                       })
         }

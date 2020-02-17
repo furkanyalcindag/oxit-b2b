@@ -1,0 +1,549 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+
+
+    <main class="main">
+
+
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="#">Electronics</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Headsets</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav>
+
+        <div class="container">
+            <nav class="toolbox">
+                <div class="toolbox-left">
+                    <div class="toolbox-item toolbox-sort">
+                        <div class="select-custom">
+                            <select name="orderby" class="form-control">
+                                <option value="menu_order" selected="selected">Default sorting</option>
+                                <option value="popularity">Sort by popularity</option>
+                                <option value="rating">Sort by average rating</option>
+                                <option value="date">Sort by newness</option>
+                                <option value="price">Sort by price: low to high</option>
+                                <option value="price-desc">Sort by price: high to low</option>
+                            </select>
+                        </div><!-- End .select-custom -->
+
+                        <a href="#" class="sorter-btn" title="Set Ascending Direction"><span class="sr-only">Set Ascending Direction</span></a>
+                    </div><!-- End .toolbox-item -->
+                </div><!-- End .toolbox-left -->
+
+                <div class="toolbox-item toolbox-show">
+                    <label>Showing 1–9 of 60 results</label>
+                </div><!-- End .toolbox-item -->
+
+                <div class="layout-modes">
+                    <a href="category.html" class="layout-btn btn-grid active" title="Grid">
+                        <i class="icon-mode-grid"></i>
+                    </a>
+                    <a href="category-list.html" class="layout-btn btn-list" title="List">
+                        <i class="icon-mode-list"></i>
+                    </a>
+                </div><!-- End .layout-modes -->
+            </nav>
+
+            <div class="product-wrapper">
+                <div class="product-intro divide-line up-effect">
+                    <aside class="sidebar-shop col-lg-3 order-lg-first">
+                        <div class="pin-wrapper" style="height: 1567.3px;">
+                            <div class="sidebar-wrapper sticky-active sticky-absolute sticky-transition"
+                                 style="border-bottom: 0px none rgb(122, 125, 130); width: 270px;">
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-1" role="button"
+                                           aria-expanded="true" aria-controls="widget-body-1">Kategoriler</a>
+                                    </h3>
+                                    {% for cat in categories %}
+                                    <div class="collapse show" id="widget-body-1">
+                                        <div class="widget-body">
+                                            <ul class="cat-list">
+                                                <li><a href="#">{{cat.name}}</a></li>
+
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div>
+                                    {% endfor %}<!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-2" role="button"
+                                           aria-expanded="true" aria-controls="widget-body-2">Price</a>
+                                    </h3>
+
+                                    <div class="collapse show" id="widget-body-2">
+                                        <div class="widget-body">
+                                            <form action="#">
+                                                <div class="price-slider-wrapper">
+                                                    <div id="price-slider" class="noUi-target noUi-ltr noUi-horizontal">
+                                                        <div class="noUi-base">
+                                                            <div class="noUi-connects">
+                                                                <div class="noUi-connect"
+                                                                     style="transform: translate(20%, 0px) scale(0.5, 1);"></div>
+                                                            </div>
+                                                            <div class="noUi-origin"
+                                                                 style="transform: translate(-80%, 0px); z-index: 5;">
+                                                                <div class="noUi-handle noUi-handle-lower"
+                                                                     data-handle="0" tabindex="0" role="slider"
+                                                                     aria-orientation="horizontal" aria-valuemin="0.0"
+                                                                     aria-valuemax="60.0" aria-valuenow="20.0"
+                                                                     aria-valuetext="200.00"></div>
+                                                            </div>
+                                                            <div class="noUi-origin"
+                                                                 style="transform: translate(-30%, 0px); z-index: 4;">
+                                                                <div class="noUi-handle noUi-handle-upper"
+                                                                     data-handle="1" tabindex="0" role="slider"
+                                                                     aria-orientation="horizontal" aria-valuemin="30.0"
+                                                                     aria-valuemax="100.0" aria-valuenow="70.0"
+                                                                     aria-valuetext="700.00"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div><!-- End #price-slider -->
+                                                </div><!-- End .price-slider-wrapper -->
+
+                                                <div class="filter-price-action">
+                                                    <button type="submit" class="btn btn-primary">Filter</button>
+
+                                                    <div class="filter-price-text">
+                                                        <span id="filter-price-range">$200.00 - $700.00</span>
+                                                    </div><!-- End .filter-price-text -->
+                                                </div><!-- End .filter-price-action -->
+                                            </form>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-3" role="button"
+                                           aria-expanded="true" aria-controls="widget-body-3">Size</a>
+                                    </h3>
+
+                                    <div class="collapse show" id="widget-body-3">
+                                        <div class="widget-body">
+                                            <ul class="config-size-list">
+                                                <li><a href="#">S</a></li>
+                                                <li class="active"><a href="#">M</a></li>
+                                                <li><a href="#">L</a></li>
+                                                <li><a href="#">XL</a></li>
+                                                <li><a href="#">2XL</a></li>
+                                                <li><a href="#">3XL</a></li>
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-4" role="button"
+                                           aria-expanded="true" aria-controls="widget-body-4">Markalar</a>
+                                    </h3>
+                                    {% for brand in brands %}
+                                        <div class="collapse show" id="widget-body-4">
+                                            <div class="widget-body">
+                                                <ul class="cat-list">
+                                                    <li><a href="#">{{ brand.name }}</a></li>
+
+                                                </ul>
+                                            </div><!-- End .widget-body -->
+                                        </div>
+                                    {% endfor %}<!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-6" role="button"
+                                           aria-expanded="true" aria-controls="widget-body-6">Color</a>
+                                    </h3>
+
+                                    <div class="collapse show" id="widget-body-6">
+                                        <div class="widget-body">
+                                            <ul class="config-swatch-list">
+                                                <li>
+                                                    <a href="#" style="background-color: #4090d5;"></a>
+                                                </li>
+                                                <li class="active">
+                                                    <a href="#" style="background-color: #f5494a;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #fca309;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #11426b;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #f0f0f0;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #3fd5c9;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #979c1c;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #7d5a3c;"></a>
+                                                </li>
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+                                <div class="widget widget-featured">
+                                    <h3 class="widget-title">Featured Products</h3>
+
+                                    <div class="widget-body">
+                                        <div class="owl-carousel widget-featured-products owl-loaded owl-drag">
+                                            <!-- End .featured-col -->
+
+                                            <!-- End .featured-col -->
+                                            <div class="owl-stage-outer owl-height" style="height: 272.7px;">
+                                                <div class="owl-stage"
+                                                     style="transform: translate3d(-416px, 0px, 0px); transition: all 0.25s ease 0s; width: 1248px;">
+
+                                                    <div class="owl-item" style="width: 208px;">
+                                                        <div class="featured-col">
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-10.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-11.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-12.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="owl-item cloned" style="width: 208px;">
+                                                        <div class="featured-col">
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-7.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-8.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-9.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="owl-item cloned" style="width: 208px;">
+                                                        <div class="featured-col">
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-10.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-11.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                            <div class="product-default left-details product-widget">
+                                                                <figure>
+                                                                    <a href="product.html">
+                                                                        <img src="assets/images/products/product-12.jpg">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="product-details">
+                                                                    <h2 class="product-title">
+                                                                        <a href="product.html">Product Short Name</a>
+                                                                    </h2>
+                                                                    <div class="ratings-container">
+                                                                        <div class="product-ratings">
+                                                                            <span class="ratings"
+                                                                                  style="width:100%"></span>
+                                                                            <!-- End .ratings -->
+                                                                            <span class="tooltiptext tooltip-top"></span>
+                                                                        </div><!-- End .product-ratings -->
+                                                                    </div><!-- End .product-container -->
+                                                                    <div class="price-box">
+                                                                        <span class="product-price">$49.00</span>
+                                                                    </div><!-- End .price-box -->
+                                                                </div><!-- End .product-details -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="owl-nav">
+                                                <button type="button" role="presentation" class="owl-prev"><i
+                                                        class="icon-angle-left"></i></button>
+                                                <button type="button" role="presentation" class="owl-next"><i
+                                                        class="icon-angle-right"></i></button>
+                                            </div>
+                                            <div class="owl-dots disabled"></div>
+                                        </div><!-- End .widget-featured-slider -->
+                                    </div><!-- End .widget-body -->
+                                </div><!-- End .widget -->
+
+
+                            </div>
+                        </div><!-- End .sidebar-wrapper -->
+                    </aside>
+                    <div class="col-md-9">
+                        <div class="owl-item active" style="width: 870px;">
+                            <div class="home-slide">
+                                <div class="owl-lazy slide-bg" data-src="assets/images/slider/slide-3.jpg"></div>
+                                <div class="home-slide-content">
+                                    <h3>up to <span>40%</span> off</h3>
+                                    <h1>NEW ARRIVALS</h1>
+                                    <p>Starting at $9</p>
+                                    <a href="category.html" class="btn btn-dark">Shop Now</a>
+                                </div><!-- End .home-slide-content -->
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                {% for urun in urunler %}
+                                    <div class="col-md-3 product-default">
+
+                                        <figure>
+                                            {% if urun.productImage.all %}
+
+                                                <img class="pic-1" style="height: 200px;width: 150px"
+                                                     src="/media/{{ urun.productImage.all.0.productImage }}">
+
+                                            {% endif %}
+
+                                            <!-- <span class="product-label label-sale">27% OFF</span> -->
+                                        </figure>
+
+
+                                        <div class="product-details">
+
+
+                                            <h2 class="product-title">
+                                                <a href="product.html">{{ urun.name }}</a>
+                                            </h2>
+
+                                            <div class="category-list">
+                                                <a href="category.html" class="product-category"><b>Stok
+                                                    Miktarı: {{ urun.stock }}</b></a>
+                                            </div>
+                                            <div class="ratings-container">
+                                                <!-- End .product-ratings -->
+                                            </div><!-- End .product-container -->
+                                            <div class="price-box">
+                                                <span class="product-price">{{ urun.price }}</span>
+                                            </div><!-- End .price-box -->
+                                            <div class="product-action">
+                                                <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+                                                <button class="btn-icon btn-add-cart" data-toggle="modal"
+                                                        data-target="#addCartModal"><i
+                                                        class="icon-bag"></i>Sepete Ekle
+                                                </button>
+                                                <a href="ajax/product-quick-view.html" class="btn-quickview"
+                                                   title="Quick View"><i
+                                                        class="fas fa-external-link-alt"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <!-- End .product-details -->
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <nav class="toolbox toolbox-pagination">
+                                <div class="toolbox-item toolbox-show">
+                                    <label>Showing 1–9 of 60 results</label>
+                                </div><!-- End .toolbox-item -->
+
+                                <ul class="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link page-link-btn" href="#"><i class="icon-angle-left"></i></a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><span>...</span></li>
+                                    <li class="page-item"><a class="page-link" href="#">15</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link page-link-btn" href="#"><i class="icon-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </div><!-- End .product-details -->
+            </div>
+        </div>
+
+
+        </div><!-- End .container -->
+
+        <div class="mb-5"></div><!-- margin -->
+    </main><!-- End .main -->
+
+
+
+
+
+{% endblock %}
+

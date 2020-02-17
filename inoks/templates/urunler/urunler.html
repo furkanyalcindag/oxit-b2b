@@ -4,7 +4,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'bower_components/product/product-dashboard.css' %} ">
 
-    <div class="box box-success box-solid" id="toast" style="display: none" >
+    <div class="box box-success box-solid" id="toast" style="display: none">
         <div class="box-header with-border">
             <h3 class="box-title">Başarılı</h3>
 
@@ -192,14 +192,14 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-            <div class="col pull-right">
-                <button type="button" style="display: block;position: fixed ;right: 0;top: 80px;z-index:99 "
-                        class="btn btn-primary" data-toggle="modal" data-target="#cart"><i
-                        class="fa fa-shopping-cart"></i> Alışveriş Sepeti (<span
-                        class="total-count"></span>)
-                </button>
+            <!--    <div class="col pull-right">
+                    <button type="button" style="display: block;position: fixed ;right: 0;top: 80px;z-index:99 "
+                            class="btn btn-primary" data-toggle="modal" data-target="#cart"><i
+                            class="fa fa-shopping-cart"></i> Alışveriş Sepeti (<span
+                            class="total-count"></span>)
+                    </button>
 
-            </div>
+                </div> -->
 
             <section class="col-lg-12 ">
 
@@ -329,6 +329,8 @@
                     html += ' <img class="profile-user-img img-responsive img-circle" src="' + product.productImage[0].productImage + '" alt="User profile picture">';
                     html += '<h3 class="profile-username text-center">' + product.name + ' /  ' + product.price + '  ' + 'TL' + '</h3>';
                     html += '<p class="text-muted text-center">' + product.info + '</p>';
+                    html += '<p class="text-muted text-center">STOK: ' + product.stock + '</p>';
+
 
 
                     $(".bodys").html(html);
@@ -354,12 +356,11 @@
     <script>
 
 
-    document.getElementById("remove-toast").onclick = function() {
-          document.getElementById("toast").style.display='none';
+        document.getElementById("remove-toast").onclick = function () {
+            document.getElementById("toast").style.display = 'none';
 
 
-
-    };
+        };
 
         // ************************************************
         // Shopping Cart API
@@ -516,16 +517,17 @@
             var price = Number(x);
             shoppingCart.addItemToCart(name, price, 1, id);
             displayCart();
-            document.getElementById("toast").style.display='block';
-            document.getElementById("toast").style.position='fixed';
-            document.getElementById("toast").style.right =0;
+            document.getElementById("toast").style.display = 'block';
+            document.getElementById("toast").style.position = 'fixed';
+            document.getElementById("toast").style.right = 0;
             document.getElementById("toast").style.top = '123px';
-            document.getElementById("toast").style.zIndex=99;
+            document.getElementById("toast").style.zIndex = 99;
             document.getElementById("toast").style.width = '200px';
 
 
-            setTimeout(function(){  document.getElementById("toast").style.display='none'; }, 2000)
-
+            setTimeout(function () {
+                document.getElementById("toast").style.display = 'none';
+            }, 2000)
 
 
         });

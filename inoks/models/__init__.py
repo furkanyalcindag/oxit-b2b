@@ -13,3 +13,5 @@ from .Menu import Menu
 from .MenuAdmin import MenuAdmin
 from .OrderProduct import OrderProduct
 from .Settings import Settings
+from .ProductImage import ProductImage
+from .ProductGroup import ProductGroup

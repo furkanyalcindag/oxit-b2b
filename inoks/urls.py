@@ -1,11 +1,17 @@
 from django.conf.urls import url
 
 from inoks.Views import ProductViews, UserViews, OrderViews, ReportViews, EarningsViews, DashboardViews, SettingViews, \
-    TreeViews, RefundViews, CityViews, APIViews
+    TreeViews, RefundViews, CityViews, APIViews, HomeViews
 
 app_name = 'inoks'
 
 urlpatterns = [
+    # HOME
+
+    url(r'home/customer-home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
+    url(r'home/category-product/(?P<pk>\d+)$', HomeViews.get_category_products, name='kategori-urunleri'),
+    url(r'home/brand-product/(?P<pk>\d+)$', HomeViews.get_brand_products, name='markanin-urunleri'),
+    url(r'home/product-detail/(?P<pk>\d+)$', HomeViews.get_product_detail, name='urun-detay'),
 
     # Dashboard
     url(r'dashboard/admin-dashboard/$', DashboardViews.return_admin_dashboard, name='admin-dashboard'),
@@ -36,8 +42,15 @@ urlpatterns = [
     url(r'kullanici/iptal-edilen-kullanicilar/(?P<pk>\d+)$', UserViews.getDeactiveProfile, name='getDeactiveProfile'),
     url(r'kullanici-aktif-et/$', UserViews.profile_reactive, name="kullanici-aktif-et"),
     url(r'kullanici/kullanici-ekle/duzenle/(?P<pk>\d+)$', UserViews.users_update, name='kullanici-duzenle'),
-    url(r'kullanici/kullanici-ekle/kullanici-bilgileri/(?P<pk>\d+)$', UserViews.users_information, name='kullanici-bilgileri-getir'),
+    url(r'kullanici/kullanici-ekle/kullanici-bilgileri/(?P<pk>\d+)$', UserViews.users_information,
+        name='kullanici-bilgileri-getir'),
     url(r'kullanici/kullanici-bilgi-gonder/(?P<pk>\d+)$', UserViews.send_information, name='kullanici-bilgi-gonder'),
+    url(r'kullanici/kullanici-kart-ekle/(?P<pk>\d+)$', UserViews.return_add_user_creditcart,
+        name='kullanici-kart-ekle'),
+    url(r'kullanici/kullanici-kart-guncelle/(?P<pk>\d+)$', UserViews.credit_card_update,
+        name='kullanici-kart-guncelle'),
+    url(r'kullanici/kullanici-kart-sil/(?P<pk>\d+)$', UserViews.credit_card_delete,
+        name='kullanici-kart-sil'),
 
     # Urunler
     url(r'urunler/urun-ekle/$', ProductViews.return_add_products, name='urun-ekle'),
@@ -53,6 +66,10 @@ urlpatterns = [
         name='urun-kategori-ekle-duzenle'),
     url(r'urunler/urun-listesi/(?P<pk>\d+)$', ProductViews.getProduct, name='getProduct'),
     url(r'urunler/urunler/(?P<pk>\d+)$', ProductViews.getProducts, name='getProducts'),
+    url(r'urunler/marka-ekle/$', ProductViews.return_add_brand, name='marka-ekle'),
+    url(r'urunler/marka-sil/(?P<pk>\d+)$', ProductViews.brand_delete, name='marka-sil'),
+    url(r'urunler/grupla/(?P<group_id>\d+)$', ProductViews.add_products_to_group, name='urun-grupla'),
+    url(r'urunler/grup-urun-sil/(?P<group_id>\d+)/(?P<product_id>\d+)$', ProductViews.delete_product_from_group, name='urun-grup-sil'),
 
     # Siparisler
     url(r'siparisler/siparis-ekle/$', OrderViews.return_add_orders, name='siparis-ekle'),
@@ -74,7 +91,6 @@ urlpatterns = [
     url(r'siparisler/sepet-siparis-ekle/$', OrderViews.return_add_orders_from_cart, name='kart-siparis-ekle'),
     url(r'siparis-durumu-guncelle/$', OrderViews.siparis_durumu_guncelle, name="siparis-durumu-guncelle"),
     url(r'kargo-bilgi/(?P<pk>\d+)$', OrderViews.kargoBilgi, name='kargo-bilgi'),
-
 
     # İadeler
     url(r'iadeler/iade-olustur/$', RefundViews.return_add_refund, name='iade-olustur'),

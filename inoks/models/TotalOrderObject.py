@@ -1,6 +1,7 @@
 class TotalOrderObject:
 
-    def __init__(self, earning, total_price, profile, is_paid, paid_date, tree_price, kdv_tree_price, income_tax_tree_price,total_earn_with_tax ):
+    def __init__(self, earning, total_price, profile, is_paid, paid_date, tree_price, kdv_tree_price,
+                 income_tax_tree_price, total_earn_with_tax):
         self.id = id
         self.earning = earning
         self.total_price = total_price
@@ -11,3 +12,4 @@ class TotalOrderObject:
         self.kdv_tree_price = kdv_tree_price
         self.income_tax_price = income_tax_tree_price
         self.total_earn_with_tax = total_earn_with_tax
+

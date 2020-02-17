@@ -1,0 +1,249 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+
+    <div class="container">
+        <div class="product-single-container product-single-default">
+            <div class="row">
+                <div class="col-lg-4 product-single-gallery">
+
+                    <div class="sticky-slider">
+
+                        <div class="product-slider-container product-item">
+
+                            <div class="product-single-carousel owl-carousel owl-theme">
+                                {% for image in product.productImage.all %}
+                                    <div class="product-item">
+                                        <img class="product-single-image"
+                                             src="/media/{{ image.productImage }}"
+                                             data-zoom-image="/media/{{ image.productImage }}"/>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                            <!-- End .product-single-carousel -->
+                            <span class="prod-full-screen">
+                                        <i class="icon-plus"></i>
+                                    </span>
+                        </div>
+
+                        <div class="prod-thumbnail row owl-dots transparent-dots" id='carousel-custom-dots'>
+                            {% for image in product.productImage.all %}
+                                {% if forloop.counter == 1 %}
+                                    <div class="owl-dot active">
+                                        <img src="/media/{{ image.productImage }}"/>
+                                    </div>
+                                {% else %}
+                                    <div class="owl-dot">
+                                        <img src="/media/{{ image.productImage }}"/>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                    </div><!-- End .col-md-6 -->
+                </div>
+                <div class="col-lg-6">
+                    <div class="product-single-details">
+
+                        <h1 class="product-title">{{ product.name }}</h1>
+
+                        <br>
+
+                        <div class="price-box">
+                            <!--   <span class="old-price">$81.00 ₺</span> -->
+                            <span class="product-price">{{ product.price }} ₺</span>
+                        </div><!-- End .price-box -->
+
+                        <table class="table table-size">
+
+                            <tbody>
+                            <tr>
+
+                                <td>Ürün Kodu</td>
+                                <td>{{ product.code }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Marka</td>
+                                <td>{{ product.brand }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Araç Tipi</td>
+                                <td>{{ product.vehicleType }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Mevsim Türü</td>
+                                {% for cat in product.category.all %}
+                                    <td>{{ cat.name }}</td>
+                                {% endfor %}
+                            </tr>
+
+                            <tr>
+
+                                <td>Taban Genişliği</td>
+                                <td>{{ product.baseWidth }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Kesit Oranı</td>
+                                <td>{{ product.sectionRate }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Jant Çapı</td>
+                                <td>{{ product.rimDiameter }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Hız Endeksi</td>
+                                <td>{{ product.speedIndex }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Üretim Yılı</td>
+                                <td>2019</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <div class="product-action">
+                            <div class="product-single-qty">
+                                <input class="horizontal-quantity form-control" type="text">
+                            </div><!-- End .product-single-qty -->
+
+                            <a href="cart.html" class="paction add-cart" title="Add to Cart">
+                                <span>Sepete Ekle</span>
+                            </a>
+
+                        </div><!-- End .product-action -->
+
+                    </div><!-- End .product-single-details -->
+
+
+                </div><!-- End .col-md-6 -->
+                <!-- End .product-single-tabs -->
+            </div><!-- End .row -->
+
+            <div class="row">
+                <div class="col-lg-12 ">
+
+                    <div class="product-single-tabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="product-tab-desc" data-toggle="tab"
+                                   href="#product-desc-content" role="tab" aria-controls="product-desc-content"
+                                   aria-selected="true">Açıklama</a>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+                                 aria-labelledby="product-tab-desc">
+                                <div class="product-desc-content">
+                                    <p>{{ product.info }}</p>
+
+                                </div><!-- End .product-desc-content -->
+                            </div><!-- End .tab-pane -->
+
+
+                            <!-- End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="featured-section">
+                <div class="container">
+                    <h2 class="carousel-title">Featured Products</h2>
+
+                    <div class="product-intro owl-carousel owl-theme owl-loaded owl-drag" data-toggle="owl"
+                         data-owl-options="{
+                        'margin': 20,
+                        'items': 2,
+                        'autoplayTimeout': 5000,
+                        'responsive': {
+                            '559': {
+                                'items': 3
+                            },
+                            '975': {
+                                'items': 4
+                            }
+                        }
+                    }">
+
+
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage"
+                                 style="transform: translate3d(-2082px, 0px, 0px); transition: all 0.25s ease 0s; width: 3868px;">
+
+                                {% for product in group.products.all %}
+
+                                    <div class="owl-item cloned " style="width: 277.5px; margin-right: 20px;">
+                                        <div class="product-default">
+                                            {% for image in product.productImage.all %}
+                                                <figure>
+                                                    <a href="{% url 'inoks:urun-detay' product.pk %}">
+                                                        <img src="/media/{{ image.productImage }}">
+                                                    </a>
+                                                </figure>
+                                            {% endfor %}
+                                            <div class="product-details">
+                                                <div class="ratings-container">
+                                                   <!-- End .product-ratings -->
+                                                </div><!-- End .product-container -->
+                                                <h2 class="product-title">
+                                                      <a href="{% url 'inoks:urun-detay' product.pk %}">{{ product.name }}</a>
+                                                </h2>
+                                                <div class="price-box">
+                                                    <span class="product-price">{{product.price}}₺</span>
+                                                </div><!-- End .price-box -->
+                                                 <div class="product-action">
+
+                                                    <button class="btn-icon add-to-cart" style="font-family: INITIAL;"
+                                                            data-id="{{ product.id }}"
+                                                            data-name="{{ product.name }}"
+                                                            data-price=" {{ product.price }}"
+                                                            data-toggle="modal"
+                                                    ><i class="icon-bag"></i>Sepete
+                                                        Ekle
+                                                    </button>
+
+
+                                                </div>
+                                            </div><!-- End .product-details -->
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                        <div class="owl-nav disabled">
+                            <button type="button" role="presentation" class="owl-prev"><i
+                                    class="icon-left-open-big"></i></button>
+                            <button type="button" role="presentation" class="owl-next"><i
+                                    class="icon-right-open-big"></i></button>
+                        </div>
+                        <div class="owl-dots">
+                            <button role="button" class="owl-dot active"><span></span></button>
+                            <button role="button" class="owl-dot"><span></span></button>
+                        </div>
+                    </div>
+                </div><!-- End .container -->
+            </div>
+
+
+
+        </div>
+
+
+    </div><!-- End .product-single-container -->
+    </div><!-- End .container -->
+
+{% endblock %}

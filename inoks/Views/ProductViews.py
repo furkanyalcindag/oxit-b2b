@@ -1,15 +1,18 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.forms import modelformset_factory
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from rest_framework.decorators import api_view
 
+from inoks.Forms.BrandForm import BrandForm
 from inoks.Forms.ImageForm import ImageForm
 from inoks.Forms.ProductCategoryForm import ProductCategoryForm
 from inoks.Forms.ProductForm import ProductForm
-from inoks.models import Product, ProductCategory
+from inoks.models import Product, ProductCategory, ProductGroup
+from inoks.models.Brand import Brand
 from inoks.models.ProductImage import ProductImage
 from inoks.serializers.product_serializers import ProductSerializer
 from inoks.services import general_methods
@@ -40,9 +43,15 @@ def return_add_products(request):
             product = Product(
                 name=product_form.cleaned_data['name'],
                 price=product_form.cleaned_data['price'],
-
+                listPrice=product_form.cleaned_data['listPrice'],
+                code=product_form.cleaned_data['code'],
+                brand=product_form.cleaned_data['brand'],
+                baseWidth=product_form.cleaned_data['baseWidth'],
+                speedIndex=product_form.cleaned_data['speedIndex'],
+                rimDiameter=product_form.cleaned_data['rimDiameter'],
+                sectionRate=product_form.cleaned_data['sectionRate'],
+                vehicleType=product_form.cleaned_data['vehicleType'],
                 stock=product_form.cleaned_data['stock'],
-
                 info=product_form.cleaned_data['info'])
 
             product.save()
@@ -237,7 +246,7 @@ def return_add_product_category(request):
     if not perm:
         logout(request)
         return redirect('accounts:login')
-    product_category_form = ProductCategoryForm();
+    product_category_form = ProductCategoryForm()
 
     if request.method == 'POST':
 
@@ -257,3 +266,77 @@ def return_add_product_category(request):
     categories = ProductCategory.objects.all()
     return render(request, 'urunler/urun-kategori-ekle.html',
                   {'product_category_form': product_category_form, 'categories': categories})
+
+
+@login_required
+def return_add_brand(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+    brand_form = BrandForm(request.POST)
+    brands = Brand.objects.all()
+
+    if request.method == 'POST':
+
+        if brand_form.is_valid():
+
+            brand = Brand(name=brand_form.cleaned_data['name'])
+
+            brand.save()
+
+            return redirect('inoks:marka-ekle')
+
+        else:
+
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+
+    return render(request, 'urunler/urun-marka-ekle.html',
+                  {'brand_form': brand_form, 'brands': brands})
+
+
+@login_required
+def brand_delete(request, pk):
+    if request.method == 'POST':
+        try:
+            obj = Brand.objects.get(pk=pk)
+            obj.delete()
+            return JsonResponse({'status': 'Success', 'messages': 'save successfully'})
+        except Brand.DoesNotExist:
+            return JsonResponse({'status': 'Fail', 'msg': 'Object does not exist'})
+
+    else:
+        return JsonResponse({'status': 'Fail', 'msg': 'Not a valid request'})
+
+
+@login_required
+def add_products_to_group(request, group_id):
+    group = ProductGroup.objects.get(pk=group_id)
+
+    exist_products = Product.objects.filter(id__in=group.products.all().values('pk'))
+
+    products = Product.objects.filter(~Q(id__in=group.products.all().values('pk')))
+
+    if request.method == 'POST':
+        for check in request.POST.getlist('check_list[]'):
+            product = Product.objects.get(pk=int(check))
+            group.products.add(product)
+            group.save()
+
+        messages.success(request, 'özellikler eklendi.')
+
+        return redirect('inoks:urun-grupla', group_id)
+
+    return render(request, 'urunler/urun-grup.html',
+                  {'group': group, 'exist_products': exist_products, 'products': products})
+
+
+@login_required
+def delete_product_from_group(request, product_id, group_id):
+    product = Product.objects.get(pk=product_id)
+    group = ProductGroup.objects.get(pk=group_id)
+    group.products.remove(product)
+    group.save()
+    messages.success(request, 'Ürün başarıyla çıkarıldı.')
+    return redirect('inoks:urun-grupla', group_id)

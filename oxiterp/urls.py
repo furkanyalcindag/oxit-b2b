@@ -34,7 +34,7 @@ urlpatterns = [
     #path('accounts/', include('django.contrib.auth.urls'))
     path('', include('accounts.urls')),
     #path('egitim/', include('education.urls')),
-    path('baven/', include('inoks.urls')),
+    path('oxit/', include('inoks.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

@@ -2825,7 +2825,7 @@
                             if (result.status == 'Success') {
                                 swal("Başarılı", "Resim Silindi", "success");
                                 {% if durum == "GUNCELLE" %}
-                                window.location.replace("{% url "inoks:urun-duzenle" product %}");
+                                    window.location.replace("{% url "inoks:urun-duzenle" product %}");
                                 {% endif %}
 
 
@@ -2843,7 +2843,7 @@
 
         }
 
-    function getCookie(name) {
+        function getCookie(name) {
             var cookieValue = null;
             var i = 0;
             if (document.cookie && document.cookie !== '') {
@@ -3215,8 +3215,9 @@
                                                 <div class="col-md-3" style="border: #00000052;border-style: double;">
                                                     <img src="/media/{{ image.productImage }}" width="150" height="150"
                                                          alt="..." class="margin">
-                                                    <a onclick="product_image_delete({{ product }},{{ image.pk }})" class="button btn btn-danger"><i class="fa fa-trash-o"
-                                                                                        ></i>
+                                                    <a onclick="product_image_delete({{ product }},{{ image.pk }})"
+                                                       class="button btn btn-danger"><i class="fa fa-trash-o"
+                                                    ></i>
                                                         Sil</a>
                                                 </div>
                                             {% endfor %}</div>
@@ -3262,28 +3263,63 @@
                                     <label> {{ product_form.name.label }}</label>
                                     {{ product_form.name }}
                                 </div>
-
                                 <div class="form-group">
-                                    <label> {{ product_form.price.label }}</label>
-                                    {{ product_form.price }}
+                                    <label> {{ product_form.vehicleType.label }}</label>
+                                    {{ product_form.vehicleType }}
+                                </div>
+                                <div class="form-group">
+                                    <label> {{ product_form.code.label }}</label>
+                                    {{ product_form.code }}
                                 </div>
 
-                                <!-- <div class="form-group">
+                                <div class="form-group">
+                                    <label> {{ product_form.baseWidth.label }}</label>
+                                    {{ product_form.baseWidth }}
+                                </div>
+                                <div class="form-group">
+                                    <label> {{ product_form.sectionRate.label }}</label>
+                                    {{ product_form.sectionRate }}
+                                </div>
+                                <div class="form-group">
+                                    <label> {{ product_form.rimDiameter.label }}</label>
+                                    {{ product_form.rimDiameter }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label> {{ product_form.speedIndex.label }}</label>
+                                    {{ product_form.speedIndex }}
+
+
+                                    <div class="form-group">
+                                        <label> {{ product_form.price.label }}</label>
+                                        {{ product_form.price }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label> {{ product_form.listPrice.label }}</label>
+                                        {{ product_form.listPrice }}
+                                    </div>
+
+                                    <!-- <div class="form-group">
                                     <label> {{ product_form.discountPrice.label }}</label>
                                     {{ product_form.discountPrice }}
                                 </div> -->
 
-                                <div class="form-group">
-                                    <label> {{ product_form.stock.label }}</label>
-                                    {{ product_form.stock }}
-                                </div>
+                                    <div class="form-group">
+                                        <label> {{ product_form.stock.label }}</label>
+                                        {{ product_form.stock }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label> {{ product_form.brand.label }}</label>
+                                        {{ product_form.brand }}
+                                    </div>
 
-                                <div class="form-group">
-                                    <label> Kategori</label>
-                                    {{ product_form.category }}
-                                </div>
 
-                                <!--<div class="form-group">
+                                    <div class="form-group">
+                                        <label> Kategori</label>
+                                        {{ product_form.category }}
+                                    </div>
+
+                                    <!--<div class="form-group">
                                     <label> {{ product_form.discountStartDate.label }}</label>
                                     {{ product_form.discountStartDate }}
                                 </div>
@@ -3293,18 +3329,18 @@
                                     {{ product_form.discountFinishDate }}
                                 </div> -->
 
-                                <div class="form-group">
-                                    <label> {{ product_form.info.label }}</label>
-                                    {{ product_form.info }}
+                                    <div class="form-group">
+                                        <label> {{ product_form.info.label }}</label>
+                                        {{ product_form.info }}
+                                    </div>
+
+
                                 </div>
+                                <!-- /.box-body -->
 
-
-                            </div>
-                            <!-- /.box-body -->
-
-                            <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">Ürün Ekle</button>
-                            </div>
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary">Ürün Ekle</button>
+                                </div>
                         </form>
                     </div>
                     <!-- /.box -->

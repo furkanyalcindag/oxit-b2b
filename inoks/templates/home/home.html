@@ -1,0 +1,237 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+    <div class="home-top-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="home-slider owl-carousel owl-carousel-lazy owl-loaded owl-drag">
+                        <!-- End .home-slide -->
+
+                        <!-- End .home-slide -->
+
+                        <!-- End .home-slide -->
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage"
+                                 style="transform: translate3d(-1740px, 0px, 0px); transition: all 0s ease 0s; width: 6090px;">
+                                <div class="owl-item cloned" style="width: 870px;">
+                                    <div class="home-slide">
+                                        <div class="owl-lazy slide-bg"
+                                             data-src="https://www.otopratik.com.tr/Dosyalar/kampanya/bridgestoneop-slider-mobile.jpg"></div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="owl-nav disabled">
+                            <button type="button" role="presentation" class="owl-prev"><i
+                                    class="icon-left-open-big"></i></button>
+                            <button type="button" role="presentation" class="owl-next"><i
+                                    class="icon-right-open-big"></i></button>
+                        </div>
+                        <div class="owl-dots">
+                            <button role="button" class="owl-dot active"><span></span></button>
+
+                        </div>
+                    </div><!-- End .home-slider -->
+                </div><!-- End .col-lg-9 -->
+
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <main class="main">
+
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+
+                            <div class="row row-sm">
+                                {% for product in products %}
+                                    <div class="col-6 col-md-4 col-xl-3">
+                                        <div class="product-default">
+                                            <figure>
+                                                {% if product.productImage.all %}
+
+                                                    <a  href="{% url 'inoks:urun-detay' product.pk %}" ><img class="pic-1" style="height: 200px;width: 150px"
+
+                                                             src="/media/{{ product.productImage.all.0.productImage }}"></a>
+
+                                                {% endif %}
+                                            </figure>
+                                            <div class="product-details">
+                                                <!-- End .product-container -->
+                                                <h2 class="product-title">
+                                                    <a href="{% url 'inoks:urun-detay' product.pk %}" style="padding: 10px; white-space: normal;">{{ product.name }}</a>
+                                                </h2>
+                                                <h2 class="product-title">
+                                                    <b> <a href="{% url 'inoks:urun-detay' product.pk %}"> {{ product.brand }}</a> </b>
+                                                </h2>
+                                                <div class="price-box">
+                                                    <span class="product-price">{{ product.price }} ₺</span>
+                                                </div><!-- End .price-box -->
+                                                <div class="product-action">
+
+                                                    <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
+                                                            data-id="{{ product.id }}"
+                                                            data-name="{{ product.name }}"
+                                                            data-price=" {{ product.price }}"
+                                                            data-toggle="modal"
+                                                    ><i class="icon-bag"></i>Sepete
+                                                        Ekle
+                                                    </button>
+
+
+                                                </div>
+                                            </div><!-- End .product-details -->
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+
+                            </div>
+
+
+                        </div><!-- End .col-lg-9 -->
+
+                        <aside class="sidebar-shop col-lg-3 order-lg-first">
+                            <div class="pin-wrapper" style="height: 1567.3px;">
+                                <div class="sidebar-wrapper sticky-active sticky-absolute sticky-transition"
+                                     style="border-bottom: 0px none rgb(122, 125, 130); width: 270px; top: -10px; position: absolute;">
+                                    <div class="widget">
+                                        <h3 class="widget-title">
+                                            <a data-toggle="collapse" href="#widget-body-1" role="button"
+                                               aria-expanded="true" aria-controls="widget-body-1">Kategoriler</a>
+                                        </h3>
+                                        {% for cat in categories %}
+                                            <div class="collapse show" id="widget-body-1">
+                                                <div class="widget-body">
+                                                    <ul class="cat-list">
+                                                        <li>
+                                                            <a href="{% url 'inoks:kategori-urunleri' cat.pk %}">{{ cat.name }}</a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div><!-- End .widget-body -->
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+
+                                    <div class="widget">
+                                        <h3 class="widget-title">
+                                            <a data-toggle="collapse" href="#widget-body-2" role="button"
+                                               aria-expanded="true" aria-controls="widget-body-2">Price</a>
+                                        </h3>
+
+                                        <div class="collapse show" id="widget-body-2">
+                                            <div class="widget-body">
+                                                <form action="#">
+                                                    <div class="price-slider-wrapper">
+                                                        <div id="price-slider"
+                                                             class="noUi-target noUi-ltr noUi-horizontal">
+                                                            <div class="noUi-base">
+                                                                <div class="noUi-connects">
+                                                                    <div class="noUi-connect"
+                                                                         style="transform: translate(20%, 0px) scale(0.5, 1);"></div>
+                                                                </div>
+                                                                <div class="noUi-origin"
+                                                                     style="transform: translate(-80%, 0px); z-index: 5;">
+                                                                    <div class="noUi-handle noUi-handle-lower"
+                                                                         data-handle="0" tabindex="0" role="slider"
+                                                                         aria-orientation="horizontal"
+                                                                         aria-valuemin="0.0" aria-valuemax="60.0"
+                                                                         aria-valuenow="20.0"
+                                                                         aria-valuetext="200.00"></div>
+                                                                </div>
+                                                                <div class="noUi-origin"
+                                                                     style="transform: translate(-30%, 0px); z-index: 4;">
+                                                                    <div class="noUi-handle noUi-handle-upper"
+                                                                         data-handle="1" tabindex="0" role="slider"
+                                                                         aria-orientation="horizontal"
+                                                                         aria-valuemin="30.0" aria-valuemax="100.0"
+                                                                         aria-valuenow="70.0"
+                                                                         aria-valuetext="700.00"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- End #price-slider -->
+                                                    </div><!-- End .price-slider-wrapper -->
+
+                                                    <div class="filter-price-action">
+                                                        <button type="submit" class="btn btn-primary">Filter
+                                                        </button>
+
+                                                        <div class="filter-price-text">
+                                                            <span id="filter-price-range">$200.00 - $700.00</span>
+                                                        </div><!-- End .filter-price-text -->
+                                                    </div><!-- End .filter-price-action -->
+                                                </form>
+                                            </div><!-- End .widget-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .widget -->
+
+                                    <div class="widget">
+                                        <h3 class="widget-title">
+                                            <a data-toggle="collapse" href="#widget-body-3" role="button"
+                                               aria-expanded="true" aria-controls="widget-body-3">Size</a>
+                                        </h3>
+
+                                        <div class="collapse show" id="widget-body-3">
+                                            <div class="widget-body">
+                                                <ul class="config-size-list">
+                                                    <li><a href="#">S</a></li>
+                                                    <li class="active"><a href="#">M</a></li>
+                                                    <li><a href="#">L</a></li>
+                                                    <li><a href="#">XL</a></li>
+                                                    <li><a href="#">2XL</a></li>
+                                                    <li><a href="#">3XL</a></li>
+                                                </ul>
+                                            </div><!-- End .widget-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .widget -->
+
+                                    <div class="widget">
+                                        <h3 class="widget-title">
+                                            <a data-toggle="collapse" href="#widget-body-4" role="button"
+                                               aria-expanded="true" aria-controls="widget-body-4">Markalar</a>
+                                        </h3>
+
+                                        <div class="collapse show" id="widget-body-4">
+                                            <div class="widget-body">
+                                                {% for brand in brands %}
+                                                    <ul class="cat-list">
+                                                        <li>
+                                                            <a href="{% url 'inoks:markanin-urunleri' brand.pk %}">{{ brand.name }}
+                                                                <span>{{ brand.count }}</span></a></li>
+
+                                                    </ul>
+                                                {% endfor %}
+                                            </div><!-- End .widget-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .widget -->
+
+
+                                </div>
+                            </div><!-- End .sidebar-wrapper -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </div>
+
+                <div class="mb-5"></div><!-- margin -->
+            </main>
+        </div>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+

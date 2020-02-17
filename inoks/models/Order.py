@@ -1,19 +1,13 @@
 from django.db import models
 
 from inoks.models import Profile, City
-
 from inoks.models.OrderSituations import OrderSituations
 from inoks.models.Product import Product
+from inoks.models.Enum import PAYMENT_CHOICES, TRANSFER
 
 
 class Order(models.Model):
-    TRANSFER = 'Kredi Kartı'
-    EFT = 'Havale/EFT'
-    PAYMENT_CHOICES = (
 
-        (TRANSFER, 'Kredi Kartı'),
-        (EFT , 'Havale/EFT')
-    )
 
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Üye Adı')
     product = models.ManyToManyField(Product, through='OrderProduct')

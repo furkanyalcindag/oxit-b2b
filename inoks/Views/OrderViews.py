@@ -46,6 +46,7 @@ def return_add_orders_admin(request):
 
     if request.method == 'POST':
 
+
         order_form = OrderFormAdmin(request.POST)
 
         if order_form.is_valid():
@@ -716,6 +717,11 @@ def odeme_sonuc(request):
     if request.POST.get("status") == 'success':  ## Ödeme Onaylandı
 
         order.isPayed = True
+        orderProducts = OrderProduct.objects.filter(order=order)
+        for orderProduct in orderProducts:
+            product = Product.objects.get(product=orderProduct.product)
+            product.stock = product.stock-orderProduct.quantity
+            product.save()
         order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
         order.save()
 
