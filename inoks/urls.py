@@ -8,7 +8,7 @@ app_name = 'inoks'
 urlpatterns = [
     # HOME
 
-    url(r'home/customer-home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
+    url(r'home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
     url(r'home/category-product/(?P<pk>\d+)$', HomeViews.get_category_products, name='kategori-urunleri'),
     url(r'home/brand-product/(?P<pk>\d+)$', HomeViews.get_brand_products, name='markanin-urunleri'),
     url(r'home/product-detail/(?P<pk>\d+)$', HomeViews.get_product_detail, name='urun-detay'),
@@ -69,7 +69,15 @@ urlpatterns = [
     url(r'urunler/marka-ekle/$', ProductViews.return_add_brand, name='marka-ekle'),
     url(r'urunler/marka-sil/(?P<pk>\d+)$', ProductViews.brand_delete, name='marka-sil'),
     url(r'urunler/grupla/(?P<group_id>\d+)$', ProductViews.add_products_to_group, name='urun-grupla'),
-    url(r'urunler/grup-urun-sil/(?P<group_id>\d+)/(?P<product_id>\d+)$', ProductViews.delete_product_from_group, name='urun-grup-sil'),
+    url(r'urunler/grup-urun-sil/(?P<group_id>\d+)/(?P<product_id>\d+)$', ProductViews.delete_product_from_group,
+        name='urun-grup-sil'),
+
+    # Stok
+    url(r'urunler/stok-guncelle/$', ProductViews.stock_update, name='stok-guncelle'),
+
+    # Kargo
+    url(r'urunler/kargo-ücret/$', OrderViews.get_cargo, name='kargo-ücret-gör'),
+    url(r'urunler/kargo-guncelle/(?P<pk>\d+)$', OrderViews.cargo_update, name='kargo-guncelle'),
 
     # Siparisler
     url(r'siparisler/siparis-ekle/$', OrderViews.return_add_orders, name='siparis-ekle'),

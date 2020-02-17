@@ -19,10 +19,12 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 
+from inoks.Forms.CargoForm import CargoForm
 from inoks.Forms.OrderForm import OrderForm
 from inoks.Forms.OrderFormAdmin import OrderFormAdmin
 from inoks.Forms.OrderSituationsForm import OrderSituationsForm
 from inoks.models import Order, OrderSituations, Profile, Product, OrderProduct, City, Settings
+from inoks.models.Cargo import Cargo
 from inoks.models.CartObject import CartObject
 from inoks.models.OrderObject import OrderObject
 from inoks.serializers.order_serializers import OrderSerializer
@@ -39,13 +41,13 @@ def return_add_orders_admin(request):
         logout(request)
         return redirect('accounts:login')
     kargo = float(Settings.objects.filter(name='kargo')[0].value)
+
     order_form = OrderFormAdmin(instance=Profile.objects.get(user=request.user))
     products = Product.objects.all()
     current_user = request.user
     profile = Profile.objects.get(user=current_user)
 
     if request.method == 'POST':
-
 
         order_form = OrderFormAdmin(request.POST)
 
@@ -80,13 +82,16 @@ def return_add_orders_admin(request):
                 order_product_card.append(orderProduct)
 
                 total_price = total_price + (int(product[0].strip()) * prod.price)
+            if order.cargo.status:
+                if total_price >= order.cargo.lower_limit:
+                    order.totalPrice = total_price
 
-            if total_price >= 150:
-                order.totalPrice = total_price
-            else:
-                order.totalPrice = float(total_price) + kargo
 
-            order.save()
+                else:
+                    # order.totalPrice = float(total_price) + kargo
+                    order.totalPrice = float(total_price) + float(order.cargo.price)
+
+                    order.save()
 
             # order.product.add(order_form.cleaned_data['product'])
 
@@ -720,7 +725,7 @@ def odeme_sonuc(request):
         orderProducts = OrderProduct.objects.filter(order=order)
         for orderProduct in orderProducts:
             product = Product.objects.get(product=orderProduct.product)
-            product.stock = product.stock-orderProduct.quantity
+            product.stock = product.stock - orderProduct.quantity
             product.save()
         order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
         order.save()
@@ -773,3 +778,31 @@ def kargoBilgi(request, pk):
                    'userOrder': order.profile})
 
 
+def cargo_update(request, pk):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+
+    cargo = Cargo.objects.get(pk=pk)
+    cargo_form = CargoForm(request.POST or None, instance=cargo)
+    if request.method == 'POST':
+        if cargo_form.is_valid():
+            cargo_form.save()
+
+            messages.success(request, 'Başarıyla Güncellendi')
+
+            return redirect('inoks:kargo-ücret-gör')
+
+        else:
+
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+    return render(request, 'kargo/kargo-guncelle.html',
+                  {'cargo_form': cargo_form})
+
+
+def get_cargo(request):
+    cargos = Cargo.objects.all()
+
+    return render(request, 'kargo/kargo.html', {'cargos': cargos})

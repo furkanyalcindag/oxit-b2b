@@ -14,6 +14,12 @@ def get_home_product(request):
                   {'products': products, 'brands': brands, 'categories': categories})
 
 
+def get_category_home(request):
+    categories = ProductCategory.objects.all()
+    return render(request, 'base_layout_2.html',
+                  {'categories': categories})
+
+
 def get_category_products(request, pk):
     category = ProductCategory.objects.get(pk=pk)
     products = category.product_set.all()
@@ -38,8 +44,4 @@ def get_product_detail(request, pk):
     product = Product.objects.get(pk=pk)
     group = ProductGroup.objects.get(name="Önerilen Ürünler")
     return render(request, 'home/product-detail.html',
-                  {'product': product, 'group' : group})
-
-
-
-
+                  {'product': product, 'group': group})

@@ -340,3 +340,20 @@ def delete_product_from_group(request, product_id, group_id):
     group.save()
     messages.success(request, 'Ürün başarıyla çıkarıldı.')
     return redirect('inoks:urun-grupla', group_id)
+
+
+def stock_update(request):
+    if request.method == 'POST':
+
+        check_list = request.POST['checks'].split(',')
+
+        for check in check_list:
+            product = Product.objects.get(pk=int(check))
+            product.stock = request.POST['stok']
+            product.save()
+
+        messages.success(request, 'Stok güncellendi.')
+
+        return redirect('inoks:urun-listesi')
+
+    return redirect('inoks:urun-listesi')

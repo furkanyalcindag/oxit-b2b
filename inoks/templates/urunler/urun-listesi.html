@@ -3,7 +3,36 @@
 {% block content %}
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'inoks:stok-guncelle' %}" method="post">
 
+
+                        {% csrf_token %}
+                        <label for="customRange2">Stok: </label>
+                        <input type="number" name="stok" class="custom-range" id="customRange2">
+                        <input type="hidden" name="checks" id="checks">
+
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- success modal -->
     <div class="modal modal-success modal-success-food fade in" id="modal-success" style="display: none;">
@@ -141,19 +170,32 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Ürünler Listesi</h3>
                         </div>
-                    <div class="box-header with-border">
-                                <div class="btn-group">
-                                    <a href="{% url "inoks:urun-ekle" %}"
-                                       type="button" class="btn btn-success"><i
-                                            class="fa fa-edit"></i> Ürün Ekle
-                                    </a>
-                                </div>
+                        <div class="box-header with-border">
+                            <div class="btn-group">
+
+
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#exampleModalCenter">
+                                    Stok Güncelle
+                                </button>
+
                             </div>
+                            <div class="btn-group">
+                                <a href="{% url "inoks:urun-ekle" %}"
+                                   type="button" class="btn btn-success"><i
+                                        class="fa fa-edit"></i> Ürün Ekle
+                                </a>
+
+                            </div>
+                        </div>
 
                         <table id="urun" class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Stok Seç</th>
+                                <th>Stok Miktarı</th>
+
                                 <th>Fotoğraf</th>
                                 <th>Ürün Adı</th>
                                 <th>Fiyatı</th>
@@ -167,47 +209,51 @@
                             <tbody>
 
 
+                            {% for product_lists in product_list %}
+                                <tr>
+                                <td>{{ forloop.counter }} </td>
+                                    <td><input id="{{ forloop.counter }}" type="checkbox"
+                                               name="check_list[]"
+                                               value="{{ product_lists.id }}" onclick="checkbox()">
+                                    </td>
+                                    <td>{{ product_lists.stock }}</td>
 
-                                {% for product_lists in product_list %}
-                                    <tr>
-                                        <td>{{ forloop.counter }} </td>
-                                        <td><img src="/media/{{ product_lists.productImage.all.0.productImage }}"
-                                                 width="40px"
-                                                 height="40px"/>
-                                        </td>
-                                        <td>{{ product_lists.name }}</td>
-                                        <td>{{ product_lists.price }} TL </td>
-
-
-                                        <td>
-                                            <ul> {% for category in product_lists.category.all %}
-
-                                                <li>{{ category.name }}</li>
-
-                                            {% endfor %}</ul>
-
-                                        </td>
+                                    <td><img src="/media/{{ product_lists.productImage.all.0.productImage }}"
+                                             width="40px"
+                                             height="40px"/>
+                                    </td>
+                                    <td>{{ product_lists.name }}</td>
+                                    <td>{{ product_lists.price }} TL</td>
 
 
-                                        <td>
-                                            <div class="btn-group">
-                                                <a class="btn btn-info" onclick="getProduct({{ product_lists.id }})"><i
-                                                        class="fa fa-align-left"></i>Detay</a>
-                                                <a href="{% url "inoks:urun-duzenle" product_lists.pk %}" type="button"
-                                                   class="btn btn-warning"><i
-                                                        class="fa fa-edit"></i>Güncelle
-                                                </a>
-                                                <a class="btn btn-danger"
-                                                   data-toggle="modal" onclick=deleteProduct({{ product_lists.pk }})><i
-                                                        class="fa fa-trash"></i>Sil</a>
-                                            </div>
-                                        </td>
+                                    <td>
+                                        <ul> {% for category in product_lists.category.all %}
+
+                                            <li>{{ category.name }}</li>
+
+                                        {% endfor %}</ul>
+
+                                    </td>
 
 
-                                    </tr>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a class="btn btn-info" onclick="getProduct({{ product_lists.id }})"><i
+                                                    class="fa fa-align-left"></i>Detay</a>
+                                            <a href="{% url "inoks:urun-duzenle" product_lists.pk %}" type="button"
+                                               class="btn btn-warning"><i
+                                                    class="fa fa-edit"></i>Güncelle
+                                            </a>
+                                            <a class="btn btn-danger"
+                                               data-toggle="modal" onclick=deleteProduct({{ product_lists.pk }})><i
+                                                    class="fa fa-trash"></i>Sil</a>
+                                        </div>
+                                    </td>
 
-                                {% endfor %}
 
+                                </tr>
+
+                            {% endfor %}
 
 
                             </tbody>
@@ -306,6 +352,7 @@
                     html += ' <img class="profile-user-img img-responsive img-circle" src="' + image[0].productImage + '" alt="User profile picture">';
                     html += '<h3 class="profile-username text-center">' + product.name + ' /  ' + product.price + '  ' + 'TL' + '</h3>';
                     html += '<p class="text-muted text-center">' + product.info + '</p>';
+                    html+='<p class="text-muted text-center">'+'Stok Miktarı:'+' ' + product.stock + '</p>';
 
 
                     $(".bodys").html(html);
@@ -326,6 +373,26 @@
 
     </script>
 
+
+    <script>
+
+        function checkbox() {
+
+            var checkboxes = document.getElementsByName('check_list[]');
+            var vals = "";
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                if (checkboxes[i].checked) {
+                    vals += "," + checkboxes[i].value;
+                }
+            }
+            if (vals) vals = vals.substring(1);
+
+            document.getElementById("checks").value = vals;
+
+        }
+
+
+    </script>
 
 
 

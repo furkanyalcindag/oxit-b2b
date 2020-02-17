@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Porto - Bootstrap eCommerce Template</title>
+    <title>OXIT</title>
 
     <meta name="keywords" content="HTML5 Template"/>
     <meta name="description" content="Porto - Bootstrap eCommerce Template">
@@ -34,13 +34,13 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}">
-      <!-- Theme style -->
+    <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %} ">
 </head>
 <body>
 <div class="page-wrapper">
     <header class="header">
-        <div class="header-top">
+        <div class="header-top" style="background-color: black;">
             <div class="container">
                 <div class="header-left header-dropdowns">
 
@@ -52,8 +52,8 @@
                     <div class="dropdown compare-dropdown">
                         <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false" data-display="static">
-                            <span>Call us now</span>
-                            <a href="tel:#"><strong>+123 5678 890</strong></a>
+
+                            <a href="tel:#" class="fa fa-phone"><strong> 0850 346 34 62</strong></a>
                         </a>
 
                         <!-- End .dropdown-menu -->
@@ -61,14 +61,14 @@
                 </div><!-- End .header-left -->
 
                 <div class="header-right">
-                    <p class="welcome-msg">Default welcome msg! </p>
+                    <p class="welcome-msg">Hoşgeldiniz </p>
 
                     <div class="header-dropdown dropdown-expanded">
                         <a href="#">Links</a>
                         <div class="header-menu">
                             <ul>
 
-                                <li><a href="#" class="login-link">LOG IN</a></li>
+                                <li><a href="#" class="login-link">Giriş</a></li>
                             </ul>
                         </div><!-- End .header-menu -->
                     </div><!-- End .header-dropown -->
@@ -79,8 +79,8 @@
         <div class="header-middle">
             <div class="container">
                 <div class="header-left">
-                    <a href="index.html" class="logo">
-                        <img src="assets/images/logo.png" alt="Porto Logo">
+                    <a href="{% url 'inoks:kullanici-urun-sayfasi' %}" class="logo">
+                        <img src="/media/logo.png" alt="Oxit Logo">
                     </a>
                 </div><!-- End .header-left -->
 
@@ -89,28 +89,19 @@
                         <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
                         <form action="#" method="get">
                             <div class="header-search-wrapper">
-                                <input type="search" class="form-control" name="q" id="q" placeholder="Search..."
+                                <input type="search" class="form-control" name="q" id="q" placeholder="Ara..."
                                        required>
                                 <div class="select-custom">
+
                                     <select id="cat" name="cat">
-                                        <option value="">All Categories</option>
-                                        <option value="4">Fashion</option>
-                                        <option value="12">- Women</option>
-                                        <option value="13">- Men</option>
-                                        <option value="66">- Jewellery</option>
-                                        <option value="67">- Kids Fashion</option>
-                                        <option value="5">Electronics</option>
-                                        <option value="21">- Smart TVs</option>
-                                        <option value="22">- Cameras</option>
-                                        <option value="63">- Games</option>
-                                        <option value="7">Home &amp; Garden</option>
-                                        <option value="11">Motors</option>
-                                        <option value="31">- Cars and Trucks</option>
-                                        <option value="32">- Motorcycles &amp; Powersports</option>
-                                        <option value="33">- Parts &amp; Accessories</option>
-                                        <option value="34">- Boats</option>
-                                        <option value="57">- Auto Tools &amp; Supplies</option>
+                                        <option value="">Tüm Kategoriler</option>
+                                        {% for cat in categories %}
+                                            <option value="4">{{ cat.name }}</option>
+                                        {% endfor %}
+
+
                                     </select>
+
                                 </div><!-- End .select-custom -->
                                 <button class="btn" type="submit"><i class="icon-magnifier"></i></button>
                             </div><!-- End .header-search-wrapper -->
@@ -125,10 +116,11 @@
 
 
                     <div class="dropdown cart-dropdown">
-                         <button class="dropdown-toggle " role="button"
-                       aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#cart" data-display="static">
-                        <span class="cart-count total-count">2</span>
-                    </button>
+                        <button class="dropdown-toggle " role="button"
+                                aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#cart"
+                                data-display="static">
+                            <span class="cart-count total-count">2</span>
+                        </button>
 
 
                     </div>
@@ -141,155 +133,28 @@
             <div class="container">
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="active"><a href="index.html">Home</a></li>
-                        <li>
-                            <a href="category.html" class="sf-with-ul">Categories</a>
-                            <div class="megamenu megamenu-fixed-width">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="menu-title">
-                                                    <a href="#">Variations 1<span class="tip tip-new">New!</span></a>
-                                                </div>
-                                                <ul>
-                                                    <li><a href="category-banner-full-width.html">Fullwidth Banner<span
-                                                            class="tip tip-hot">Hot!</span></a></li>
-                                                    <li><a href="category-banner-boxed-slider.html">Boxed Slider
-                                                        Banner</a></li>
-                                                    <li><a href="category-banner-boxed-image.html">Boxed Image
-                                                        Banner</a></li>
-                                                    <li><a href="category-sidebar-left.html">Left Sidebar</a></li>
-                                                    <li><a href="category-sidebar-right.html">Right Sidebar</a></li>
-                                                    <li><a href="category-flex-grid.html">Product Flex Grid</a></li>
-                                                    <li><a href="category-horizontal-filter1.html">Horizontal
-                                                        Filter1</a></li>
-                                                    <li><a href="category-horizontal-filter2.html">Horizontal
-                                                        Filter2</a></li>
-                                                </ul>
-                                            </div><!-- End .col-lg-6 -->
-                                            <div class="col-lg-6">
-                                                <div class="menu-title">
-                                                    <a href="#">Variations 2</a>
-                                                </div>
-                                                <ul>
-                                                    <li><a href="#">Product List Item Types</a></li>
-                                                    <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a>
-                                                    </li>
-                                                    <li><a href="category-3col.html">3 Columns Products</a></li>
-                                                    <li><a href="category-4col.html">4 Columns Products <span
-                                                            class="tip tip-new">New</span></a></li>
-                                                    <li><a href="category-5col.html">5 Columns Products</a></li>
-                                                    <li><a href="category-6col.html">6 Columns Products</a></li>
-                                                    <li><a href="category-7col.html">7 Columns Products</a></li>
-                                                    <li><a href="category-8col.html">8 Columns Products</a></li>
-                                                </ul>
-                                            </div><!-- End .col-lg-6 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .col-lg-8 -->
-                                    <div class="col-lg-4">
-                                        <div class="banner">
-                                            <a href="#">
-                                                <img src="assets/images/menu-banner-2.jpg" alt="Menu banner">
-                                            </a>
-                                        </div><!-- End .banner -->
-                                    </div><!-- End .col-lg-4 -->
-                                </div>
-                            </div><!-- End .megamenu -->
-                        </li>
-                        <li class="megamenu-container">
-                            <a href="product.html" class="sf-with-ul">Products</a>
-                            <div class="megamenu">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="menu-title">
-                                                    <a href="#">Variations</a>
-                                                </div>
-                                                <ul>
-                                                    <li><a href="product.html">Horizontal Thumbnails</a></li>
-                                                    <li><a href="product-full-width.html">Vertical Thumbnails<span
-                                                            class="tip tip-hot">Hot!</span></a></li>
-                                                    <li><a href="product.html">Inner Zoom</a></li>
-                                                    <li><a href="product-addcart-sticky.html">Addtocart Sticky</a></li>
-                                                    <li><a href="product-sidebar-left.html">Accordion Tabs</a></li>
-                                                </ul>
-                                            </div><!-- End .col-lg-4 -->
-                                            <div class="col-lg-4">
-                                                <div class="menu-title">
-                                                    <a href="#">Variations</a>
-                                                </div>
-                                                <ul>
-                                                    <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
-                                                    <li><a href="product-simple.html">Simple Product</a></li>
-                                                    <li><a href="product-sidebar-left.html">With Left Sidebar</a></li>
-                                                </ul>
-                                            </div><!-- End .col-lg-4 -->
-                                            <div class="col-lg-4">
-                                                <div class="menu-title">
-                                                    <a href="#">Product Layout Types</a>
-                                                </div>
-                                                <ul>
-                                                    <li><a href="product.html">Default Layout</a></li>
-                                                    <li><a href="product-extended-layout.html">Extended Layout</a></li>
-                                                    <li><a href="product-full-width.html">Full Width Layout</a></li>
-                                                    <li><a href="product-grid-layout.html">Grid Images Layout</a></li>
-                                                    <li><a href="product-sticky-both.html">Sticky Both Side Info<span
-                                                            class="tip tip-hot">Hot!</span></a></li>
-                                                    <li><a href="product-sticky-info.html">Sticky Right Side Info</a>
-                                                    </li>
-                                                </ul>
-                                            </div><!-- End .col-lg-4 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .col-lg-8 -->
-                                    <div class="col-lg-4">
-                                        <div class="banner">
-                                            <a href="#">
-                                                <img src="assets/images/menu-banner.jpg" alt="Menu banner"
-                                                     class="product-promo">
-                                            </a>
-                                        </div><!-- End .banner -->
-                                    </div><!-- End .col-lg-4 -->
-                                </div><!-- End .row -->
-                            </div><!-- End .megamenu -->
-                        </li>
-                        <li>
-                            <a href="#" class="sf-with-ul">Pages</a>
+                        <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}">Anasayfa</a></li>
 
-                            <ul>
-                                <li><a href="cart.html">Shopping Cart</a></li>
-                                <li><a href="#">Checkout</a>
-                                    <ul>
-                                        <li><a href="checkout-shipping.html">Checkout Shipping</a></li>
-                                        <li><a href="checkout-shipping-2.html">Checkout Shipping 2</a></li>
-                                        <li><a href="checkout-review.html">Checkout Review</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Dashboard</a>
-                                    <ul>
-                                        <li><a href="dashboard.html">Dashboard</a></li>
-                                        <li><a href="my-account.html">My Account</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="about.html">About Us</a></li>
-                                <li><a href="#">Blog</a>
-                                    <ul>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="single.html">Blog Post</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="contact.html">Contact Us</a></li>
-                                <li><a href="#" class="login-link">Login</a></li>
-                                <li><a href="forgot-password.html">Forgot Password</a></li>
+                        <li class="">
+                            <a href="#" class="sf-with-ul">Kategoriler</a>
+
+                            <ul style="display: none;">
+                                {% for cat in categories %}
+                                    <li><a href="">{{ cat.name }}</a></li>
+
+                                {% endfor %}
+
+
                             </ul>
                         </li>
-                        <li><a href="#" class="sf-with-ul">Features</a>
-                            <ul>
-                                <li><a href="#">Header Types</a></li>
-                                <li><a href="#">Footer Types</a></li>
-                            </ul>
+
+
+                        <li>
+                            <a href="contact.html" class="sf-with-ul">Kurumsal</a>
+
                         </li>
+                        <li><a href="contact.html" class="sf-with-ul">İletişim</a></li>
+
 
                     </ul>
                 </nav>
@@ -346,19 +211,18 @@
     </div>
 
 
+    <main class="main">
 
- <main class="main">
-
-    {% block content %}
-
+        {% block content %}
 
 
 
 
-    {% endblock %}
+
+        {% endblock %}
 
 
-</main>
+    </main>
     <footer class="footer">
         <div class="footer-middle">
             <div class="container">
@@ -366,21 +230,22 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="widget">
-                            <h4 class="widget-title">Contact Us</h4>
+                            <h4 class="widget-title">İletişim</h4>
                             <ul class="contact-info">
                                 <li>
-                                    <span class="contact-info-label">Address:</span>123 Street Name, City, England
+                                    <span class="contact-info-label">Adres:</span>Ankara Teknopark TGB Yerleşkesi 2224.
+                                    Cad. No:1/116 B Blok NAR Kuluçka Merkezi İvedik OSB Yenimahalle/ANKARA
                                 </li>
                                 <li>
-                                    <span class="contact-info-label">Phone:</span>Toll Free <a href="tel:">(123)
-                                    456-7890</a>
+                                    <span class="contact-info-label">Telefon:</span> <a href="tel:">0850 346 34
+                                    62</a>
                                 </li>
                                 <li>
-                                    <span class="contact-info-label">Email:</span> <a href="mailto:mail@example.com">mail@example.com</a>
+                                    <span class="contact-info-label">Email:</span> <a href="mailto:mail@example.com">info@oxit.com.tr</a>
                                 </li>
                                 <li>
-                                    <span class="contact-info-label">Working Days/Hours:</span>
-                                    Mon - Sun / 9:00AM - 8:00PM
+                                    <span class="contact-info-label">Çalışma Saatleri</span>
+                                    pazartesi-cumartesi 09:00-19:00
                                 </li>
                             </ul>
                             <div class="social-icons">
@@ -411,30 +276,24 @@
                         </div><!-- End .widget -->
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-7">
                                 <div class="widget">
                                     <h4 class="widget-title">My Account</h4>
 
                                     <div class="row">
-                                        <div class="col-sm-6 col-md-5">
+                                        <div class="col-sm-6 col-md-12">
                                             <ul class="links">
-                                                <li><a href="about.html">About Us</a></li>
-                                                <li><a href="contact.html">Contact Us</a></li>
-                                                <li><a href="my-account.html">My Account</a></li>
+                                                <li><a href="about.html">Hakkımızda</a></li>
+                                                <li><a href="contact.html">İletişim</a></li>
+
                                             </ul>
                                         </div><!-- End .col-sm-6 -->
-                                        <div class="col-sm-6 col-md-5">
-                                            <ul class="links">
-                                                <li><a href="#">Orders History</a></li>
-                                                <li><a href="#">Advanced Search</a></li>
-                                                <li><a href="#" class="login-link">Login</a></li>
-                                            </ul>
-                                        </div><!-- End .col-sm-6 -->
+
                                     </div><!-- End .row -->
                                 </div><!-- End .widget -->
                             </div><!-- End .col-md-5 -->
 
-                            <div class="col-md-7">
+                            <div class="col-md-5">
                                 <div class="widget">
                                     <h4 class="widget-title">Main Features</h4>
 
@@ -446,12 +305,7 @@
                                                 <li><a href="#">20 Unique Homepage Layouts</a></li>
                                             </ul>
                                         </div><!-- End .col-sm-6 -->
-                                        <div class="col-sm-6">
-                                            <ul class="links">
-                                                <li><a href="#">Powerful Admin Panel</a></li>
-                                                <li><a href="#">Mobile & Retina Optimized</a></li>
-                                            </ul>
-                                        </div><!-- End .col-sm-6 -->
+
                                     </div><!-- End .row -->
                                 </div><!-- End .widget -->
                             </div><!-- End .col-md-7 -->
@@ -463,9 +317,10 @@
 
         <div class="container">
             <div class="footer-bottom">
-                <p class="footer-copyright">Porto eCommerce. &copy; 2018. All Rights Reserved</p>
+                <p class="footer-copyright">Copyright &copy; 2020 All rights
+                    reserved. Made by <a href="https://www.oxit.com.tr">OXIT</a></p>
 
-                <img src="assets/images/payments.png" alt="payment methods" class="footer-payments">
+                <!-- <img src="assets/images/payments.png" alt="payment methods" class="footer-payments"> -->
             </div><!-- End .footer-bottom -->
         </div><!-- End .container -->
     </footer><!-- End .footer -->
@@ -478,90 +333,40 @@
         <span class="mobile-menu-close"><i class="icon-cancel"></i></span>
         <nav class="mobile-nav">
             <ul class="mobile-menu">
-                <li class="active"><a href="index.html">Home</a></li>
+                <li class="active"><a href="index.html">Anasayfa</a></li>
                 <li>
-                    <a href="category.html">Categories</a>
-                    <ul>
-                        <li><a href="category-banner-full-width.html">Full Width Banner</a></li>
-                        <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a></li>
-                        <li><a href="category-banner-boxed-image.html">Boxed Image Banner</a></li>
-                        <li><a href="category-sidebar-left.html">Left Sidebar</a></li>
-                        <li><a href="category-sidebar-right.html">Right Sidebar</a></li>
-                        <li><a href="category-flex-grid.html">Product Flex Grid</a></li>
-                        <li><a href="category-horizontal-filter1.html">Horizontal Filter 1</a></li>
-                        <li><a href="category-horizontal-filter2.html">Horizontal Filter 2</a></li>
-                        <li><a href="#">Product List Item Types</a></li>
-                        <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll<span
-                                class="tip tip-new">New</span></a></li>
-                        <li><a href="category-3col.html">3 Columns Products</a></li>
-                        <li><a href="category-4col.html">4 Columns Products</a></li>
-                        <li><a href="category-5col.html">5 Columns Products</a></li>
-                        <li><a href="category-6col.html">6 Columns Products</a></li>
-                        <li><a href="category-7col.html">7 Columns Products</a></li>
-                        <li><a href="category-8col.html">8 Columns Products</a></li>
+                    {% for cat in categories %}
+                        <a href="category.html">Kategoriler</a>
+                        <ul>
+                        <li><a href="category-banner-full-width.html">{{ cat.name }}</a></li>
+                    {% endfor %}
+
                     </ul>
                 </li>
                 <li>
-                    <a href="product.html">Products</a>
+                    <a href="product.html">Kurumsal</a>
                     <ul>
                         <li>
-                            <a href="#">Variations</a>
+
                             <ul>
-                                <li><a href="product.html">Horizontal Thumbnails</a></li>
-                                <li><a href="product-full-width.html">Vertical Thumbnails<span
-                                        class="tip tip-hot">Hot!</span></a></li>
-                                <li><a href="product.html">Inner Zoom</a></li>
-                                <li><a href="product-addcart-sticky.html">Addtocart Sticky</a></li>
-                                <li><a href="product-sidebar-left.html">Accordion Tabs</a></li>
+                                <li><a href="product.html">Hakkımızda</a></li>
+
                             </ul>
                         </li>
-                        <li>
-                            <a href="#">Variations</a>
-                            <ul>
-                                <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
-                                <li><a href="product-simple.html">Simple Product</a></li>
-                                <li><a href="product-sidebar-left.html">With Left Sidebar</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">Product Layout Types</a>
-                            <ul>
-                                <li><a href="product.html">Default Layout</a></li>
-                                <li><a href="product-extended-layout.html">Extended Layout</a></li>
-                                <li><a href="product-full-width.html">Full Width Layout</a></li>
-                                <li><a href="product-grid-layout.html">Grid Images Layout</a></li>
-                                <li><a href="product-sticky-both.html">Sticky Both Side Info<span class="tip tip-hot">Hot!</span></a>
-                                </li>
-                                <li><a href="product-sticky-info.html">Sticky Right Side Info</a></li>
-                            </ul>
-                        </li>
+
+
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Pages<span class="tip tip-hot">Hot!</span></a>
+
+                    <a href="contact.html" class="sf-with-ul">İletişim</a>
+
                     <ul>
-                        <li><a href="cart.html">Shopping Cart</a></li>
-                        <li>
-                            <a href="#">Checkout</a>
-                            <ul>
-                                <li><a href="checkout-shipping.html">Checkout Shipping</a></li>
-                                <li><a href="checkout-shipping-2.html">Checkout Shipping 2</a></li>
-                                <li><a href="checkout-review.html">Checkout Review</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="#" class="login-link">Login</a></li>
-                        <li><a href="forgot-password.html">Forgot Password</a></li>
+                        <li><a href="cart.html">İnsan Kaynakları</a></li>
+
                     </ul>
+
                 </li>
-                <li><a href="blog.html">Blog</a>
-                    <ul>
-                        <li><a href="single.html">Blog Post</a></li>
-                    </ul>
-                </li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="#">Special Offer!<span class="tip tip-hot">Hot!</span></a></li>
-                <li><a href="https://1.envato.market/DdLk5" target="_blank">Buy Porto!</a></li>
             </ul>
         </nav><!-- End .mobile-nav -->
 
@@ -584,14 +389,7 @@
                   <input type="submit" class="btn" value="Go!">
               </div> End .from-group
           </form>-->
-<div class="newsletter-subscribe">
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" value="1">
-            Don't show this popup again
-        </label>
-    </div>
-</div>
+
 </div><!-- End .newsletter-popup-content -->
 </div><!-- End .newsletter-popup -->
 
