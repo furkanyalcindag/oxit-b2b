@@ -1,0 +1,44 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+    {% load staticfiles %}
+    <link href="{% static 'editor/css/font-awesome.min.css' %} " rel="stylesheet" type="text/css">
+    <link href="{% static 'editor/css/froala_editor.min.css' %}" rel="stylesheet" type="text/css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{% static 'editor/js/froala_editor.min.js' %}"></script>
+    <section class="content">
+
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+            <section class="col-lg-12 ">
+                <div class="box-body">
+                    <div class="box box-primary">
+
+                        <section id="editor">
+                            <form method="post" enctype="multipart/form-data" role="form">
+                                {% csrf_token %}
+
+                                <h3>{{ form.name }}</h3>
+
+                                <div id="edit">
+                                    {{ form.value }}
+                                </div>
+
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary">Gönder</button>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+    </section>
+    <script>
+        new FroalaEditor('textarea');
+    </script>
+{% endblock %}

@@ -119,6 +119,13 @@ urlpatterns = [
     url(r'ayarlar/profil-ayarlari/$', SettingViews.return_profil_settings, name='profil-ayarlari'),
     url(r'ayarlar/sistem-ayarlari/$', SettingViews.return_system_settings, name='sistem-ayarlari'),
     url(r'sponsor-dogrula/$', SettingViews.sponsor_isexist, name="sponsor-dogrula"),
+    url(r'kurumsal/$', SettingViews.return_corporate, name="kurumsal"),
+    url(r'sozlesme/$', SettingViews.return_contract, name="sozlesme"),
+
+    #IletisimBilgileri
+    url(r'adres-bilgisi/$', SettingViews.return_address, name="iletisim"),
+    url(r'mail-bilgisi/$', SettingViews.return_mail, name="iletisim"),
+    url(r'telefon-bilgisi/$', SettingViews.return_phone, name="iletisim"),
 
     # SoyAgacı
     url(r'soyagaci/soy-agacim/$', TreeViews.return_my_tree, name='soy-agacim'),
