@@ -78,7 +78,7 @@
                                             <div class="widget-body">
                                                 {% for cat in categories %}
                                                     <ul class="cat-list">
-                                                        <li><a href="">{{ cat.name }}</a></li>
+                                                        <li><a href="{% url 'inoks:kategori-urunleri' cat.pk %}">{{ cat.name }}</a></li>
 
                                                     </ul>
                                                 {% endfor %}
@@ -157,16 +157,17 @@
                                         </div><!-- End .collapse -->
                                     </div><!-- End .widget -->
 
-                                    <div class="widget">
+                                   <div class="widget">
                                         <h3 class="widget-title">
                                             <a data-toggle="collapse" href="#widget-body-4" role="button"
-                                               aria-expanded="true" aria-controls="widget-body-4">Markalar</a>
+                                               aria-expanded="true" aria-controls="widget-body-4">´Markalar</a>
+                                        </h3>
 
                                         <div class="collapse show" id="widget-body-4">
                                             <div class="widget-body">
                                                 {% for brand in brands %}
                                                     <ul class="cat-list">
-                                                        <li><a href="{% url 'inoks:markanin-urunleri' brand.pk %}">{{brand.name}}</a></li>
+                                                        <li><a href="{% url 'inoks:markanin-urunleri' brand.pk %}">{{ brand.name }} </a></li>
 
                                                     </ul>
                                                 {% endfor %}

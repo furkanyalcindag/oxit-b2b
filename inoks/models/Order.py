@@ -8,6 +8,9 @@ from inoks.models.Enum import PAYMENT_CHOICES, TRANSFER
 
 
 class Order(models.Model):
+    first_name = models.CharField(max_length=200, blank=True, null=True)
+    last_name = models.CharField(max_length=200, blank=True, null=True)
+    email = models.CharField(max_length=128, blank=True, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Üye Adı')
     product = models.ManyToManyField(Product, through='OrderProduct')
     order_situations = models.ManyToManyField(OrderSituations, default='Ödeme Bekliyor')

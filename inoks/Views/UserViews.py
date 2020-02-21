@@ -1,5 +1,5 @@
-from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib import messages, auth
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.core.mail import EmailMultiAlternatives
@@ -8,15 +8,24 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 
+from accounts.forms import ResetPassword
+from inoks.Forms.AddressForm import AddressForm
+from inoks.Forms.LoginProfilForm import LoginProfilForm
+from inoks.Forms.LoginUserForm import LoginUserForm
 from inoks.Forms.ProfileCreditCardForm import ProfileCreditCardForm
+from inoks.Forms.RefundForm import RefundForm
 from inoks.Forms.UserForm import UserForm
 from inoks.Forms.ProfileForm import ProfileForm
 from inoks.Forms.ProfileUpdateForm import ProfileUpdateForm
 from inoks.Forms.ProfileUpdateMemberForm import ProfileUpdateMemberForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
-from inoks.models import Profile
+from inoks.models import Profile, Settings, Order, Refund
+from inoks.models.Address import Address
+from inoks.models.AddressObject import AddressObject
+from inoks.models.AddressProfile import AddressProfile
 from inoks.models.CreditCardObject import CreditCardObject
 from inoks.models.CreditCard import CreditCard
+from inoks.models.OrderObject import OrderObject
 from inoks.models.ProfileCreditCard import ProfileCreditCard
 from inoks.serializers.profile_serializers import ProfileSerializer
 from inoks.services import general_methods
@@ -88,7 +97,7 @@ def return_add_users(request):
 
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-ekle.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'bayi/kullanici-ekle.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 @login_required
@@ -145,7 +154,7 @@ def return_add_user_creditcart(request, pk):
 
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-kredi-kart-ekle.html',
+    return render(request, 'bayi/kullanici-kredi-kart-ekle.html',
                   {'card_form': user_card_form, 'cards': creditCards})
 
 
@@ -180,7 +189,7 @@ def credit_card_update(request, pk):
 
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-kredi-kart-guncelle.html',
+    return render(request, 'bayi/kullanici-kredi-kart-guncelle.html',
                   {'card_form': card_form})
 
 
@@ -225,7 +234,7 @@ def users_update(request, pk):
 
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-ekle.html',
+    return render(request, 'bayi/kullanici-ekle.html',
                   {'user_form': user_form, 'profile_form': profile_form, 'ilce': profile.district})
 
 
@@ -260,7 +269,7 @@ def users_information(request, pk):
 
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-bilgileri.html',
+    return render(request, 'bayi/kullanici-bilgileri.html',
                   {'user_form': user_form, 'profile_form': profile_form, 'ilce': profile.district})
 
 
@@ -273,7 +282,7 @@ def return_users(request):
         return redirect('accounts:login')
     users = Profile.objects.filter(user__is_active=True).filter(~Q(user__groups__name='Admin'))
 
-    return render(request, 'kullanici/kullanicilar.html', {'users': users})
+    return render(request, 'bayi/kullanicilar.html', {'users': users})
 
 
 @login_required
@@ -297,7 +306,7 @@ def send_information(request, pk):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-    return render(request, 'kullanici/kullanici-bilgi.html', {'password': password, 'username': user.username})
+    return render(request, 'bayi/kullanici-bilgi.html', {'password': password, 'username': user.username})
 
 
 @login_required
@@ -312,7 +321,7 @@ def return_my_users(request):
 
     users = Profile.objects.filter(sponsor_id=userprofile.id, isApprove=True)
 
-    return render(request, 'kullanici/uyelerim.html', {'users': users})
+    return render(request, 'bayi/uyelerim.html', {'users': users})
 
 
 @login_required
@@ -322,7 +331,7 @@ def return_pending_users(request):
         return redirect('accounts:login')
     users = Profile.objects.filter(isApprove=False)
 
-    return render(request, 'kullanici/bekleyen-kullanicilar.html', {'users': users})
+    return render(request, 'bayi/bekleyen-kullanicilar.html', {'users': users})
 
 
 @api_view()
@@ -432,4 +441,310 @@ def return_deactive_users(request):
         return redirect('accounts:login')
     users = Profile.objects.filter(isActive=False)
 
-    return render(request, 'kullanici/iptal-edilen-kullanicilar.html', {'users': users})
+    return render(request, 'bayi/iptal-edilen-kullanicilar.html', {'users': users})
+
+
+def user_register(request):
+    user_form = LoginUserForm(request.POST or None)
+    profile_form = LoginProfilForm(request.POST or None)
+    contract = Settings.objects.get(name='Sozlesme')
+
+    if request.method == 'POST':
+
+        data = request.POST.copy()
+        data['username'] = data['email']
+
+        if user_form.is_valid() and profile_form.is_valid():
+
+            if request.POST['password'] == request.POST['confirm_password']:
+                user = user_form.save(commit=False)
+                user.username = user.email
+                user.save()
+                group = Group.objects.get(name='Üye')
+                user2 = user_form.save()
+                user2.groups.add(group)
+                user.save()
+                user.set_password(user_form.cleaned_data['password'])
+                user.save()
+
+                profil = Profile(user=user, mobilePhone=profile_form.cleaned_data['mobilePhone'])
+                profil.isContract = profile_form.cleaned_data['isContract']
+                profil.isContract = profile_form.cleaned_data['isNotification']
+                profil.save()
+                messages.success(request, 'Kullanıcı Kaydedildi.Giriş Yapabilirsiniz.')
+                return redirect('inoks:kullanici-giris')
+
+
+            else:
+                messages.warning(request, 'Girdiğiniz şifreler eşleşmemektedir.')
+
+        else:
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+
+    return render(request, 'kullanici/kullanici-ekle.html',
+                  {'profile_form': profile_form, 'user_form': user_form, 'contract': contract})
+
+
+def user_login(request):
+    if request.user.is_authenticated is True:
+        return redirect('inoks:admin-dashboard')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            # correct username and password login the user
+            auth.login(request, user)
+
+            if user.groups.all()[0].name == 'Admin':
+                return redirect('inoks:admin-dashboard')
+
+            elif user.groups.all()[0].name == 'Üye':
+
+                return redirect('inoks:kullanici-urun-sayfasi')
+
+            # logout yapılcak
+        else:
+            messages.add_message(request, messages.SUCCESS, 'Mail Adresi Ve Şifre Uyumsuzluğu')
+            return render(request, 'kullanici/kullanici-login.html')
+
+    return render(request, 'kullanici/kullanici-login.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('inoks:kullanici-giris')
+
+
+def user_profil(request):
+    user = request.user
+
+    user_form = UserUpdateForm(request.POST or None, instance=user)
+    profile = Profile.objects.get(user=user)
+    profile_form = LoginProfilForm(request.POST or None, instance=profile)
+
+    if request.method == 'POST':
+
+        if user_form.is_valid() and profile_form.is_valid():
+
+            user.first_name = user_form.cleaned_data['first_name']
+            user.last_name = user_form.cleaned_data['last_name']
+            user.email = user_form.cleaned_data['email']
+            user.username = user_form.cleaned_data['email']
+            profile.mobilePhone = profile_form.cleaned_data['mobilePhone']
+
+            user.save()
+            profile_form.save()
+
+            messages.success(request, 'Profil Bilgileriniz Başarıyla Güncellenmiştir.')
+            return redirect('inoks:kullanici-profil')
+
+        else:
+
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+
+    return render(request, 'kullanici/kullanici-hesabi.html', {'user_form': user_form, 'profile_form': profile_form})
+
+
+def user_change_password(request):
+    if request.method == 'POST':
+        form = ResetPassword(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Şifreniz başarıyla değiştirilmiştir.')
+            return redirect('inoks:kullanici-profil')
+        else:
+            for error in form.errors.keys():
+                messages.warning(request, form.errors[error])
+
+    else:
+        form = ResetPassword(request.user)
+    return render(request, 'kullanici/kullanici-sifre-guncelle.html', {'form': form})
+
+
+@login_required
+def user_my_orders(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+    current_user = request.user
+    userprofile = Profile.objects.get(user=current_user)
+    orderss = Order.objects.filter(profile_id=userprofile.id)
+
+    orders = []
+
+    for order in orderss:
+        orderObject = OrderObject(order=order, total_price=0)
+
+        orderObject.total_price = order.totalPrice
+        orders.append(orderObject)
+
+    return render(request, 'kullanici/kullanici-siparisleri.html', {'orders': orderss})
+
+
+@login_required
+def add_user_address(request):
+    current_user = request.user
+
+    perm = general_methods.control_access(request)
+    if not perm and request.user == current_user:
+        logout(request)
+        return redirect('accounts:login')
+
+    address_form = AddressForm(request.POST)
+
+    profile = Profile.objects.get(user=current_user)
+
+    addresses = AddressProfile.objects.filter(profile=profile)
+
+    if request.method == 'POST':
+        address_form = AddressForm(request.POST)
+        if address_form.is_valid():
+
+            userAddress = Address(name=address_form.cleaned_data['name'],
+                                  address=address_form.cleaned_data['address'],
+                                  city=address_form.cleaned_data['city'],
+                                  district=address_form.cleaned_data['district'])
+            userAddress.save()
+            address_profile = AddressProfile(profile=profile, address=userAddress)
+            address_profile.save()
+            messages.success(request, 'Adres Eklendi')
+            return redirect('inoks:kullanici-adres-ekle')
+
+        else:
+
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+
+    return render(request, 'kullanici/kullanici-adres-ekle.html',
+                  {'address_form': address_form})
+
+
+def get_address(request):
+    current_user = request.user
+    perm = general_methods.control_access(request)
+    if not perm and request.user == current_user:
+        logout(request)
+        return redirect('accounts:login')
+
+    profile = Profile.objects.get(user=current_user)
+    address = []
+
+    addresses = AddressProfile.objects.filter(profile=profile)
+
+    for adres in addresses:
+        addressobj = AddressObject(id=0, name=None, city=None, district=None, address=None)
+        addressobj.id = adres.address.pk
+        addressobj.name = adres.address.name
+        addressobj.address = adres.address.address
+        addressobj.city = adres.address.city
+        addressobj.district = adres.address.district
+        address.append(addressobj)
+
+    return render(request, 'kullanici/kullanici-adres-bilgileri.html', {'addresses': address})
+
+
+@login_required
+def user_add_refund(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+    refund_form = RefundForm()
+
+    if request.method == 'POST':
+
+        refund_form = RefundForm(request.POST, request.FILES)
+
+        if refund_form.is_valid():
+            current_user = request.user
+            refunduser = Profile.objects.get(user=current_user)
+
+            refund = Refund(order=refund_form.cleaned_data['order'],
+                            product=refund_form.cleaned_data['product'],
+                            orderQuantity=refund_form.cleaned_data['orderQuantity'],
+                            isOpen=refund_form.cleaned_data['isOpen'],
+                            profile=refunduser)
+
+            refund.save()
+
+            refund.refundSituations.add(refund_form.cleaned_data['refundSituations'])
+
+            refund.save()
+            messages.success(request, 'İade Kaydı Başarıyla Oluşturulmuştur.')
+            return redirect('inoks:iade-olustur')
+
+        else:
+
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+
+    return render(request, 'kullanici/kullanici-iade-olustur.html', {'refund_form': refund_form})
+
+
+@login_required
+def user_my_refunds(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+    current_user = request.user
+    refund = Profile.objects.get(user=current_user)
+
+    refund_list = Refund.objects.filter(profile_id=refund.id)
+    return render(request, 'kullanici/kullanici-urun-iade.html', {'refund_list': refund_list})
+
+
+@login_required
+def user_delete_address(request, pk):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+
+    address = Address.objects.get(pk=pk)
+    adresProfile = AddressProfile.objects.get(address=address)
+    adresProfile.delete()
+    address.delete()
+    return redirect('inoks:kullanici-adres-bilgileri')
+
+
+@login_required
+def user_address_update(request, pk):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+
+    address = Address.objects.get(pk=pk)
+    address_form= AddressForm(request.POST or None)
+
+    if request.method == 'POST':
+
+        if address_form.is_valid():
+
+            address.name = address_form.cleaned_data['name']
+            address.cvv = address_form.cleaned_data['city']
+            address.card_name_lastName = address_form.cleaned_data['district']
+            address.cartNumber = address_form.cleaned_data['address']
+
+            address_form.save()
+            addressUser = Address(address=address_form)
+            addressUser.save()
+
+            messages.success(request, 'Adres Bilgileri Başarıyla Güncellenmiştir.')
+            return redirect('inoks:kullanici-adres-guncelle', pk)
+
+        else:
+
+            messages.warning(request, 'Alanları Kontrol Ediniz')
+
+    return render(request, 'kullanici/kullanici-adres-guncelle.html',
+                  {'address_form': address_form})

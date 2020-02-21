@@ -87,7 +87,7 @@ def return_user_dashboard(request):
 
     if not perm:
         logout(request)
-        return redirect('accounts:login')
+        return redirect('inoks:kullanici-giris')
     current_user = request.user
     userprofile = Profile.objects.get(user=current_user)
     orders = Order.objects.filter(isApprove=True, profile_id=userprofile.id)

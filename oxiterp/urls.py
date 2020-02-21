@@ -21,24 +21,23 @@ from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
+from inoks.Views import UserViews
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # re_path('api/(?P<version>(v1|v2))/', include('patient.urls')),
-    #path('hasta/', include('patient.urls',  namespace='patient')),
+    # path('hasta/', include('patient.urls',  namespace='patient')),
     # url(r'^', include(router.urls)),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-    #path('', include('accounts.urls')),
-    #path('accounts/', include('django.contrib.auth.urls'))
-    path('', include('accounts.urls')),
-    #path('egitim/', include('education.urls')),
+    # path('', include('accounts.urls')),
+    # path('accounts/', include('django.contrib.auth.urls'))
+    path('bayi/', include('accounts.urls')),
+    # path('egitim/', include('education.urls')),
     path('oxit/', include('inoks.urls')),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-

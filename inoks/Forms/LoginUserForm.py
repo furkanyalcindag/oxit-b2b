@@ -3,21 +3,20 @@ from django.forms import ModelForm
 from django import forms
 
 
-class UserForm(ModelForm):
+class LoginUserForm(ModelForm):
     # confirm_password = forms.CharField( widget=forms.PasswordInput(
     #   attrs={'class': 'form-control', 'placeholder': 'Şifre Tekrarı'}))
     # email = forms.CharField(help_text=("Enter the same password as before, for verification."))
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'password',)
+        fields = ('first_name', 'last_name', 'email', 'password')
         widgets = {
             'first_name': forms.TextInput(
-                attrs={'class': 'form-control ', 'placeholder': 'Ad Soyad', 'value': '', 'required': 'required'}),
+                attrs={'class': 'form-control ', 'placeholder': 'Ad', 'value': '', 'required': 'required'}),
             'last_name': forms.TextInput(
-                attrs={'class': 'form-control ', 'placeholder': ' Bayi Adı', 'required': 'required'}),
-            'username': forms.TextInput(
-                attrs={'class': 'form-control ', 'placeholder': 'Kullanıcı Adı'}),
+                attrs={'class': 'form-control ', 'placeholder': ' Soyad', 'required': 'required'}),
+
             'email': forms.TextInput(
                 attrs={'class': 'form-control ', 'placeholder': 'E-mailiniz', 'required': 'required'}),
             'password': forms.PasswordInput(

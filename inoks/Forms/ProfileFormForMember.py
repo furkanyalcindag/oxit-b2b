@@ -11,17 +11,17 @@ CHOICES_WITH_BLANK = (
 
 
 class ProfileForm(ModelForm):
-    isContract = forms.BooleanField(required=True)
+    isContract = forms.BooleanField(required=False)
 
     class Meta:
         model = Profile
 
         fields = (
-            'profileImage', 'address', 'mobilePhone', 'gender', 'tc', 'birthDate', 'job', 'city', 'educationLevel',
+            'profileImage', 'mobilePhone', 'gender', 'tc', 'birthDate', 'job', 'city', 'educationLevel',
              'district', 'isContract', 'iban', 'ibanAdSoyad')
         widgets = {
-            'address': forms.Textarea(
-                attrs={'class': 'form-control ', 'placeholder': 'Adres', 'rows': '2', 'required': 'required'}),
+           # 'address': forms.Textarea(
+             #   attrs={'class': 'form-control ', 'placeholder': 'Adres', 'rows': '2', 'required': 'required'}),
             'mobilePhone': forms.TextInput(
                  attrs={'class': 'form-control ', 'placeholder': '(5XX)-XXX-XX-XX', 'required': 'required',
                         'maxlength': '10', 'minlength': '10'}),

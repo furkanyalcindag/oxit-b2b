@@ -1,0 +1,603 @@
+{% extends 'base_layout_2.html' %}
+{% load mathfilters %}
+{% block content %}
+
+
+
+    <style>
+        #cover-spin {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: none;
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #cover-spin::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 48%;
+            top: 40%;
+            width: 40px;
+            height: 40px;
+            border-style: solid;
+            border-color: black;
+            border-top-color: transparent;
+            border-width: 4px;
+            border-radius: 50%;
+            -webkit-animation: spin .8s linear infinite;
+            animation: spin .8s linear infinite;
+        }
+    </style>
+
+
+    <div class="modal fade bd-example-modal-lg" id="product" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="product-body">
+                ...
+            </div>
+        </div>
+    </div>
+    <!-- success modal -->
+    <div class="modal modal-success modal-success-food fade in" id="modal-success" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">İşlem Başarılı</h4>
+                </div>
+                <div class="modal-body successModal">
+                    ...
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-outline btn-ok">Tamam</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal modal-danger fade in deneme22" tabindex="-1" role="dialog" id="modal-danger"
+         aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Uyarı</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Silmek istediğinizden emin misiniz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left btn-ok" id="btn-conf"
+                            data-dismiss="modal">Evet
+                    </button>
+                    <button type="button" class="btn btn-outline" id="btn-close">Hayır</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" id="situation" role="dialog"
+         aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+
+
+            <div class="modal-content" style="height:fit-content">
+
+                <div class="modal-header" style="background-color:#3c8dbc ">
+                    <font color="white">Sipariş Durumu Güncelle</font>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body bodys bodys-1234">
+
+                </div>
+
+                <div class="modal-footer footer-1234 ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+
+    {% endif %}
+
+
+    <div class="modal fade bd-example-modal-lg-1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+
+
+            <div class="modal-content" style="height:fit-content">
+
+                <div class="modal-header" style="background-color:#3c8dbc ">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body bodys">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <aside class="sidebar col-lg-3">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+                    <div id="myDIV">
+                        <ul class="list">
+
+                            <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                            <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                            <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-iadelerim' %}" class="">İadelerim</a></li>
+
+                        </ul>
+                    </div>
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-3 -->
+
+            <div class="col-lg-9 order-lg-last dashboard-content">
+
+
+                <div class="box-body">
+
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title"> Siparişler</h3>
+                    </div>
+
+
+                    <table id="tum" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Sipariş Numarası</th>
+
+                            <th>Ödeme Şekli</th>
+                            <th>Sipariş Durumu</th>
+                            <th>Sipariş Tarihi</th>
+                            <th>Ürünler</th>
+                            <th>Tutar</th>
+                            <th>Kargo Bilgi</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% if orders.all %}
+                            {% for order in orderss %}
+                                <tr>
+
+
+                                    <td>{{ forloop.counter }} </td>
+                                    <td><a href="#">{{ order.id }}</a></td>
+
+
+                                    <td>{{ order.payment_type }}</td>
+
+
+                                    <td><span style="font-size: 100%"
+                                              class="label label-info"> {{ order.latest_catch }}</span>
+                                    </td>
+
+                                    <td>{{ order.creationDate }}</td>
+
+                                    <td width=200px>
+                                        <a href="#" class="button btn btn-success"
+                                           onclick="order_products({{ order.id }})">Urunler</a>
+
+                                    </td>
+
+                                    <td>{{ order.totalPrice }} TL</td>
+                                    <td><a href="{% url 'inoks:kargo-bilgi' pk=order.id %}"
+                                           class="btn btn-warning">Kargo Bilgisi </a></td>
+
+                                </tr>
+
+                            {% endfor %}
+                        {% endif %}
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+
+            </div>
+        </div>
+        <!-- /.row (main row) -->
+    </div>
+
+
+
+    <script>
+        $(function () {
+            $('#tum').DataTable({
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': true
+            })
+
+        })
+    </script>
+
+
+    <script>
+
+        function showSituationModal(order_id) {
+
+            var html = '';
+            var html2 = ''
+
+            html += '  <div class="form-group">';
+            html += ' <label>Sipariş Durumları</label>';
+            //var x = document.getElementById(situation).options[document.getElementById(situation).selectedIndex].value
+            html += ' <select class="form-control" id="situation-12"';
+            // html +=  'onChange="durumGuncelle('+order_id+','+this.value+');' +'"';
+            html += '>';
+            html += '  {% for situation in order_situations %} ';
+                html += ' <option value="{{ situation.id }}">{{ situation.name }}</option>';
+                html += ' {% endfor %}';
+            html += ' </select></div>';
+
+
+            $(".bodys-1234").html(html);
+            html2 += ' <button class="btn btn-primary align-right" onClick ="getOrderSituation(' + order_id + ',' + document.getElementById('situation-12').options[document.getElementById('situation-12').selectedIndex].value + ')" >Durum Güncelle</button>';
+
+
+            $(".footer-1234").html(html2);
+
+
+            var att = document.createAttribute("onchange");       // Create a "class" attribute
+            att.value = 'durumGuncelle(' + order_id + ',' + document.getElementById('situation-12' + '').options[document.getElementById('situation-12').selectedIndex].value + ');';
+
+            document.getElementById('situation-12').setAttributeNode(att);
+            // document.getElementById('situation-12'). setAttributeNode("onchange", function(){durumGuncelle(order_id,document.getElementById('situation-12' +
+            //   '').options[document.getElementById('situation-12').selectedIndex].value);});
+
+            // $('situation').attr('onchange',undefined).change(function() { durumGuncelle(order_id,document.getElementById(situation).options[document.getElementById(situation).selectedIndex].value) });
+
+
+            $('#situation').modal()
+
+
+        }
+
+        function durumGuncelle(order_id, situation_id) {
+            var att = document.createAttribute("onchange");
+            att.value = 'durumGuncelle(' + order_id + ',' + document.getElementById('situation-12' + '').options[document.getElementById('situation-12').selectedIndex].value + ');';
+
+            document.getElementById('situation-12').setAttributeNode(att);
+
+            var html2 = '';
+            html2 += ' <button class="btn btn-primary align-right" onClick ="getOrderSituation(' + order_id + ',' + document.getElementById('situation-12').options[document.getElementById('situation-12').selectedIndex].value + ')" >Durum Güncelle</button>';
+            console.log(html2);
+            $(".footer-1234").html(html2);
+
+
+        }
+
+        function deleteOrders(id) {
+            // $('#modal-danger').modal('show');
+            console.log(id);
+            var html = ''
+            $("#modal-danger").on("shown.bs.modal", function (e) {
+                $("#btn-conf").click(function () {
+                    $.ajax({
+                        url: "{% url "inoks:siparislersil" pk=212121223232323232 %}".replace(/212121223232323232/, id.toString()),
+                        type: "POST",
+                        data: {
+                            'csrfmiddlewaretoken': "{{  csrf_token  }}",
+                            isActive: 'False'
+                        },
+                        success: function (result) {
+
+                            html = ' Sipariş Başarıyla Silindi';
+
+                            $(".successModal").html(html);
+                            $('#modal-success').on("shown.bs.modal", function (e) {
+                                $(".btn-ok").click(function () {
+
+                                    window.location.replace("{% url "inoks:siparisler" %}");
+
+                                });
+
+                            }).modal('show');
+
+
+                            console.log(result.status)
+                        }
+                    });
+                });
+            }).modal('show');
+            $('#btn-close').click(function () {
+                $('#modal-danger').modal('hide');
+            });
+
+        }
+    </script>
+
+
+    <script>
+
+
+        function getOrder(id) {
+
+            var html = '';
+            $.get(" {% url "inoks:getOrder" pk=12121   %}".replace(/12121/, id.toString()))
+                .done(function (response) {
+
+                    var order = response.order[0];
+                    console.log(order.isContract);
+                    var situation = order.isContract;
+                    console.log(situation);
+                    if (situation) {
+                        console.log("deneme");
+                        situation = 'Onaylandı'
+                    }
+                    if (!situation) {
+                        situation = 'Onaylanmadı'
+                    }
+                    html += ' <div class="box-body box-profile">';
+                    html += ' <ul class="list-group list-group-unbordered">';
+                    html += '<div class="row">';
+                    html += '<div class="col-md-6">';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Sözleşme Onaylandı Mı ?</b> <a class="pull-right">' + situation + '</a></li>';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Üye Adı</b> <a class="pull-right">' + order.profile.user.first_name + ' ' + order.profile.user.last_name + '</a></li>';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>İl</b> <a class="pull-right">' + order.city.name + '</a></li></div>';
+                    html += '<div class="col-md-6" style="border-left: thin solid #000000">';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Toplam Tutar</b> <a class="pull-right">' + order.totalPrice + ' TL' + '</a></li>';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Sponsor</b> <a class="pull-right">' + order.profile.sponsor.id + ' - ' + order.profile.sponsor.user.first_name + ' ' + order.profile.sponsor.user.last_name + '</a></li>';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>İlçe</b> <a class="pull-right">' + order.district + '</a></li></div>';
+
+                    html += '<div class="col-md-12" >';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Adres</b> <a class="pull-right">' + order.address + '</a></li>' +
+                        '';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Diğer Adres</b> <a class="pull-right">' + order.otherAddress + '</a></li>' +
+                        '';
+                    html += ' <li class="list-group-item">';
+                    html += '<b>Kurumsal</b> <a class="pull-right">' + order.companyInfo + '</a></li></div>' +
+                        '</div></ul>';
+
+
+                    $(".bodys").html(html);
+
+                });
+
+            $('.bd-example-modal-lg-1').modal('show');
+
+
+            $(".bd-example-modal-lg-1").on("hidden.bs.modal", function () {
+                // put your default event here
+                $(".bodys").html("");
+            });
+
+
+        }
+
+
+    </script>
+
+
+    <script>
+
+        function order_products(id) {
+
+            $('#product').modal('show');
+            $.ajax({
+                url: "{% url "inoks:siparis-urun-getir" %}",
+                type: "GET",
+                data: {
+
+                    id: id
+                },
+                success: function (result) {
+
+                    debugger;
+                    html = '   <table class="table">';
+                    html += '  <thead>';
+                    html += '   <tr>';
+                    html += '     <th scope="col">#</th>';
+                    html += '     <th scope="col">adı</th>';
+                    html += '    <th scope="col">miktarı</th>';
+
+                    html += '  </tr>';
+                    html += ' </thead>';
+                    html += ' <tbody>';
+
+                    for (i = 0; i < result.length; i++) {
+                        // do something
+                        var x = i + 1;
+                        html += '  <tr>';
+                        html += '    <th scope="row">' + x + '</th>';
+                        html += '    <td>' + result[i].product_name + '</td>';
+                        html += '   <td>' + result[i].quantity + '</td>';
+
+                        html += '  </tr>';
+                    }
+
+
+                    html += ' </tbody>';
+                    html += ' </table>';
+
+
+                    document.getElementById('product-body').innerHTML = html;
+
+                    console.log(html);
+                }
+            });
+
+
+        }
+
+        function getOrderSituation(order_id, situation_id) {
+            document.getElementById("cover-spin").style.display = "block";
+
+            $.ajax({
+                url: "{% url 'inoks:siparis-durumu-guncelle' %}",
+                type: "post", // or "get"
+                data: {
+                    order_id: order_id,
+                    situation_id: situation_id
+
+                },
+                success: function (result) {
+                    if (result.status == 'Success') {
+                        document.getElementById("cover-spin").style.display = "none";
+                        swal("Başarılı", "Sipariş durumu güncellendi.", "success");
+                        window.location.replace("{% url "inoks:siparisler" %}");
+
+
+                    } else {
+                        document.getElementById("cover-spin").style.display = "none";
+                        swal("Başarısız", result.msg, "error");
+                    }
+                }
+            });
+
+
+        }
+
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+    </script>
+
+
+{% endblock %}

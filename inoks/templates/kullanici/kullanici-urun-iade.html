@@ -1,0 +1,138 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <aside class="sidebar col-lg-3">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+                    <div id="myDIV">
+                        <ul class="list">
+
+                            <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                            <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                            <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-iadelerim' %}" class="">İadelerim</a></li>
+
+                        </ul>
+                    </div>
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-3 -->
+            <div class="col-lg-9 order-lg-last dashboard-content">
+
+                <div class="row">
+
+                    <div class="box-body">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">İadelerim</h3>
+                            <a href="{% url 'inoks:kullanici-iade-olustur' %}" class="btn"
+                               style="float: right;background-color: #cdceca;color: #010101;">İade Oluştur</a>
+                        </div>
+
+                        <table id="iadelerim" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Sipariş Numarası</th>
+                                <th>Ürün Kodu / Adı / Fiyatı</th>
+                                <th>İade Miktarı</th>
+                                <th>İade Nedeni / Kullanıldı Mı ?</th>
+                                <th>İade Tarihi</th>
+                                <th>Durum</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% if refund_list.all %}
+                                {% for refund_lists in refund_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter }} </td>
+
+                                        <td>{{ refund_lists.order.id }}</td>
+                                        <td>{{ refund_lists.product.id }} - {{ refund_lists.product.name }}
+                                            - {{ refund_lists.product.price }} TL
+                                        </td>
+                                        <td>{{ refund_lists.orderQuantity }} Adet</td>
+                                        <td>
+                                            {% for refundSituations in refund_lists.refundSituations.all %}
+
+                                                {{ refundSituations.name }} - {{ refund_lists.isOpen }}
+
+                                            {% endfor %}
+
+                                        </td>
+
+
+                                        <td>{{ refund_lists.refundDate }}</td>
+                                        <td> {% if refund_lists.isApprove == True %}
+                                            <font style="color: darkgreen"> Onaylandı </font>
+                                        {% elif  refund_lists.isApprove == False %}
+                                            <font style="color: red"> Reddedildi </font>
+                                        {% else %} <font style="color: blue"> Bekleniyor </font>
+
+                                        {% endif %} </td>
+
+                                    </tr>
+
+                                {% endfor %}
+                            {% endif %}
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <!-- /.box -->
+
+
+
+
+
+
+{% endblock %}

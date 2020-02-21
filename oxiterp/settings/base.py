@@ -57,7 +57,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.IsAuthenticated',
         # 'rest_framework.permissions.IsAdminUser',
-     ),
+    ),
     'PAGE_SIZE': 100,
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',
@@ -89,6 +89,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
                 'inoks.services.general_methods.getMenu',
+
+                'inoks.services.general_methods.get_category_home',
                 'inoks.services.general_methods.getAdminMenu',
 
                 # "education.services.general_methods.append_privileges",
@@ -168,7 +170,6 @@ EMAIL_HOST_USER = 'ik@oxityazilim.com'
 EMAIL_HOST_PASSWORD = 'oxit2016'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True"""
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.baven.net'

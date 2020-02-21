@@ -27,6 +27,7 @@ from inoks.models import Order, OrderSituations, Profile, Product, OrderProduct,
 from inoks.models.Cargo import Cargo
 from inoks.models.CartObject import CartObject
 from inoks.models.OrderObject import OrderObject
+from inoks.models.UserProductObject import UserProductObject
 from inoks.serializers.order_serializers import OrderSerializer
 from inoks.serializers.product_cart_serializer import CartSerializer
 from inoks.services import general_methods
@@ -793,7 +794,7 @@ def cargo_update(request, pk):
 
             messages.success(request, 'Başarıyla Güncellendi')
 
-            return redirect('inoks:kargo-ücret-gör')
+            return redirect('inoks:kargo-ücret-bilgileri')
 
         else:
 
@@ -803,6 +804,25 @@ def cargo_update(request, pk):
 
 
 def get_cargo(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
     cargos = Cargo.objects.all()
 
     return render(request, 'kargo/kargo.html', {'cargos': cargos})
+
+
+@login_required
+def cargo_delete(request, pk):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
+    cargo = Cargo.objects.get(pk=pk)
+    cargo.delete()
+    messages.success(request, 'Kargo Bilgisi Silindi.')
+    return redirect('inoks:kargo-ücret-bilgileri')
+

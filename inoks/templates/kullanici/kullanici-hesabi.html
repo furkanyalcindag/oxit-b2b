@@ -1,0 +1,87 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+    <br>
+    <div class="container">
+        <div class="row">
+            <aside class="sidebar col-lg-3">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+                    <div id="myDIV">
+                        <ul class="list">
+
+                            <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                            <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                            <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-iadelerim' %}" class="">İadelerim</a></li>
+
+                        </ul>
+                    </div>
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-3 -->
+            <div class="col-lg-9 order-lg-last dashboard-content">
+                <h2>Hesap Bilgileri</h2>
+                <br>
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group ">
+                                        <label for="acc-name">{{ user_form.first_name.label }}</label>
+                                        {{ user_form.first_name }}
+                                    </div><!-- End .form-group -->
+                                    <div class="form-group ">
+                                        <label for="acc-mname">{{ user_form.last_name.label }}</label>
+                                        {{ user_form.last_name }}
+                                    </div><!-- End .form-group -->
+                                    <div class="form-group ">
+                                        <label for="acc-mname">{{ user_form.email.label }}</label>
+                                        {{ user_form.email }}
+                                    </div><!-- End .form-group -->
+                                    <div class="form-group ">
+                                        <label for="acc-mname">{{ profile_form.mobilePhone.label }}</label>
+                                        {{ profile_form.mobilePhone }}
+                                    </div><!-- End .form-group -->
+                                </div><!-- End .col-md-4 -->
+
+
+                            </div><!-- End .row -->
+                        </div><!-- End .col-sm-11 -->
+                    </div><!-- End .row -->
+                    <div class="mb-2"></div><!-- margin -->
+
+                    <div class="form-footer">
+                        <div class="form-footer-right">
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </div>
+                    </div><!-- End .form-footer -->
+                </form>
+            </div><!-- End .col-lg-9 -->
+
+
+        </div><!-- End .row -->
+    </div>
+
+
+    <script>
+        function active_btn() {
+            var header = document.getElementById("myDIV");
+            var btns = header.getElementsByClassName("");
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].addEventListener("click", function () {
+                    var current = document.getElementsByClassName("active");
+                    if (current.length > 0) {
+                        current[0].className = current[0].className.replace(" active", "");
+                    }
+                    this.className += " active";
+                });
+            }
+        }
+
+
+    </script>
+{% endblock %}

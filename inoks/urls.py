@@ -1,17 +1,19 @@
 from django.conf.urls import url
 
 from inoks.Views import ProductViews, UserViews, OrderViews, ReportViews, EarningsViews, DashboardViews, SettingViews, \
-    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews
+    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews, CheckoutViews
 
 app_name = 'inoks'
 
 urlpatterns = [
     # HOME
 
-    url(r'home/customer-home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
+    url(r'home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
     url(r'home/category-product/(?P<pk>\d+)$', HomeViews.get_category_products, name='kategori-urunleri'),
     url(r'home/brand-product/(?P<pk>\d+)$', HomeViews.get_brand_products, name='markanin-urunleri'),
     url(r'home/product-detail/(?P<pk>\d+)$', HomeViews.get_product_detail, name='urun-detay'),
+    url(r'home/checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
+    url(r'home/search/$', HomeViews.search_category, name='search'),
 
     # Dashboard
     url(r'dashboard/admin-dashboard/$', DashboardViews.return_admin_dashboard, name='admin-dashboard'),
@@ -19,7 +21,7 @@ urlpatterns = [
     url(r'dashboard/admin-dashboard/sil/(?P<pk>\d+)$', DashboardViews.pending_profile_delete,
         name='bekleyen-kullanicilar-sil'),
     url(r'dashboard/admin-dashboard/(?P<pk>\d+)$', DashboardViews.getPendingProfile, name='getPendingProfile'),
-    url(r'kullanici-onayla/$', DashboardViews.profile_active_passive, name="kullanici-onayla"),
+    url(r'bayi-onayla/$', DashboardViews.profile_active_passive, name="bayi-onayla"),
     url(r'dashboard/admin-dashboard/bekleyen-siparis-sil/(?P<pk>\d+)$', DashboardViews.pending_order_delete,
         name='bekleyen-siparisler-sil'),
     url(r'dashboard/admin-dashboard/pending-order/(?P<pk>\d+)$', DashboardViews.getPendingOrder,
@@ -27,30 +29,43 @@ urlpatterns = [
     url(r'siparis-onayla/$', DashboardViews.pendingOrderActive, name="siparis-onayla"),
     url(r'dashboard/user-dashboard/(?P<pk>\d+)$', DashboardViews.getMyOrder, name='getMyOrder'),
 
-    # Kullanıcılar
-    url(r'kullanici/kullanici-ekle/$', UserViews.return_add_users, name='kullanici-ekle'),
-    url(r'kullanici/kullanicilar/$', UserViews.return_users, name='kullanicilar'),
+    # Bayi-Kullanici
+    url(r'kullanici/bayi-ekle/$', UserViews.return_add_users, name='bayi-ekle'),
+    url(r'kullanici/bayiler/$', UserViews.return_users, name='bayiler'),
     url(r'kullanici/uyelerim/$', UserViews.return_my_users, name='uyelerim'),
     url(r'kullanici/bekleyen-kullanicilar/$', UserViews.return_pending_users, name='bekleyen-kullanicilar'),
     url(r'kullanici/iptal-edilen-kullanicilar/$', UserViews.return_deactive_users, name='iptal-edilen-kullanicilar'),
     url(r'kullanici/bekleyen-kullanicilar/sil/(?P<pk>\d+)$', UserViews.pending_profile_delete,
         name='bekleyen-kullanicilar-sil'),
     url(r'kullanici-onayla/$', UserViews.profile_active_passive, name="kullanici-onayla"),
-    url(r'kullanici-iptal-et/$', UserViews.profile_passive, name="kullanici-iptal-et"),
+    url(r'kullanici-iptal-et/$', UserViews.profile_passive, name="bayi-iptal-et"),
     url(r'kullanici/bekleyen-kullanicilar/(?P<pk>\d+)$', UserViews.getPendingProfile, name='getPendingProfile'),
-    url(r'kullanici/kullanicilar/(?P<pk>\d+)$', UserViews.getAllProfile, name='getAllProfile'),
+    url(r'kullanici/bayiler/(?P<pk>\d+)$', UserViews.getAllProfile, name='getAllProfile'),
     url(r'kullanici/iptal-edilen-kullanicilar/(?P<pk>\d+)$', UserViews.getDeactiveProfile, name='getDeactiveProfile'),
-    url(r'kullanici-aktif-et/$', UserViews.profile_reactive, name="kullanici-aktif-et"),
-    url(r'kullanici/kullanici-ekle/duzenle/(?P<pk>\d+)$', UserViews.users_update, name='kullanici-duzenle'),
-    url(r'kullanici/kullanici-ekle/kullanici-bilgileri/(?P<pk>\d+)$', UserViews.users_information,
-        name='kullanici-bilgileri-getir'),
-    url(r'kullanici/kullanici-bilgi-gonder/(?P<pk>\d+)$', UserViews.send_information, name='kullanici-bilgi-gonder'),
-    url(r'kullanici/kullanici-kart-ekle/(?P<pk>\d+)$', UserViews.return_add_user_creditcart,
-        name='kullanici-kart-ekle'),
-    url(r'kullanici/kullanici-kart-guncelle/(?P<pk>\d+)$', UserViews.credit_card_update,
-        name='kullanici-kart-guncelle'),
-    url(r'kullanici/kullanici-kart-sil/(?P<pk>\d+)$', UserViews.credit_card_delete,
-        name='kullanici-kart-sil'),
+    url(r'kullanici-aktif-et/$', UserViews.profile_reactive, name="bayi-aktif-et"),
+    url(r'kullanici/bayi-ekle/duzenle/(?P<pk>\d+)$', UserViews.users_update, name='bayi-duzenle'),
+    url(r'kullanici/bayi-ekle/bayi-bilgileri/(?P<pk>\d+)$', UserViews.users_information,
+        name='bayi-bilgileri-getir'),
+    url(r'kullanici/bayi-bilgi-gonder/(?P<pk>\d+)$', UserViews.send_information, name='bayi-bilgi-gonder'),
+    url(r'kullanici/bayi-kart-ekle/(?P<pk>\d+)$', UserViews.return_add_user_creditcart,
+        name='bayi-kart-ekle'),
+    url(r'kullanici/bayi-kart-guncelle/(?P<pk>\d+)$', UserViews.credit_card_update,
+        name='bayi-kart-guncelle'),
+    url(r'kullanici/bayi-kart-sil/(?P<pk>\d+)$', UserViews.credit_card_delete,
+        name='bayi-kart-sil'),
+
+    # Kulllanici
+    url(r'kullanici/kullanici-ekle/$', UserViews.user_register, name='kullanici-ekle'),
+    url(r'kullanici/kullanici-login/$', UserViews.user_login, name='kullanici-giris'),
+    url(r'kullanici/kullanici-logout/$', UserViews.user_logout, name='kullanici-logout'),
+    url(r'kullanici/profil/$', UserViews.user_profil, name='kullanici-profil'),
+    url(r'kullanici/sifre-guncelle/$', UserViews.user_change_password, name='sifre-guncelle'),
+    url(r'kullanici/siparislerim/$', UserViews.user_my_orders, name='kullanici-siparisleri'),
+    url(r'kullanici/adres-ekle/$', UserViews.add_user_address, name='kullanici-adres-ekle'),
+    url(r'kullanici/adres-bilgileri/$', UserViews.get_address, name='kullanici-adres-bilgileri'),
+    url(r'kullanici/adres-sil/(?P<pk>\d+)$', UserViews.user_delete_address, name='kullanici-adres-sil'),
+    url(r'kullanici/adres-guncelle/(?P<pk>\d+)$', UserViews.user_address_update, name='kullanici-adres-guncelle'),
+    url(r'kullanici/kulanici-iade-olustur/$', RefundViews.return_add_refund, name='kullanici-urun-iade-olustur'),
 
     # Urunler
     url(r'urunler/urun-ekle/$', ProductViews.return_add_products, name='urun-ekle'),
@@ -71,6 +86,13 @@ urlpatterns = [
     url(r'urunler/grupla/(?P<group_id>\d+)$', ProductViews.add_products_to_group, name='urun-grupla'),
     url(r'urunler/grup-urun-sil/(?P<group_id>\d+)/(?P<product_id>\d+)$', ProductViews.delete_product_from_group,
         name='urun-grup-sil'),
+
+    # Stok
+    url(r'urunler/stok-guncelle/$', ProductViews.stock_update, name='stok-guncelle'),
+
+    # Kargo
+    url(r'urunler/kargo-metotlari/$', OrderViews.get_cargo, name='kargo-metotlari'),
+    url(r'urunler/kargo-guncelle/(?P<pk>\d+)$', OrderViews.cargo_update, name='kargo-guncelle'),
 
     # Siparisler
     url(r'siparisler/siparis-ekle/$', OrderViews.return_add_orders, name='siparis-ekle'),
@@ -105,6 +127,10 @@ urlpatterns = [
     url(r'iade-reddet/$', RefundViews.pendingRefundPassive, name="iade-reddet"),
     url(r'iadeler/bekleyen-iadeler/$', RefundViews.return_pendings_refunds, name='bekleyen-iadeler'),
 
+    # Kullanıcı-İade
+    url(r'kullanici/iade-olustur/$', UserViews.user_add_refund, name='kullanici-iade-olustur'),
+    url(r'kullanici/iadelerim/$', UserViews.user_my_refunds, name='kullanici-iadelerim'),
+
     # Raporlar
     url(r'raporlar/rapor-olustur/$', ReportViews.return_create_report, name='rapor-olustur'),
 
@@ -122,7 +148,7 @@ urlpatterns = [
     url(r'kurumsal/$', SettingViews.return_corporate, name="kurumsal"),
     url(r'sozlesme/$', SettingViews.return_contract, name="sozlesme"),
 
-    #IletisimBilgileri
+    # IletisimBilgileri
     url(r'adres-bilgisi/$', SettingViews.return_address, name="iletisim"),
     url(r'mail-bilgisi/$', SettingViews.return_mail, name="iletisim"),
     url(r'telefon-bilgisi/$', SettingViews.return_phone, name="iletisim"),

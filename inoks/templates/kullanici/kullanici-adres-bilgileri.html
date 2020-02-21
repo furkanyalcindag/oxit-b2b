@@ -1,0 +1,108 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 order-lg-last dashboard-content">
+                <br>
+                <h2>Adreslerim</h2>
+
+                <div class="row">
+                    {% for address in addresses %}
+
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <h2 class="card-header">{{ address.name }}</h2>
+
+                                <div class="card-body">
+                                    <div>
+                                        <address>
+                                            {{ address.address }}
+                                        </address>
+                                        <p>{{ address.city }}/ {{ address.district }}</p>
+
+                                        <div class="address-box-action clearfix">
+                                            <a href="{% url 'inoks:kullanici-adres-guncelle' address.id%}" class="btn btn-sm btn-link">
+                                                Düzenle
+                                            </a>
+                                            <a href="{% url 'inoks:kullanici-adres-sil' address.id%}" class="btn btn-sm btn-link">
+                                                Sil
+                                            </a>
+
+                                        </div><!-- End .address-box-action -->
+                                    </div><!-- End .shipping-address-box -->
+                                </div><!-- End .shipping-step-addresses -->
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+
+                <a href="{% url 'inoks:kullanici-adres-ekle' %}"
+                   class="btn btn-sm btn-outline-secondary btn-new-address"
+                >+ Yeni Adres</a>
+            </div><!-- End .col-lg-9 -->
+            <aside class="sidebar col-lg-3">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+                    <div id="myDIV">
+                        <ul class="list">
+
+                            <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                            <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                            <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                            <li><a href="#" class="">İadelerim</a></li>
+
+                        </ul>
+                    </div>
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-3 -->
+        </div><!-- End .row -->
+    </div>
+
+
+{% endblock %}

@@ -37,7 +37,7 @@ def coupon_create(request):
         else:
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-kupon-form.html',
+    return render(request, 'bayi/kullanici-kupon-form.html',
                   {'coupon_form': coupon_form, 'coupon': coupon})
 
 
@@ -66,7 +66,7 @@ def coupon_update(request, pk):
         else:
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-kupon-form.html',
+    return render(request, 'bayi/kullanici-kupon-form.html',
                   {'coupon_form': coupon_form, 'coupon': coupon})
 
 
@@ -96,7 +96,7 @@ def review_payments(request):
         else:
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'kullanici/kullanici-ödeme-kupon.html',
+    return render(request, 'bayi/bayi-ödeme-kupon.html',
                   {'coupon_form': coupon_form, 'user_form': user_form, 'profile_form': profile_form})
 
 

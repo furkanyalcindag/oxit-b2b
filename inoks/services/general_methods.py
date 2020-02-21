@@ -4,7 +4,9 @@ import datetime
 from django.contrib.auth.models import User, Permission
 from django.db.models import Sum
 
-from inoks.models import Profile, Order, Menu, MenuAdmin, Refund, earningPayments, OrderSituations
+from inoks.models import Profile, Order, Menu, MenuAdmin, Refund, earningPayments, OrderSituations, ProductCategory
+from inoks.models.Address import Address
+
 from inoks.models.ProfileControlObject import ProfileControlObject
 
 
@@ -17,6 +19,13 @@ def getMenu(request):
 def getAdminMenu(request):
     adminmenus = MenuAdmin.objects.all().order_by('name')
     return {'adminmenus': adminmenus}
+
+
+def get_category_home(request):
+    categories = ProductCategory.objects.all()
+
+    return {'categories': categories}
+
 
 
 def activeUser(request, pk):
@@ -92,7 +101,7 @@ def rtrnProfileBySponsorID(profile_list):
         if not prof.is_controlled:
             profiles = Profile.objects.filter(sponsor=prof.profile)
             for profile in profiles:
-                #total_order = monthlyMemberOrderTotal(profile)['total_price']
+                # total_order = monthlyMemberOrderTotal(profile)['total_price']
                 total_order = MemberAllOrderTotal(profile)['total_price']
                 if total_order is None:
                     total_order = 0
@@ -152,6 +161,7 @@ def MemberAllOrderTotal(profile):
         total_price=Sum('totalPrice'))
 
     return orders_sum
+
 
 def monthlyMemberOrderTotalByDate(profile, month, year):
     datetime_current = datetime.datetime.today()
@@ -367,7 +377,7 @@ def calculate_earning_of_tree(levelDict, total_order_member):
     total_order_member = total_order_member['total_price']
 
     if total_order_member is None:
-        total_order_member=0
+        total_order_member = 0
 
     total_order1 = (total_order * 100) / 118
 
@@ -554,5 +564,3 @@ def control_access(request):
         is_exist = True
 
     return is_exist
-
-

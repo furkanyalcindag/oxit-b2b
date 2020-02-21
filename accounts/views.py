@@ -229,6 +229,7 @@ def permission_post(request):
     else:
         return JsonResponse({'status': 'Fail', 'msg': 'Not a valid request'})
 
+
 def change_password(request):
     if request.method == 'POST':
         form = ResetPassword(request.user, request.POST)

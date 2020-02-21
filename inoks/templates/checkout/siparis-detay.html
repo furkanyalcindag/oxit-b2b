@@ -1,0 +1,136 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="cart-table-container">
+                    <table class="table table-cart">
+                        <thead>
+                        <tr>
+                            <th class="product-col">Ürün</th>
+                            <th class="price-col">Fiyat</th>
+                            <th class="qty-col">Adet</th>
+                            <th>Toplam Ürün Fiyatı</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in orders %}
+                            <tr class="product-row">
+                                <td class="product-col">
+
+
+                                    {% if product.image.all %}
+                                        <figure class="product-image">
+                                            <a href="product.html" class="product-image">
+                                                <img style="width:50px"
+                                                     src="/media/{{ product.image.all.0.productImage }}" alt="product">
+                                            </a>
+                                        </figure>
+                                    {% endif %}
+                                    <h2 class="product-title">
+                                        <a href="{% url 'inoks:urun-detay' product.id %}">{{ product.product_name }}</a>
+                                    </h2>
+                                </td>
+                                <td>{{ product.price }}₺</td>
+
+                                <td>
+
+                                    <input class=" form-control" type="number" value="{{ product.count }}"
+                                           style="width:60px">
+                                </td>
+                                <td>{{ product.subtotal }}₺</td>
+
+                            </tr>
+
+                            <tr class="product-action-row">
+                                <td colspan="4" class="clearfix">
+
+
+                                    <div class="float-right">
+
+                                        <a href="#" title="Remove product" class="btn-remove"><span
+                                                class="sr-only">Sil</span></a>
+                                    </div><!-- End .float-right -->
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                        <tr>
+                            <td colspan="4" class="clearfix">
+                                <div class="float-left">
+                                    <a href="{% url 'inoks:kullanici-urun-sayfasi' %}"
+                                       class="btn btn-outline-secondary">Alışverişe Devam Et</a>
+                                </div><!-- End .float-left -->
+
+                                <div class="float-right">
+                                    <a href="#" class="btn btn-outline-secondary btn-clear-cart">Alışveriş Sepetini
+                                        Temizle</a>
+                                    <a href="#" class="btn btn-outline-secondary btn-update-cart">Alışveriş Sepetini
+                                        Güncelle</a>
+                                </div><!-- End .float-right -->
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div><!-- End .cart-table-container -->
+
+
+            </div><!-- End .col-lg-8 -->
+
+            <div class="col-lg-4">
+                <div class="cart-discount">
+                    <h4>İndirim Kuponu</h4>
+                    <form action="#">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" placeholder="İndirim Kodu"
+                                   required="">
+                            <div class="input-group-append">
+                                <button class="btn btn-sm btn-primary" type="submit">İndirim Uygula</button>
+                            </div>
+                        </div><!-- End .input-group -->
+                    </form>
+                </div><!-- End .cart-discount -->
+                <div class="cart-summary">
+                    <h3>Sipariş Detayı</h3>
+
+
+                    <!-- End #total-estimate-section -->
+
+                    <table class="table table-totals">
+                        <tbody>
+                        <tr>
+                            <td>Toplam Sipariş</td>
+                            <td>17.00₺</td>
+                        </tr>
+
+                        <tr>
+                            <td>KDV</td>
+                            <td>0.00₺</td>
+                        </tr>
+                        <tr>
+                            <td>Kargo</td>
+                            <td>10.00₺</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td>Toplam Tutar</td>
+                            <td>$17.90</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="checkout-methods">
+                        <a href="checkout-shipping.html" class="btn btn-block btn-sm btn-primary">Ödemeyi Tamamla</a>
+
+                    </div><!-- End .checkout-methods -->
+                </div><!-- End .cart-summary -->
+            </div><!-- End .col-lg-4 -->
+        </div><!-- End .row -->
+    </div>
+{% endblock %}

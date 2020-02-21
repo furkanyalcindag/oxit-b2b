@@ -61,17 +61,30 @@
                 </div><!-- End .header-left -->
 
                 <div class="header-right">
-                    <p class="welcome-msg">Hoşgeldiniz </p>
+                    {% if user.is_authenticated %}
+                        <p class="welcome-msg">Hoşgeldiniz {{ user.first_name }} {{ user.last_name }} </p>
+                        <div class="header-dropdown dropdown-expanded">
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Hesabım</a></li>
+                                    <li><a href="{% url 'inoks:kullanici-logout' %}" class="">Çıkış Yap</a></li>
 
-                    <div class="header-dropdown dropdown-expanded">
-                        <a href="#">Links</a>
-                        <div class="header-menu">
-                            <ul>
+                                </ul>
+                            </div><!-- End .header-menu -->
+                        </div><!-- End .header-dropown -->
+                    {% else %}
+                        <p class="welcome-msg">Hoşgeldiniz </p>
+                        <div class="header-dropdown dropdown-expanded">
 
-                                <li><a href="#" class="login-link">Giriş</a></li>
-                            </ul>
-                        </div><!-- End .header-menu -->
-                    </div><!-- End .header-dropown -->
+                            <div class="header-menu">
+                                <ul>
+
+                                    <li><a href="{% url 'inoks:kullanici-giris' %}" class="">Giriş Yap</a></li>
+                                </ul>
+                            </div><!-- End .header-menu -->
+                        </div><!-- End .header-dropown -->
+                    {% endif %}
+
                 </div><!-- End .header-right -->
             </div><!-- End .container -->
         </div><!-- End .header-top -->
@@ -86,17 +99,18 @@
 
                 <div class="header-center">
                     <div class="header-search">
-                        <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
-                        <form action="#" method="get">
+                        <a href="" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
+                        <form method="post" action="{% url 'inoks:search' %}">
+                            {% csrf_token %}
                             <div class="header-search-wrapper">
-                                <input type="search" class="form-control" name="q" id="q" placeholder="Ara..."
-                                       required>
+
+                                <input type="search" class="form-control" name="name" id="name" placeholder="Search...">
                                 <div class="select-custom">
 
-                                    <select id="cat" name="cat">
-                                        <option value="">Tüm Kategoriler</option>
+                                    <select id="cat" name="cat" type="search">
+
                                         {% for cat in categories %}
-                                            <option value="4">{{ cat.name }}</option>
+                                            <option value="{{ cat.id }}">{{ cat.name }}</option>
                                         {% endfor %}
 
 
@@ -150,17 +164,16 @@
 
 
                         <li>
-                            <a href="contact.html" class="sf-with-ul">Kurumsal</a>
+                            <a href="contact.html">Kurumsal</a>
 
                         </li>
-                        <li><a href="contact.html" class="sf-with-ul">İletişim</a></li>
+                        <li><a href="contact.html">İletişim</a></li>
 
 
                     </ul>
                 </nav>
             </div><!-- End .header-bottom -->
         </div><!-- End .header-bottom -->
-
 
     </header><!-- End .header -->
 
@@ -192,7 +205,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{% url "inoks:kart-siparis-ekle" %}">
+                <form action="{% url "inoks:kullanici-checkout" %}" method="post">
+                    {% csrf_token %}
                     <div class="modal-body">
                         <table class="show-cart table">
 
@@ -205,6 +219,7 @@
 
                         <a class="button clear-cart btn btn-danger">Sepeti Boşalt</a>
                     </div>
+                    <input type="hidden" name="products_cart" id="products_cart">
                 </form>
             </div>
         </div>
@@ -454,14 +469,25 @@
         }
 
         // Save cart
+        window.onload = function () {
+            if (sessionStorage.getItem('shoppingCart')!= null){
+                cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            document.getElementById('products_cart').value = JSON.stringify(cart)
+            }
+
+
+        };
+
         function saveCart() {
             sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
+            document.getElementById('products_cart').value = JSON.stringify(cart)
 
         }
 
         // Load cart
         function loadCart() {
             cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            document.getElementById('products_cart').value = JSON.stringify(cart)
         }
 
         if (sessionStorage.getItem("shoppingCart") != null) {
@@ -484,6 +510,7 @@
                 }
             }
             var item = new Item(name, price, count, id);
+            debugger;
             cart.push(item);
             saveCart();
         }
@@ -581,7 +608,7 @@
     // *****************************************
     // Add item
     $('.add-to-cart').click(function (event) {
-        debugger;
+
 
         var x = $(this).data('price').replace(',', '.')
         event.preventDefault();
@@ -589,6 +616,7 @@
 
         var id = $(this).data('id');
         var price = Number(x);
+        debugger;
         shoppingCart.addItemToCart(name, price, 1, id);
         displayCart();
         document.getElementById("toast").style.display = 'block';

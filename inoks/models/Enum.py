@@ -102,3 +102,13 @@ SPEED_CHOISES = (
     (HIZ10, 'Y=186 MPH, 300km/h'),
 
 )
+
+ADDRESS1 = 'EV'
+ADDRESS2 = 'İŞ'
+ADDRESS3 = 'DİĞER'
+
+ADDRESS_CHOISES = (
+    (ADDRESS1, 'EV'),
+    (ADDRESS2, 'İŞ'),
+    (ADDRESS3, 'DİĞER')
+)

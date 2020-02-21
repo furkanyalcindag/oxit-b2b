@@ -1,0 +1,90 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+
+
+                {% if message.tags == 'warning' %}
+
+                    <div class="alert " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if message.tags == 'success' %}
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+
+                            <div class="alert  " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li class="{{ message.tags }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+
+        {% endif %}
+        <div class="container">
+            <div class="content">
+                <br>
+                <h2>Kullanıcı Giriş Sayfası</h2>
+
+                    <form action="#" method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group required-field">
+                            <label for="acc-email">E-Posta</label>
+                            <input type="text" id="email_address" class="form-control" name="username"
+                                   required autofocus>
+                        </div><!-- End .form-group -->
+
+                        <div class="form-group required-field">
+                            <label for="acc-password">Parola</label>
+                            <input type="password" id="password" class="form-control" name="password" required>
+                        </div><!-- End .form-group -->
+
+                        <div class="form-footer">
+                            <div class="form-footer-right">
+                                <button type="submit" class="btn btn-primary">Giriş yap</button>
+                            </div>
+                        </div><!-- End .form-footer -->
+
+                    </form>
+            </div>
+        </div>
+    </div><!-- End .col-lg-9 -->
+    </div><!-- End .row -->
+
+
+{% endblock %}

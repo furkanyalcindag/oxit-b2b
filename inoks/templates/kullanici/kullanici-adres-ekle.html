@@ -1,0 +1,185 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-6 order-lg-last dashboard-content">
+                         {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert  alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+                <br>
+
+                <h2>Adres Ekle</h2>
+
+                <form action="" method="post">
+                    {% csrf_token %}
+
+
+                    <div class="form-group ">
+                        <label for="acc-name">{{ address_form.name.label }}</label>
+                        {{ address_form.name }}
+                    </div>
+                    <div class="form-group ">
+                        <label for="acc-name">{{ address_form.city.label }}</label>
+                        {{ address_form.city }}
+                    </div><!-- End .form-group -->
+
+
+                    <div class="form-group ">
+                        <label for="acc-name">{{ address_form.district.label }}</label>
+                        {{ address_form.district }}
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group ">
+                        <label for="acc-name">{{ address_form.address.label }}</label>
+                        {{ address_form.address }}
+                    </div><!-- End .form-group -->
+
+
+                    <div class="form-footer">
+
+                        <div class="form-footer-right">
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </div>
+                    </div><!-- End .form-footer -->
+
+                </form>
+            </div><!-- End .col-lg-9 -->
+            <aside class="sidebar col-lg-3">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+                    <div id="myDIV">
+                        <ul class="list">
+
+                            <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                            <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                            <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                            <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                            <li><a href="#" class="">İadelerim</a></li>
+
+                        </ul>
+                    </div>
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-3 -->
+        </div><!-- End .row -->
+    </div>
+
+
+    <script>
+
+
+        function ilceGetir() {
+
+            var e = document.getElementById("id_city");
+            var il_id = e.options[e.selectedIndex].value;
+            $.ajax({
+                url: "{% url 'inoks:ilce-getir' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    il_id: il_id,
+
+                },
+                success: function (result) {
+                    debugger;
+
+                    let select = document.getElementById("ilce_id");
+
+                    select.options[select.options.length] = new Option('Text 1', 'Value1');
+
+                    $('#ilce_id').empty();
+
+                    for (let i = 0; i < result.ilceler.length; i++) {
+                        select.options[select.options.length] = new Option(result.ilceler[i].name, result.ilceler[i].name);
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('.iban').mask('SS00 0000 0000 0000 0000 0000 00', {
+                placeholder: '____ ____ ____ ____ ____ ____ __'
+            });
+
+
+            ilceGetir();
+            //console.log($('#ilce_id').select2('data'))
+            $('#ilce_id').val('{{ilce}}').trigger('change'); // Select the option with a value of '1'
+
+
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    </script>
+{% endblock %}

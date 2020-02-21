@@ -14,11 +14,9 @@ class ProfileUpdateForm(ModelForm):
         model = Profile
 
         fields = (
-            'profileImage', 'address', 'mobilePhone', 'gender', 'tc', 'birthDate', 'job', 'city', 'educationLevel',
+            'profileImage', 'mobilePhone', 'gender', 'tc', 'birthDate', 'job', 'city', 'educationLevel',
              'district', 'iban', 'ibanAdSoyad')
         widgets = {
-            'address': forms.Textarea(
-                attrs={'class': 'form-control ', 'placeholder': 'Adres', 'rows': '2', 'required': 'required'}),
             'mobilePhone': forms.TextInput(
                 attrs={'class': 'form-control ', 'placeholder': 'Telefon Numarası', 'required': 'required'}),
             'gender': forms.Select(attrs={'class': 'form-control select2 select2-hidden-accessible',
