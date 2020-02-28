@@ -78,7 +78,7 @@ def order_checkout(request):
 @login_required
 def payment_islogin(request):
     card = ""
-    c_code = ""
+
     subtotal = 0
     discount = 0
     net_total = 0
@@ -96,12 +96,9 @@ def payment_islogin(request):
     address_dict = dict()
     orders = []
 
-
-
     if request.POST:
 
         if user_form.is_valid() and profile_form.is_valid():
-
             user.first_name = user_form.cleaned_data['first_name']
             user.last_name = user_form.cleaned_data['last_name']
             user.email = user_form.cleaned_data['email']
@@ -124,8 +121,6 @@ def payment_islogin(request):
                 address_dict[choice[0]] = address_array
 
         cards = json.loads(request.POST['card'])
-        c_code = json.loads(request.POST['c_code'])
-        code = c_code['c_code']
 
         for product in cards:
             order = UserProductObject(id=0, product_name=None, price=0, count=0, image=None, subtotal=0, slug=None)
@@ -139,20 +134,26 @@ def payment_islogin(request):
 
         for order in orders:
             subtotal = order.subtotal + subtotal
+        c_code = json.loads(request.POST['c_code'])
+        if c_code == None:
+            discount = discount
 
-        discount = couponControl(code, subtotal)
-
+        else:
+            code = c_code['c_code']
+            discount = couponControl(code, subtotal)
         if orders:
             net_total = subtotal * 100 / (100 + float(kdv.value))
-            if subtotal >= kargo.lower_limit:  # KARGO KONTROLU
+            if subtotal >= kargo.lower_limit:  # ücretsiz kargo
                 kargo1 = 0
-                total = subtotal - float(discount)
+                total = subtotal
                 kdv = Decimal(total) - Decimal(net_total)
+                total = subtotal - float(discount)
 
             else:
-                kargo1 = kargo.price
-                total = Decimal(subtotal) + kargo.price - float(discount)
+                kargo1 = kargo.price  # ücretli kargo
+                total = Decimal(subtotal)
                 kdv = Decimal(total) - Decimal(net_total)
+                total = Decimal(subtotal) + kargo.price - float(discount)
 
     return render(request, 'checkout/odeme-tamamla-login.html',
                   {'card': orders, 'user_form': user_form, 'profile_form': profile_form, 'subtotal': Decimal(subtotal),

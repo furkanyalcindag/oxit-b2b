@@ -378,16 +378,20 @@
             {% if user.is_authenticated %}
 
                 card = JSON.parse(sessionStorage.getItem('shoppingCart'));
-                document.getElementById('card').value = JSON.stringify(card)
+                document.getElementById('card').value = JSON.stringify(card);
 
-                console.log(card)
+                console.log(card);
 
                 debugger;
                 c_code = sessionStorage.getItem('c_code');
 
-                if (c_code != null) {
+                if (c_code != null ) {
                     discount = JSON.parse(c_code);
-                    document.getElementById('c_code').value = JSON.stringify(discount)
+                    document.getElementById('c_code').value = JSON.stringify(discount);
+                }
+                else{
+                    document.getElementById('c_code').value = JSON.stringify(null);
+                    console.log(c_code);
                 }
 
 
