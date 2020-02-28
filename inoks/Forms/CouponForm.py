@@ -7,7 +7,7 @@ from inoks.models.Coupon import Coupon
 class CouponForm(ModelForm):
     class Meta:
         model = Coupon
-        fields = ('name', 'code', 'creationDate', 'finishDate', 'discountAmount')
+        fields = ('name', 'code', 'creationDate', 'finishDate', 'stock','discount','isLimit','limit')
         widgets = {
             'name': forms.TextInput(
                 attrs={'class': 'form-control ', 'placeholder': 'Kupon Adı', 'required': 'required'}),
@@ -22,7 +22,13 @@ class CouponForm(ModelForm):
             'finishDate': forms.DateInput(
                 attrs={'class': 'form-control  pull-right', 'type': 'date', 'autocomplete': 'off'}),
 
-            'discountAmount': forms.TextInput(
-                attrs={'class': 'form-control ', 'placeholder': 'İndirim Miktarı', 'required': 'required'})
+            'stock': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Kupon Adedi', 'required': 'required'}),
+
+            'discount': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Ürün Fiyatı', 'required': 'required'}),
+
+            'limit': forms.NumberInput(
+                attrs={'class': 'form-control ', 'placeholder': 'Kupon Limit Fiyatı', 'required': 'required'}),
 
         }

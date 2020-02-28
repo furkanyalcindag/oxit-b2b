@@ -778,7 +778,7 @@ def kargoBilgi(request, pk):
                   {'card': order_products, 'siparis_no': pk, 'order': order, 'total': order.totalPrice,
                    'userOrder': order.profile})
 
-
+@login_required
 def cargo_update(request, pk):
     perm = general_methods.control_access(request)
 
@@ -802,8 +802,13 @@ def cargo_update(request, pk):
     return render(request, 'kargo/kargo-guncelle.html',
                   {'cargo_form': cargo_form})
 
-
+@login_required
 def get_cargo(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
     perm = general_methods.control_access(request)
 
     if not perm:

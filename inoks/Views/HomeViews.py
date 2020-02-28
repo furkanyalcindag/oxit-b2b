@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from django.shortcuts import render
 
+from inoks.filters.ProductFilter import ProductFilter
 from inoks.models import ProductCategory, Product, ProductGroup
 from inoks.models.Brand import Brand
 
@@ -16,10 +17,8 @@ def get_home_product(request):
 
 
 
-
-
-def get_category_products(request, pk):
-    category = ProductCategory.objects.get(pk=pk)
+def get_category_products(request, slug):
+    category = ProductCategory.objects.get(slug=slug)
     products = category.product_set.all()
     cat = ProductCategory.objects.all()
     brands = Brand.objects.all()
@@ -28,8 +27,8 @@ def get_category_products(request, pk):
                   {'products': products, 'categories': cat, 'brands': brands})
 
 
-def get_brand_products(request, pk):
-    brand = Brand.objects.get(pk=pk)
+def get_brand_products(request, slug):
+    brand = Brand.objects.get(slug=slug)
     products = brand.product_set.all()
     brands = Brand.objects.all()
 
@@ -38,8 +37,8 @@ def get_brand_products(request, pk):
                   {'products': products, 'categories': cat, 'brands': brands})
 
 
-def get_product_detail(request, pk):
-    product = Product.objects.get(pk=pk)
+def get_product_detail(request, slug):
+    product = Product.objects.get(slug=slug)
     group = ProductGroup.objects.get(name="Önerilen Ürünler")
     return render(request, 'home/product-detail.html',
                   {'product': product, 'group': group})
@@ -58,3 +57,5 @@ def search_category(request):
 
     return render(request, 'home/get-category-products.html',
                   {'products': products, 'categories': categories, 'brands': brands})
+
+

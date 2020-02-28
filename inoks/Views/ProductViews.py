@@ -298,6 +298,11 @@ def return_add_brand(request):
 
 @login_required
 def brand_delete(request, pk):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
     if request.method == 'POST':
         try:
             obj = Brand.objects.get(pk=pk)
@@ -341,8 +346,13 @@ def delete_product_from_group(request, product_id, group_id):
     messages.success(request, 'Ürün başarıyla çıkarıldı.')
     return redirect('inoks:urun-grupla', group_id)
 
-
+@login_required
 def stock_update(request):
+    perm = general_methods.control_access(request)
+
+    if not perm:
+        logout(request)
+        return redirect('accounts:login')
     if request.method == 'POST':
 
         check_list = request.POST['checks'].split(',')

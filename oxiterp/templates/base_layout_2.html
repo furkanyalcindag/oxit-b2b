@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %} ">
 </head>
 <body>
+
 <div class="page-wrapper">
     <header class="header">
         <div class="header-top" style="background-color: black;">
@@ -110,7 +111,9 @@
                                     <select id="cat" name="cat" type="search">
 
                                         {% for cat in categories %}
-                                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                            <a href="{% url 'inoks:kategori-urunleri' cat.slug %}">
+                                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                            </a>
                                         {% endfor %}
 
 
@@ -154,7 +157,7 @@
 
                             <ul style="display: none;">
                                 {% for cat in categories %}
-                                    <li><a href="">{{ cat.name }}</a></li>
+                                    <li><a href="{% url 'inoks:kategori-urunleri' cat.slug %}">{{ cat.name }}</a></li>
 
                                 {% endfor %}
 
@@ -351,9 +354,9 @@
                 <li class="active"><a href="index.html">Anasayfa</a></li>
                 <li>
                     {% for cat in categories %}
-                        <a href="category.html">Kategoriler</a>
+                        <a href="">Kategoriler</a>
                         <ul>
-                        <li><a href="category-banner-full-width.html">{{ cat.name }}</a></li>
+                        <li><a href="{% url 'inoks:kategori-urunleri'  cat.slug %}">{{ cat.name }}</a></li>
                     {% endfor %}
 
                     </ul>
@@ -470,9 +473,9 @@
 
         // Save cart
         window.onload = function () {
-            if (sessionStorage.getItem('shoppingCart')!= null){
+            if (sessionStorage.getItem('shoppingCart') != null) {
                 cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            document.getElementById('products_cart').value = JSON.stringify(cart)
+                document.getElementById('products_cart').value = JSON.stringify(cart)
             }
 
 
@@ -510,7 +513,7 @@
                 }
             }
             var item = new Item(name, price, count, id);
-            debugger;
+
             cart.push(item);
             saveCart();
         }
@@ -616,7 +619,7 @@
 
         var id = $(this).data('id');
         var price = Number(x);
-        debugger;
+
         shoppingCart.addItemToCart(name, price, 1, id);
         displayCart();
         document.getElementById("toast").style.display = 'block';
@@ -672,6 +675,25 @@
         shoppingCart.removeItemFromCartAll(name);
         displayCart();
     })
+
+
+
+   $('.item-count').on("change", ".item-count", function (event) {
+        var name = $(this).data('name');
+        var count = Number($(this).val());
+        shoppingCart.setCountForItem(name, count);
+        displayCart();
+    });
+
+    $(".delete-item2").click(function () {
+         var name = $(this).data('id');
+         console.log("hjgshjdgshjdgjhsdgjs");
+        console.log(name);
+        shoppingCart.removeItemFromCartAll(name);
+        displayCart();
+
+        document.getElementById("pro_table").deleteRow($(this).data('row'));
+    });
 
 
     // -1

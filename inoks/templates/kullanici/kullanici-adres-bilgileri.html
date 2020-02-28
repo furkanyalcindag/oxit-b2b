@@ -50,35 +50,51 @@
                 <h2>Adreslerim</h2>
 
                 <div class="row">
-                    {% for address in addresses %}
 
+                    {% for key,value in addresses.items %}
 
                         <div class="col-md-6">
                             <div class="card">
-                                <h2 class="card-header">{{ address.name }}</h2>
+                                <h2 class="card-header">{{ key }}</h2>
 
                                 <div class="card-body">
-                                    <div>
-                                        <address>
-                                            {{ address.address }}
-                                        </address>
-                                        <p>{{ address.city }}/ {{ address.district }}</p>
 
-                                        <div class="address-box-action clearfix">
-                                            <a href="{% url 'inoks:kullanici-adres-guncelle' address.id%}" class="btn btn-sm btn-link">
-                                                Düzenle
-                                            </a>
-                                            <a href="{% url 'inoks:kullanici-adres-sil' address.id%}" class="btn btn-sm btn-link">
-                                                Sil
-                                            </a>
 
-                                        </div><!-- End .address-box-action -->
-                                    </div><!-- End .shipping-address-box -->
+                                    {% for address in value %}
+                                        <div>
+                                            <address>
+                                                {{ address.address }}
+                                            </address>
+                                            <p>{{ address.city }}/ {{ address.district }}</p>
+
+                                            <div class="address-box-action clearfix">
+                                                <a href="{% url 'inoks:kullanici-adres-guncelle' address.id %}"
+                                                   class="btn btn-sm btn-link">
+                                                    Düzenle
+                                                </a>
+                                                <a href="{% url 'inoks:kullanici-adres-sil' address.id %}"
+                                                   class="btn btn-sm btn-link">
+                                                    Sil
+                                                </a>
+
+                                            </div><!-- End .address-box-action -->
+                                        </div><!-- End .shipping-address-box -->
+
+                                    {% endfor %}
+
                                 </div><!-- End .shipping-step-addresses -->
                             </div>
                         </div>
 
+
+
+
+
+
+
                     {% endfor %}
+
+
                 </div>
 
                 <a href="{% url 'inoks:kullanici-adres-ekle' %}"

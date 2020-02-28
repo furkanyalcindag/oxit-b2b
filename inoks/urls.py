@@ -9,9 +9,9 @@ urlpatterns = [
     # HOME
 
     url(r'home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
-    url(r'home/category-product/(?P<pk>\d+)$', HomeViews.get_category_products, name='kategori-urunleri'),
-    url(r'home/brand-product/(?P<pk>\d+)$', HomeViews.get_brand_products, name='markanin-urunleri'),
-    url(r'home/product-detail/(?P<pk>\d+)$', HomeViews.get_product_detail, name='urun-detay'),
+    url(r'home/category-product/(?P<slug>[-\w\d]+)/$', HomeViews.get_category_products, name='kategori-urunleri'),
+    url(r'home/brand-product/(?P<slug>[-\w\d]+)/$', HomeViews.get_brand_products, name='markanin-urunleri'),
+    url(r'home/product-detail/(?P<slug>[-\w\d]+)/$', HomeViews.get_product_detail, name='urun-detay'),
     url(r'home/checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
     url(r'home/search/$', HomeViews.search_category, name='search'),
 
@@ -169,11 +169,15 @@ urlpatterns = [
     url(r'odeme-basarisiz/$', OrderViews.basarisiz_odeme, name='basarisiz-odeme'),
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
 
+    url(r'odeme-tamamla/$', CheckoutViews.payment_islogin, name='odeme-tamamla-login'),
+    url(r'odeme-tamamla-adres/$', CheckoutViews.add_payment_address, name='odeme-tamamla-yeni-adres'),
+
     # kupon
     url(r'kupon-bilgileri/$', CouponViews.coupon_create, name='kupon'),
     url(r'ödeme-bilgileri/$', CouponViews.review_payments, name='odeme'),
     url(r'kupon-aktifligi/(?P<pk>\d+)$', CouponViews.coupon_activity, name='kupon-aktiflestir'),
     url(r'kupon-sil/(?P<pk>\d+)$', CouponViews.coupon_delete, name='kupon-sil'),
     url(r'kupon-guncelle/(?P<pk>\d+)$', CouponViews.coupon_update, name='kupon-guncelle'),
+    url(r'kupon-kontrol/$', CouponViews.coupon_control, name='kupon-kontrol'),
 
 ]

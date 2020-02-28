@@ -19,7 +19,7 @@ class UserUpdateForm(ModelForm):
                        }),
 
             'email': forms.EmailInput(
-                attrs={'class': 'form-control ', 'placeholder': ' Soyadınız', 'required': 'required',
+                attrs={'class': 'form-control ', 'placeholder': ' Email', 'required': 'required',
                        }),
 
         }

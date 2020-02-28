@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 from inoks.models.ProductImage import ProductImage
 from inoks.models.ProductCategory import ProductCategory
@@ -34,6 +35,12 @@ class Product(models.Model):
     rimDiameter = models.IntegerField(blank=True, null=True, verbose_name='Jant Çapı')
     speedIndex = models.CharField(null=True, blank=True, verbose_name='Hız Endeksi', max_length=100,
                                   choices=SPEED_CHOISES)
+    slug = models.SlugField(null=True, unique=True)
 
     def __str__(self):
         return '%s ' % self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args,**kwargs)

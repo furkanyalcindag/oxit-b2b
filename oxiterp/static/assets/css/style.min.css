@@ -270,14 +270,14 @@ a:focus {
 }
 
 .title {
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .subtitle {
     margin-bottom: 2rem;
     color: #21293c;
     font: 700 1.9rem/1 "Open Sans", sans-serif;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .carousel-title {
@@ -287,7 +287,7 @@ a:focus {
     color: #302e2a;
     font: 700 1.8rem/1 "Open Sans", sans-serif;
     letter-spacing: -.01rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .light-title {
@@ -471,7 +471,7 @@ a:focus {
     display: none;
     position: relative;
     margin: .3rem 2rem .3rem 0;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .welcome-msg::after {
@@ -502,7 +502,7 @@ a:focus {
 
 .header-dropdown {
     position: relative;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .header-dropdown>a {
@@ -666,7 +666,7 @@ a:focus {
 }
 
 .compare-dropdown .dropdown-toggle {
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .compare-dropdown .dropdown-toggle i {
@@ -705,7 +705,7 @@ a:focus {
     font-size: 1.1rem;
     font-weight: 400;
     line-height: 1.35;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .compare-products .btn-remove {
@@ -741,7 +741,7 @@ a:focus {
     display: inline-block;
     color: #777;
     font-size: 1.1rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .compare-actions .btn {
@@ -755,7 +755,7 @@ a:focus {
     font-weight: 400;
     letter-spacing: .025rem;
     text-align: center;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .cart-dropdown .dropdown-toggle {
@@ -914,7 +914,7 @@ a:focus {
     color: #474747;
     font-size: 1.3rem;
     font-weight: 700;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .dropdown-cart-total {
@@ -957,7 +957,7 @@ a:focus {
     font-size: 1.2rem;
     font-weight: 400;
     letter-spacing: .025rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .dropdown-cart-action .btn:hover,
@@ -1140,7 +1140,7 @@ a:focus {
     display: block;
     font-size: 1.1rem;
     font-weight: 600;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .header-contact a {
@@ -1448,7 +1448,7 @@ a:focus {
     color: #696969;
     font-size: 1.2rem;
     font-weight: 600;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     white-space: nowrap
 }
 
@@ -1457,7 +1457,7 @@ a:focus {
     margin-bottom: 0;
     color: #434d53;
     letter-spacing: -.01rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .menu li .menu-title a {
@@ -1661,7 +1661,7 @@ a:focus {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     vertical-align: middle;
     z-index: 1
 }
@@ -1789,7 +1789,7 @@ a:focus {
 }
 
 .mobile-menu>li>a {
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .mobile-menu li {
@@ -2042,7 +2042,7 @@ a:focus {
     color: #fff;
     font: 700 1.6rem/1.1 "Open Sans", sans-serif;
     letter-spacing: 0;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .footer .widget {
@@ -2082,7 +2082,7 @@ a:focus {
     display: block;
     color: #fff;
     font-weight: 400;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .footer .widget-newsletter {
@@ -2156,7 +2156,7 @@ a:focus {
     font-weight: 600;
     letter-spacing: 0;
     line-height: 1;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .widget-newsletter .btn:hover,
@@ -2352,7 +2352,7 @@ a:focus {
     font: 700 1.6rem "Open Sans", sans-serif;
     letter-spacing: -0.01em;
     line-height: 22px;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-intro {
@@ -2414,7 +2414,7 @@ a:focus {
 }
 
 .product-default .product-label {
-    text-transform: uppercase;
+    //text-transform: uppercase;
     padding: 5px 11px;
     font: 600 1rem/1 "Open Sans", sans-serif;
     color: white
@@ -2439,7 +2439,7 @@ a:focus {
     font: 400 1rem "Open Sans", sans-serif;
     line-height: 1.7;
     opacity: .8;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-default .product-title {
@@ -2788,7 +2788,7 @@ a:focus {
     font-weight: 400;
     letter-spacing: 0.025em;
     font-family: "Oswald", sans-serif;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     visibility: hidden;
     opacity: 0;
     height: unset;
@@ -3041,7 +3041,7 @@ a:focus {
     font-weight: 400;
     letter-spacing: 0.025em;
     font-family: "Oswald", sans-serif;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .hidden-description .btn-quickview:hover {
@@ -3061,7 +3061,7 @@ a:focus {
     font-weight: 400;
     letter-spacing: 0.025em;
     font-family: "Oswald", sans-serif;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .hidden-description .btn-add-cart:hover {
@@ -4159,7 +4159,7 @@ a:focus {
     color: #010204;
     font: 800 3rem/1.1 "Open Sans", sans-serif;
     letter-spacing: -.025rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .banner .banner-subtitle {
@@ -4167,7 +4167,7 @@ a:focus {
     color: #010204;
     font: 700 1.5rem/1.1 "Open Sans", sans-serif;
     letter-spacing: 0;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .banner .banner-subtitle span {
@@ -4316,7 +4316,7 @@ a:focus {
     margin-bottom: 0;
     color: #1e3636;
     font-weight: 800;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 @media screen and (min-width: 768px) {
@@ -5351,7 +5351,7 @@ label {
     font-size: 1.4rem;
     letter-spacing: .1rem;
     line-height: 1.5;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .btn-sm {
@@ -5573,7 +5573,7 @@ label {
     background-color: #08c;
     font-family: Oswald;
     text-decoration: none;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .btn-social-login span,
@@ -5684,7 +5684,7 @@ a:focus {
     color: #21293c;
     font-weight: 700;
     line-height: 1.5;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .card-header::after {
@@ -5819,7 +5819,7 @@ a:focus {
     margin: 2.5rem 0 .5rem;
     color: #282d3b;
     font: 700 1.4rem/1 "Open Sans", sans-serif;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .member-job {
@@ -5827,7 +5827,7 @@ a:focus {
     margin-bottom: 1rem;
     color: #8c8e94;
     font-size: 1.4rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .tooltip {
@@ -6015,7 +6015,7 @@ a:focus {
     color: #465157;
     font: 600 1.4rem/1.1 "Open Sans", sans-serif;
     letter-spacing: .05rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .info-box p {
@@ -6126,7 +6126,7 @@ a:focus {
     color: #282d3b;
     font: 500 1.4rem/1 "Oswald", sans-serif;
     letter-spacing: .01rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .nav.nav-tabs .nav-item .nav-link:hover {
@@ -6161,7 +6161,7 @@ a:focus {
     margin-bottom: .7rem;
     color: #08c;
     font: 800 3.2rem/1 "Open Sans", sans-serif;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .count-wrapper span+span {
@@ -6192,14 +6192,14 @@ a:focus {
     padding-top: .7rem;
     color: #111;
     font-size: 1.4rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .testimonial-owner span {
     display: block;
     color: #666;
     font-size: 1.2rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .testimonial blockquote {
@@ -6550,7 +6550,7 @@ a:focus {
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 2;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .login-popup form {
@@ -6591,7 +6591,7 @@ a:focus {
     color: #121214;
     font-size: 12px;
     font-weight: 600;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .login-popup .btn-group {
@@ -6654,7 +6654,7 @@ a:focus {
     letter-spacing: .08em;
     line-height: 32px;
     text-align: center;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .logo-newsletter {
@@ -6895,7 +6895,7 @@ a:focus {
     font-weight: 800;
     letter-spacing: -.06rem;
     line-height: 1;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .home-slide-content h3 {
@@ -6906,7 +6906,7 @@ a:focus {
     font-weight: 700;
     letter-spacing: 0;
     line-height: 1.1;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .home-slide-content h3 span {
@@ -7029,7 +7029,7 @@ a:focus {
     border-radius: .3rem .3rem 0 0;
     background-color: #f4f4f4;
     font: 700 1.4rem/1 "Open Sans", sans-serif;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .side-custom-menu .side-menu-body {
@@ -7240,7 +7240,7 @@ a:focus {
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.1;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .sidebar-shop .widget-title a {
@@ -7570,7 +7570,7 @@ a:focus {
 .sort-list li {
     padding: 7px 0;
     font-size: 1.2rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .filter-toggle {
@@ -7689,7 +7689,7 @@ a:focus {
     .filter-sorts select {
         min-width: 140px;
         border: 0;
-        text-transform: uppercase
+        //text-transform: uppercase
     }
     .filter-sorts .layout-modes {
         margin-left: .5rem
@@ -7736,7 +7736,7 @@ a:focus {
         color: #7a7d82;
         font-size: 1.2rem;
         line-height: 34px;
-        text-transform: uppercase;
+        //text-transform: uppercase;
         z-index: 9
     }
     .sort-menu-trigger:hover,
@@ -7769,7 +7769,7 @@ a:focus {
         font-size: 14px;
         font-weight: 600;
         line-height: 1.4;
-        text-transform: uppercase
+        //text-transform: uppercase
     }
     .filter-sorts .toolbox-sort.select-custom {
         display: block;
@@ -7856,7 +7856,7 @@ a:focus {
 .add-cart {
     font-family: "Oswald", sans-serif;
     font-weight: 400;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     padding: .85rem .5rem;
     min-width: 115px;
     z-index: 2
@@ -8150,7 +8150,7 @@ a:focus {
     padding: 0;
     font-size: 1.4rem;
     line-height: 1.5;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .single-info-list li {
@@ -8321,7 +8321,7 @@ a:focus {
     color: #069;
     font: 600 1.4rem/1.1 "Open Sans", sans-serif;
     letter-spacing: .005em;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-single-tabs {
@@ -8388,7 +8388,7 @@ a:focus {
     margin: 0 0 2rem;
     font-size: 1.8rem;
     font-weight: 700;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-tags-content form {
@@ -8465,7 +8465,7 @@ a:focus {
     font-size: 1.1rem;
     font-weight: 600;
     text-align: center;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     white-space: nowrap;
     vertical-align: middle
 }
@@ -8512,7 +8512,7 @@ a:focus {
     color: #21293c;
     font: 600 1.2rem/1.1 "Open Sans", sans-serif;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     border-bottom-width: 1px
 }
 
@@ -8587,7 +8587,7 @@ a:focus {
     margin-bottom: 0;
     color: #6b7a83;
     font: 600 1.4rem/1.5 "Open Sans", sans-serif;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden
 }
@@ -8837,7 +8837,7 @@ a:focus {
 .product-desc .view-more {
     color: #08c;
     font-weight: 700;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-single-header {
@@ -8873,7 +8873,7 @@ a:focus {
     color: #21293c;
     font: 600 1.5rem/1.1 "Open Sans", sans-serif;
     letter-spacing: .005em;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .single-qty-wrapper .product-single-qty {
@@ -9082,7 +9082,7 @@ a:focus {
     font-size: 2rem;
     font-weight: 600;
     letter-spacing: -.01em;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-single-video .video-btn img {
@@ -9242,7 +9242,7 @@ a:focus {
     color: #21293c;
     font: 700 1.4rem/1.1 "Open Sans", sans-serif;
     letter-spacing: .005em;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .product-collapse-title a {
@@ -9472,7 +9472,7 @@ a:focus {
     color: #000000;
     font-size: 12px;
     letter-spacing: .005em;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .table.table-size thead tr th {
@@ -9682,7 +9682,7 @@ tbody .product-col {
     border-top: 1px solid #ccc;
     font-size: 1.5rem;
     font-weight: 600;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .cart-summary h4 a {
@@ -10091,7 +10091,7 @@ tbody .product-col {
     border-bottom: 1px solid #ccc;
     font-size: 1.5rem;
     font-weight: 600;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .order-summary h4 a {
@@ -10490,7 +10490,7 @@ tbody .product-col {
 .related-posts h4 {
     margin-bottom: 2rem;
     font-size: 1.9rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 .related-posts .entry {
@@ -10746,7 +10746,7 @@ tbody .product-col {
     display: inline-block;
     margin-top: .8rem;
     font-size: 1.2rem;
-    text-transform: uppercase
+    //text-transform: uppercase
 }
 
 #map address {

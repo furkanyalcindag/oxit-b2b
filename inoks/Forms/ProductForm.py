@@ -14,7 +14,7 @@ class ProductForm(ModelForm):
         model = Product
         fields = (
             'name', 'price', 'stock', 'category', 'info', 'code', 'listPrice', 'brand', 'baseWidth', 'speedIndex',
-            'rimDiameter', 'vehicleType','sectionRate',)
+            'rimDiameter', 'vehicleType','sectionRate')
         labels = {
             'price': 'Ürün Fiyatı',
 
@@ -59,6 +59,7 @@ class ProductForm(ModelForm):
 
             'speedIndex': forms.Select(
                 attrs={'class': 'form-control ', 'placeholder': 'Hız Endeksi', 'required': 'required'}),
+
 
         }
 

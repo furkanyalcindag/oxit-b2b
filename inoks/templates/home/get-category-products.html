@@ -24,7 +24,7 @@
                                                 {% if urun.productImage.all %}
 
                                                     <img class="pic-1" style="height: 200px;width: 150px"
-                                                         href="{% url 'inoks:urun-detay' urun.pk %}"
+                                                         href="{% url 'inoks:urun-detay' urun.slug %}"
                                                          src="/media/{{ urun.productImage.all.0.productImage }}">
 
                                                 {% endif %}
@@ -32,7 +32,7 @@
                                             <div class="product-details">
                                                 <!-- End .product-container -->
                                                 <h2 class="product-title">
-                                                    <a href="{% url 'inoks:urun-detay' urun.pk %}">{{ urun.name }}</a>
+                                                    <a href="{% url 'inoks:urun-detay' urun.slug %}">{{ urun.name }}</a>
                                                 </h2>
                                                 <h2 class="product-title">
                                                     <b> <a href="product.html">{{ urun.brand }}</a> </b>
@@ -79,7 +79,7 @@
                                             <div class="widget-body">
                                                 {% for cat in categories %}
                                                     <ul class="cat-list">
-                                                        <li><a href="{% url 'inoks:kategori-urunleri' cat.pk %}">{{ cat.name }}</a></li>
+                                                        <li><a href="{% url 'inoks:kategori-urunleri' cat.slug %}">{{ cat.name }}</a></li>
 
                                                     </ul>
                                                 {% endfor %}
@@ -168,7 +168,7 @@
                                             <div class="widget-body">
                                                 {% for brand in brands %}
                                                     <ul class="cat-list">
-                                                        <li><a href="{% url 'inoks:markanin-urunleri' brand.pk %}">{{ brand.name }} </a></li>
+                                                        <li><a href="{% url 'inoks:markanin-urunleri' brand.slug %}">{{ brand.name }} </a></li>
 
                                                     </ul>
                                                 {% endfor %}

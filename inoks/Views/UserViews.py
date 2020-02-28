@@ -25,6 +25,7 @@ from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
 from inoks.models.CreditCardObject import CreditCardObject
 from inoks.models.CreditCard import CreditCard
+from inoks.models.Enum import ADDRESS_CHOISES
 from inoks.models.OrderObject import OrderObject
 from inoks.models.ProfileCreditCard import ProfileCreditCard
 from inoks.serializers.profile_serializers import ProfileSerializer
@@ -632,20 +633,24 @@ def get_address(request):
         return redirect('accounts:login')
 
     profile = Profile.objects.get(user=current_user)
-    address = []
 
     addresses = AddressProfile.objects.filter(profile=profile)
+    address_dict = dict()
 
-    for adres in addresses:
-        addressobj = AddressObject(id=0, name=None, city=None, district=None, address=None)
-        addressobj.id = adres.address.pk
-        addressobj.name = adres.address.name
-        addressobj.address = adres.address.address
-        addressobj.city = adres.address.city
-        addressobj.district = adres.address.district
-        address.append(addressobj)
+    for choice in ADDRESS_CHOISES:
+        address_array = []
+        for address in addresses.filter(address__name=choice[0]):
+            addressobj = AddressObject(id=0, name=None, city=None, district=None, address=None)
+            addressobj.id = address.address.pk
+            addressobj.name = address.address.name
+            addressobj.address = address.address.address
+            addressobj.city = address.address.city
+            addressobj.district = address.address.district
+            address_array.append(addressobj)
+        if len(address_array) > 0:
+            address_dict[choice[0]] = address_array
 
-    return render(request, 'kullanici/kullanici-adres-bilgileri.html', {'addresses': address})
+    return render(request, 'kullanici/kullanici-adres-bilgileri.html', {'addresses': address_dict})
 
 
 @login_required
@@ -722,22 +727,16 @@ def user_address_update(request, pk):
     if not perm:
         logout(request)
         return redirect('accounts:login')
+    user = request.user
 
+    profile = Profile.objects.get(user=user)
     address = Address.objects.get(pk=pk)
-    address_form= AddressForm(request.POST or None)
+    address_form = AddressForm(request.POST or None, instance=address)
 
     if request.method == 'POST':
 
         if address_form.is_valid():
-
-            address.name = address_form.cleaned_data['name']
-            address.cvv = address_form.cleaned_data['city']
-            address.card_name_lastName = address_form.cleaned_data['district']
-            address.cartNumber = address_form.cleaned_data['address']
-
             address_form.save()
-            addressUser = Address(address=address_form)
-            addressUser.save()
 
             messages.success(request, 'Adres Bilgileri Başarıyla Güncellenmiştir.')
             return redirect('inoks:kullanici-adres-guncelle', pk)
@@ -747,4 +746,4 @@ def user_address_update(request, pk):
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
     return render(request, 'kullanici/kullanici-adres-guncelle.html',
-                  {'address_form': address_form})
+                  {'address_form': address_form, 'ilce': address.district})

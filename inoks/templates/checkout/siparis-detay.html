@@ -1,9 +1,109 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
 
+    {% load app_filter %}
+
+    <form name="test" method="post" action="{% url 'inoks:odeme-tamamla-login' %}">
+        {% csrf_token %}
+        <input id="card" type="hidden" name="card" value={{ card.price }}/>
+        <input id="c_code" type="hidden" name="c_code" value={{ c_code }}/>
+    </form>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog " style="width: 350px" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title text-center" id="exampleModalCenterTitle">OXIT'e Giriş Yapın</h2>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="content">
+
+
+                        <form action="#" method="post">
+                            {% csrf_token %}
+
+                            <div class="form-group required-field">
+
+                                <input type="text" id="email_address" style="height: 30px" placeholder="Email"
+                                       class="form-control"
+                                       name="username"
+                                       required autofocus>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group required-field">
+
+                                <input type="password" placeholder="Şifre" style="height: 30px" id="password"
+                                       class="form-control"
+                                       name="password" required>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-footer">
+
+                                <button type="submit" class="btn"
+                                        style="background-color:orange; color: white; padding-top: 0px; width: 100%; height: 29px; margin:0">
+                                    Giriş yap
+                                </button>
+
+                            </div><!-- End .form-footer -->
+
+                        </form>
+                    </div>
+
+
+                    <style>
+
+                        .x:hover {
+
+
+                            background-color: orange !important;
+                            color: white !important;
+
+
+                        }
+
+                        .y:hover {
+
+
+                            border-color: orange !important;
+                            color: orange !important;
+
+
+                        }
+
+
+                    </style>
+
+                    <hr style="margin: 0; margin-bottom: 20px;">
+                    <button type="submit" class="btn btn-primary y"
+                            style="background-color:white; color:black; border-color:#e6dcdc; padding-top: 5px; width: 100%; height: 29px; margin:0; margin-bottom: 10px">
+                        Üye Ol
+                    </button>
+                    <button type="submit" class="btn btn-primary x"
+                            style="background-color:#ffffff; color:black; border-color:orange;padding-top: 5px; width: 100%; height: 29px; margin:0">
+                        Üye Olmadan Devam Et
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 
 
     <div class="container">
+        <div class="alert alert-success" id="alert" style="display:none" role="alert">
+            Sepetiniz başarıyla güncellendi
+            <button type="button" class="close" onclick="kapat()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <div class="row">
             <div class="col-lg-8">
                 <div class="cart-table-container">
@@ -11,12 +111,14 @@
                         <thead>
                         <tr>
                             <th class="product-col">Ürün</th>
+                            <th></th>
                             <th class="price-col">Fiyat</th>
                             <th class="qty-col">Adet</th>
                             <th>Toplam Ürün Fiyatı</th>
+                            <th></th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="pro_table">
                         {% for product in orders %}
                             <tr class="product-row">
                                 <td class="product-col">
@@ -25,52 +127,65 @@
                                     {% if product.image.all %}
                                         <figure class="product-image">
                                             <a href="product.html" class="product-image">
-                                                <img style="width:50px"
+                                                <img style="width:50px;"
                                                      src="/media/{{ product.image.all.0.productImage }}" alt="product">
                                             </a>
+
                                         </figure>
                                     {% endif %}
-                                    <h2 class="product-title">
-                                        <a href="{% url 'inoks:urun-detay' product.id %}">{{ product.product_name }}</a>
-                                    </h2>
+
                                 </td>
-                                <td>{{ product.price }}₺</td>
+                                <td><h2 class="product-title">
+                                    <a href="{% url 'inoks:urun-detay' product.slug %}">{{ product.product_name }}</a>
+                                </h2></td>
+                                <td data-id="{{ product.id }}" data-kdv="{{ options_dict|get_item:'tax' }}"
+                                    data-name="{{ product.product_name }}"
+                                    data-price="{{ product.price }}">{{ product.price|floatformat:'2' }}₺
+                                </td>
 
                                 <td>
 
-                                    <input class=" form-control" type="number" value="{{ product.count }}"
+                                    <input class="class=item-count form-control" id="c{{ forloop.counter0 }}"
+                                           type="number"
+                                           value="{{ product.count }}"
                                            style="width:60px">
                                 </td>
-                                <td>{{ product.subtotal }}₺</td>
-
-                            </tr>
-
-                            <tr class="product-action-row">
+                                <td>{{ product.subtotal|floatformat:'2' }}₺</td>
                                 <td colspan="4" class="clearfix">
 
 
                                     <div class="float-right">
 
-                                        <a href="#" title="Remove product" class="btn-remove"><span
-                                                class="sr-only">Sil</span></a>
+                                        <button class="delete-item2 btn btn-danger"
+                                                style="min-width:20px;line-height: 0.3;font-size:10px;"
+                                                data-name="{{ product.name }}"
+                                                data-id="{{ product.id }}" data-row="{{ forloop.counter0 }}"><span
+                                                class="">Sil</span>
+                                        </button>
                                     </div><!-- End .float-right -->
                                 </td>
+
                             </tr>
+
+
                         {% endfor %}
                         </tbody>
 
                         <tfoot>
                         <tr>
-                            <td colspan="4" class="clearfix">
+
+                            <td colspan="5" class="clearfix">
                                 <div class="float-left">
                                     <a href="{% url 'inoks:kullanici-urun-sayfasi' %}"
                                        class="btn btn-outline-secondary">Alışverişe Devam Et</a>
                                 </div><!-- End .float-left -->
 
                                 <div class="float-right">
+
                                     <a href="#" class="btn btn-outline-secondary btn-clear-cart">Alışveriş Sepetini
                                         Temizle</a>
-                                    <a href="#" class="btn btn-outline-secondary btn-update-cart">Alışveriş Sepetini
+                                    <a onclick="guncelle(false)" class="btn btn-outline-secondary btn-update-cart">Alışveriş
+                                        Sepetini
                                         Güncelle</a>
                                 </div><!-- End .float-right -->
                             </td>
@@ -85,14 +200,24 @@
             <div class="col-lg-4">
                 <div class="cart-discount">
                     <h4>İndirim Kuponu</h4>
-                    <form action="#">
+                    <form>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" placeholder="İndirim Kodu"
+                            <input id="coupon" type="text" class="form-control form-control-sm"
+                                   placeholder="İndirim Kodu"
                                    required="">
                             <div class="input-group-append">
-                                <button class="btn btn-sm btn-primary" type="submit">İndirim Uygula</button>
+                                <button class="btn btn-sm btn-primary" onclick="couponControl()">İndirim Uygula</button>
                             </div>
                         </div><!-- End .input-group -->
+
+                        <p id="coupon_message" style="
+    color: green;
+    border: 1px;
+    border: double;
+    margin-top: 5px;
+    padding-left: 15px;
+    display: none;
+">Kupon mesajı</p>
                     </form>
                 </div><!-- End .cart-discount -->
                 <div class="cart-summary">
@@ -103,34 +228,343 @@
 
                     <table class="table table-totals">
                         <tbody>
+
                         <tr>
                             <td>Toplam Sipariş</td>
-                            <td>17.00₺</td>
+                            <td id="net_total">{{ net_total|floatformat:'2' }}₺</td>
                         </tr>
 
                         <tr>
                             <td>KDV</td>
-                            <td>0.00₺</td>
+                            <td id="tax">{{ kdv|floatformat:'2' }}₺</td>
                         </tr>
                         <tr>
                             <td>Kargo</td>
-                            <td>10.00₺</td>
+                            <td id="shipping">{{ kargo1 }}₺</td>
+                        </tr>
+                        <tr>
+                            <td>İndirim</td>
+                            <td id="discount"> 0 ₺</td>
                         </tr>
                         </tbody>
                         <tfoot>
                         <tr>
                             <td>Toplam Tutar</td>
-                            <td>$17.90</td>
+                            <td id="total_price">{{ total |floatformat:'2' }}₺</td>
                         </tr>
                         </tfoot>
                     </table>
 
                     <div class="checkout-methods">
-                        <a href="checkout-shipping.html" class="btn btn-block btn-sm btn-primary">Ödemeyi Tamamla</a>
+                        <button type="button" class="btn btn-block btn-sm btn-primary"
+                                onclick="odemeTamamla()"
+                                data-whatever="@getbootstrap">Ödemeyi Tamamla
+                        </button>
 
                     </div><!-- End .checkout-methods -->
                 </div><!-- End .cart-summary -->
             </div><!-- End .col-lg-4 -->
         </div><!-- End .row -->
     </div>
+    {% load staticfiles %}
+
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+    <script>
+
+
+        function guncelle2(coupon, discount) {
+
+            let total = 0;
+
+            shoppingCart.clearCart();
+            displayCart();
+            for (let i = 0; i < document.getElementById("pro_table").rows.length; i++) {
+
+                let row = document.getElementById("pro_table").rows[i];
+                let total_product = 0;
+
+                let x = row.cells[2].dataset.price.replace(',', '.');
+
+
+                event.preventDefault();
+
+                var id = row.cells[2].dataset.id;
+                var price = Number(x);
+
+                var name = row.cells[2].dataset.name;
+                var count = document.getElementById('c' + i).value;
+
+
+                for (let i = 0; i < count; i++) {
+                    shoppingCart.addItemToCart(name, price, 1, id);
+                    total = total + price;
+                    total_product = total_product + price;
+                    displayCart();
+                }
+                row.cells[4].innerHTML = Number(total_product.toFixed(2)) + ' ₺';
+
+                document.getElementById('alert').style.display = '';
+
+                //window.scrollTo(0, 0);
+
+            }
+
+            if (!coupon) {
+                calculateCheckout(total, 0);
+            } else {
+                // var discount= couponControl(document.getElementById('coupon').value, total);
+
+
+                console.log(discount);
+                calculateCheckout(total, discount);
+
+
+            }
+
+
+        }
+
+
+        function guncelle(coupon) {
+
+            let total = 0;
+
+            shoppingCart.clearCart();
+            displayCart();
+            for (let i = 0; i < document.getElementById("pro_table").rows.length; i++) {
+
+                let row = document.getElementById("pro_table").rows[i];
+                let total_product = 0;
+
+                let x = row.cells[2].dataset.price.replace(',', '.');
+
+
+                event.preventDefault();
+
+                var id = row.cells[2].dataset.id;
+                var price = Number(x);
+
+                var name = row.cells[2].dataset.name;
+                var count = document.getElementById('c' + i).value;
+
+
+                for (let i = 0; i < count; i++) {
+                    shoppingCart.addItemToCart(name, price, 1, id);
+                    total = total + price;
+                    total_product = total_product + price;
+                    displayCart();
+                }
+                row.cells[4].innerHTML = Number(total_product.toFixed(2)) + ' ₺';
+
+                document.getElementById('alert').style.display = '';
+
+                window.scrollTo(0, 0);
+
+            }
+
+
+            calculateCheckout(total, 0);
+
+
+        }
+
+        function kapat() {
+            document.getElementById('alert').style.display = 'none';
+        }
+
+        function odemeTamamla() {
+
+
+            {% if user.is_authenticated %}
+
+                card = JSON.parse(sessionStorage.getItem('shoppingCart'));
+                document.getElementById('card').value = JSON.stringify(card)
+
+                console.log(card)
+
+                debugger;
+                c_code = sessionStorage.getItem('c_code');
+
+                if (c_code != null) {
+                    discount = JSON.parse(c_code);
+                    document.getElementById('c_code').value = JSON.stringify(discount)
+                }
+
+
+
+                window.document.test.submit();
+
+
+            {% else %}
+
+                $('#exampleModal').modal('show');
+            {% endif %}
+
+
+        }
+
+
+        function calculateCheckout(total_order, discount) {
+
+            let net_total = total_order * 100 / (100 + (Number({{ options_dict|get_item:'tax' }})));
+            document.getElementById('net_total').innerHTML = Number(net_total.toFixed(2)) + ' ₺';
+            let tax = total_order - net_total;
+
+
+            document.getElementById('tax').innerHTML = Number(tax.toFixed(2)) + ' ₺';
+            let limit = '{{ kargo.lower_limit }}';
+            let kargo = 0;
+            if (total_order < Number(limit.fixed(2))) {
+
+                let price = '{{ kargo.price }}';
+
+
+                kargo = Number(price.fixed(2))
+
+
+            }
+            let disc = 0;
+            debugger;
+            if (discount === 0 || discount === null) {
+                disc = 0;
+            } else {
+                var disc_encode = window.btoa(discount.discount);
+                var c_code = {
+                    "c_code": document.getElementById('coupon').value,
+                    "d_amount": disc_encode
+
+                };
+
+
+                msg = document.getElementById('coupon_message');
+                console.log(discount);
+                if (discount.message_type === 'success') {
+                    sessionStorage.setItem('c_code', JSON.stringify(null));
+                    sessionStorage.setItem('c_code', JSON.stringify(c_code));
+                    msg.style.color = 'green';
+                    msg.innerHTML = discount.messages;
+                    msg.style.display = '';
+                    disc = Number(discount.discount);
+                    document.getElementById('discount').innerHTML = disc + ' ₺';
+                } else {
+                    sessionStorage.setItem('c_code', JSON.stringify(null));
+                    msg.style.display = 'none';
+                    msg.style.color = 'red';
+                    msg.innerHTML = discount.messages;
+                    msg.style.display = '';
+                    disc = 0;
+                }
+
+            }
+
+
+            // let shipping = Number({{ options_dict|get_item:'shipping' }});
+            document.getElementById('shipping').innerHTML = kargo + ' ₺';
+
+
+            document.getElementById('total_price').innerHTML = (net_total + tax + kargo - disc).toFixed(2) + ' ₺';
+
+        }
+
+        function couponControl() {
+
+            let total = 0;
+            let coupon = document.getElementById('coupon').value;
+
+            shoppingCart.clearCart();
+            displayCart();
+            for (let i = 0; i < document.getElementById("pro_table").rows.length; i++) {
+
+                let row = document.getElementById("pro_table").rows[i];
+                let total_product = 0;
+
+                let x = row.cells[2].dataset.price.replace(',', '.');
+
+
+                event.preventDefault();
+
+                var id = row.cells[2].dataset.id;
+                var price = Number(x);
+
+                var name = row.cells[2].dataset.name;
+                var count = document.getElementById('c' + i).value;
+
+
+                for (let i = 0; i < count; i++) {
+                    shoppingCart.addItemToCart(name, price, 1, id);
+                    total = total + price;
+                    total_product = total_product + price;
+                    displayCart();
+                }
+                row.cells[4].innerHTML = Number(total_product.toFixed(2)) + ' ₺';
+
+                document.getElementById('alert').style.display = '';
+
+                window.scrollTo(0, 0);
+
+            }
+
+
+            $.ajax({
+                url: "{% url 'inoks:kupon-kontrol' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    coupon_code: coupon,
+                    total_order: total
+
+                },
+                success: function (result) {
+
+                    if (result.status === 'Success') {
+                        //swal("Başarılı", "İlan Silindi", "success");
+                        console.log(result);
+                        guncelle2(coupon, result)
+
+
+                    } else {
+                        //swal("Başarılı", result.messages, "error");
+                        discount = result
+                    }
+                }
+            });
+
+
+        }
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+
+    </script>
 {% endblock %}

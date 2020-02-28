@@ -1,11 +1,15 @@
 import calendar
 import datetime
 
+import pytz
 from django.contrib.auth.models import User, Permission
 from django.db.models import Sum
+from django.http import JsonResponse
 
-from inoks.models import Profile, Order, Menu, MenuAdmin, Refund, earningPayments, OrderSituations, ProductCategory
+from inoks.models import Profile, Order, Menu, MenuAdmin, Refund, earningPayments, OrderSituations, ProductCategory, \
+    Settings
 from inoks.models.Address import Address
+from inoks.models.Coupon import Coupon
 
 from inoks.models.ProfileControlObject import ProfileControlObject
 
@@ -14,6 +18,14 @@ def getMenu(request):
     menus = Menu.objects.all().order_by('name')
 
     return {'menus': menus}
+
+
+def options(request):
+    option = Settings.objects.get(name='kdv')
+    options_dict = dict()
+    options_dict['tax'] = option.value
+
+    return {'options_dict': options_dict}
 
 
 def getAdminMenu(request):
@@ -25,7 +37,6 @@ def get_category_home(request):
     categories = ProductCategory.objects.all()
 
     return {'categories': categories}
-
 
 
 def activeUser(request, pk):
@@ -564,3 +575,34 @@ def control_access(request):
         is_exist = True
 
     return is_exist
+
+
+def couponControl(coupon_code, total_order):
+    discount = 0
+    message = ""
+    type = ""
+    try:
+
+        coupon = Coupon.objects.filter(code=coupon_code)
+        now = datetime.datetime.now()
+        now = pytz.utc.localize(now)
+        if len(coupon) > 0:
+            coupon = coupon[0]
+            if coupon.isActive and coupon.stock > 0 and coupon.finishDate > now:
+                if coupon.isLimit and coupon.limit <= float(total_order):
+                    discount = coupon.discount
+
+                elif not coupon.isLimit:
+                    discount = coupon.discount
+
+                else:
+                    discount = 0
+
+                return discount
+
+        else:
+            return discount
+
+    except Exception as e:
+
+        return discount

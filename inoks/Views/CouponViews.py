@@ -1,5 +1,9 @@
+from datetime import datetime
+
+import pytz
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
@@ -37,7 +41,7 @@ def coupon_create(request):
         else:
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'bayi/kullanici-kupon-form.html',
+    return render(request, 'bayi/kullanici-kupon-ekle.html',
                   {'coupon_form': coupon_form, 'coupon': coupon})
 
 
@@ -66,7 +70,7 @@ def coupon_update(request, pk):
         else:
             messages.warning(request, 'Alanları Kontrol Ediniz')
 
-    return render(request, 'bayi/kullanici-kupon-form.html',
+    return render(request, 'bayi/kullanici-kupon-ekle.html',
                   {'coupon_form': coupon_form, 'coupon': coupon})
 
 
@@ -117,3 +121,57 @@ def coupon_delete(request, pk):
     messages.success(request, 'Kupon basarıyla silindi')
 
     return redirect('inoks:kupon')
+
+
+@login_required
+def coupon_control(request):
+    if request.POST:
+        discount = 0
+        message = ""
+        type = ""
+        try:
+            coupon_code = request.POST.get('coupon_code')
+            total_order = request.POST.get('total_order')
+
+            coupon = Coupon.objects.filter(code=coupon_code)
+            now = datetime.now()
+            # here, now.tzinfo is None, it's a naive datetime
+            now = pytz.utc.localize(now)
+            if len(coupon) > 0:
+                coupon = coupon[0]
+                if coupon.isActive and coupon.stock > 0 and coupon.finishDate > now:
+                    if coupon.isLimit and coupon.limit <= float(total_order):
+                        discount = coupon.discount
+                        message = "Kupon başarıyla kullanılmıştır."
+                        type = "success"
+
+
+                    elif not coupon.isLimit:
+                        discount = coupon.discount
+                        message = "Kupon başarıyla kullanılmıştır."
+                        type = "success"
+                    else:
+                        discount = 0
+                        message = "Sipariş Tutarınız kupon kullanım limitinin altındadır."
+                        type = "error"
+
+                    return JsonResponse(
+                        {'status': 'Success', 'messages': message, 'message_type': type, 'discount': discount})
+                else:
+                    discount = 0
+                    type = "error"
+                    if coupon.isActive:
+                        message = "Kupon aktif değildir"
+                    elif coupon.stock == 0:
+                        message = "Kupon kullanım sınırı dolmuştur"
+                    else:
+                        message = "Kupon geçerlilik süresi bitmiştir."
+                    return JsonResponse(
+                        {'status': 'Success', 'messages': message, 'message_type': type, 'discount': discount})
+
+            else:
+                return JsonResponse(
+                    {'status': 'Success', 'messages': "Geçersiz Kupon Kodu", 'message_type': "error", 'discount': 0})
+        except Exception as e:
+
+            return JsonResponse({'status': 'Fail', 'msg': e})

@@ -11,7 +11,8 @@ class ProductCategoryForm(ModelForm):
         fields = ('name',)
         widgets = {
             'name': forms.TextInput(
-                attrs={'class': 'form-control ', 'placeholder': 'Ürün Kategori Adı', 'required': 'required'})
+                attrs={'class': 'form-control ', 'placeholder': 'Ürün Kategori Adı', 'required': 'required'}),
+
 
 
         }

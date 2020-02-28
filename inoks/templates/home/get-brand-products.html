@@ -23,18 +23,19 @@
                                             <figure>
                                                 {% if product.productImage.all %}
 
-                                                    <img class="pic-1" style="height: 200px;width: 150px"
-                                                         src="/media/{{ product.productImage.all.0.productImage }}">
+                                                    <a href="{% url 'inoks:urun-detay'  product.slug %}"> <img
+                                                            class="pic-1" style="height: 200px;width: 150px"
+                                                            src="/media/{{ product.productImage.all.0.productImage }}"></a>
 
                                                 {% endif %}
                                             </figure>
                                             <div class="product-details">
                                                 <!-- End .product-container -->
                                                 <h2 class="product-title">
-                                                    <a href="product.html">{{ product.name }}</a>
+                                                    <a href="{% url 'inoks:urun-detay' product.slug %}">{{ product.name }}</a>
                                                 </h2>
                                                 <h2 class="product-title">
-                                                    <b> <a href="product.html">{{ product.brand }}</a> </b>
+                                                    <b> {{ product.brand }} </b>
                                                 </h2>
                                                 <div class="price-box">
                                                     <span class="product-price">{{ product.price }} ₺</span>
@@ -78,7 +79,9 @@
                                             <div class="widget-body">
                                                 {% for cat in categories %}
                                                     <ul class="cat-list">
-                                                        <li><a href="{% url 'inoks:kategori-urunleri' cat.pk %}">{{ cat.name }}</a></li>
+                                                        <li>
+                                                            <a href="{% url 'inoks:kategori-urunleri' cat.slug %}">{{ cat.name }}</a>
+                                                        </li>
 
                                                     </ul>
                                                 {% endfor %}
@@ -157,7 +160,7 @@
                                         </div><!-- End .collapse -->
                                     </div><!-- End .widget -->
 
-                                   <div class="widget">
+                                    <div class="widget">
                                         <h3 class="widget-title">
                                             <a data-toggle="collapse" href="#widget-body-4" role="button"
                                                aria-expanded="true" aria-controls="widget-body-4">´Markalar</a>
@@ -167,7 +170,9 @@
                                             <div class="widget-body">
                                                 {% for brand in brands %}
                                                     <ul class="cat-list">
-                                                        <li><a href="{% url 'inoks:markanin-urunleri' brand.pk %}">{{ brand.name }} </a></li>
+                                                        <li>
+                                                            <a href="{% url 'inoks:markanin-urunleri' brand.slug %}">{{ brand.name }} </a>
+                                                        </li>
 
                                                     </ul>
                                                 {% endfor %}

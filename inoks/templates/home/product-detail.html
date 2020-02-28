@@ -194,7 +194,7 @@
                                         <div class="product-default">
                                             {% for image in product.productImage.all %}
                                                 <figure>
-                                                    <a href="{% url 'inoks:urun-detay' product.pk %}">
+                                                    <a href="{% url 'inoks:urun-detay' product.slug %}">
                                                         <img src="/media/{{ image.productImage }}">
                                                     </a>
                                                 </figure>
@@ -202,7 +202,7 @@
                                             <div class="product-details">
 
                                                 <h2 class="product-title">
-                                                    <a href="{% url 'inoks:urun-detay' product.pk %}">{{ product.name }}</a>
+                                                    <a href="{% url 'inoks:urun-detay' product.slug %}">{{ product.name }}</a>
                                                 </h2>
                                                 <div class="price-box">
                                                     <span class="product-price">{{ product.price }}₺</span>

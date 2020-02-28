@@ -57,19 +57,42 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>{{ coupon_form.discountAmount.label }}</label>
-                                    {{ coupon_form.discountAmount }}
+                                    <label>{{ coupon_form.stock.label }}</label>
+                                    {{ coupon_form.stock }}
                                 </div>
 
                                 <div class="form-group">
-                                    <label>{{ coupon_form.creationDate.label }}</label>
-                                    {{ coupon_form.creationDate }}
+                                    <label>{{ coupon_form.discount.label }}</label>
+                                    {{ coupon_form.discount }}
                                 </div>
 
+                                <div class="custom-control custom-checkbox">
+                                    <label>
+                                        {{ coupon_form.isLimit }}
+                                        Kupon Limit Fiyatı var mı?
+                                    </label>
+                                </div><!-- End .custom-checkbox -->
 
                                 <div class="form-group">
-                                    <label>{{ coupon_form.finishDate.label }}</label>
-                                    {{ coupon_form.finishDate }}
+                                    <label>{{ coupon_form.limit.label }}</label>
+                                    {{ coupon_form.limit }}
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>{{ coupon_form.creationDate.label }}</label>
+                                            {{ coupon_form.creationDate }}
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>{{ coupon_form.finishDate.label }}</label>
+                                            {{ coupon_form.finishDate }}
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -126,8 +149,11 @@
                                 <th scope="col">Kupon Kodu</th>
                                 <th scope="col">Başlangıç Tarihi</th>
                                 <th scope="col">Bitiş Tarihi</th>
-                                <th scope="col">İndirim Miktarı</th>
+                                <th scope="col">Stok</th>
+                                <th scope="col">Limit</th>
+                                <th scope="col">isLimit</th>
                                 <th>Aktif/pasif</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -140,7 +166,9 @@
                                         <td>{{ coupon.code }}</td>
                                         <td>{{ coupon.creationDate }}</td>
                                         <td>{{ coupon.finishDate }}</td>
-                                        <td>{{ coupon.discountAmount }}</td>
+                                        <td>{{ coupon.stock }}</td>
+                                        <td>{{ coupon.limit }}</td>
+                                        <td>{{ coupon.isLimit }}</td>
                                         <td>
                                             {% if coupon.isActive %}
                                                 <a class="btn btn-danger"
@@ -159,7 +187,7 @@
                                             <a class="btn btn-danger"
                                                href="{% url 'inoks:kupon-sil' coupon.id %}"><i
                                                     class="fa fa-trash"></i> Sil</a>
-                                          <a class="btn btn-warning"
+                                            <a class="btn btn-warning"
                                                href="{% url 'inoks:kupon-guncelle' coupon.id %}"><i
                                                     class="fa fa-pencil"></i> Guncelle</a>
 
