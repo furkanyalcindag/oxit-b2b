@@ -170,7 +170,7 @@ urlpatterns = [
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
 
     url(r'odeme-tamamla/$', CheckoutViews.payment_islogin, name='odeme-tamamla-login'),
-    url(r'odeme-tamamla-adres/$', CheckoutViews.add_payment_address, name='odeme-tamamla-yeni-adres'),
+    url(r'odeme-tamamla-adres/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
 
     # kupon
     url(r'kupon-bilgileri/$', CouponViews.coupon_create, name='kupon'),

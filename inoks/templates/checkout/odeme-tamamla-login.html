@@ -7,41 +7,52 @@
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="margin-bottom:0px">
                     <h5 class="modal-title" id="exampleModalLabel">Yeni Adres</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                     <form action="#" method="post">
-                            {% csrf_token %}
 
-                            <div class="form-group required-field">
+                    <form>
+                        {% csrf_token %}
 
-                                <input type="text" id="email_address" style="height: 30px" placeholder=""
-                                       class="form-control"
-                                       name="username"
-                                       required autofocus>
-                            </div><!-- End .form-group -->
+                        <div class="form-group">
+                            <label for="inputAddress">Adres Adı</label>
+                            <select class="form-control select2 select2-hidden-accessible" id="address_name">
+                                {% for value, text in adres %}
 
-                            <div class="form-group required-field">
+                                    <option value="{{ value }}">{{ value }}</option>
 
-                                <input type="text" placeholder="Şifre" style="height: 30px" id="password"
-                                       class="form-control"
-                                       name="text" required>
-                            </div><!-- End .form-group -->
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="acc-name">Adres</label>
+                            <textarea type="" class="form-control" id="address" name="address"
+                                      placeholder=""></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">İl</label>
+                                <select id="id_city" class="form-control select2 select2-hidden-accessible"
+                                        onchange="ilceGetir()">
+                                    {% for city in city %}
+                                        <option value="{{ city.pk }}">{{ city.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">İlçe</label>
+                                <select id="ilce_id" class="form-control select2 select2-hidden-accessible">
 
-                            <div class="form-footer">
+                                </select>
+                            </div>
 
-                                <button type="submit" class="btn"
-                                        style="background-color:orange; color: white; padding-top: 0px; width: 100%; height: 29px; margin:0">
-                                    Giriş yap
-                                </button>
-
-                            </div><!-- End .form-footer -->
-
-                        </form>
+                        </div>
+                        <a onclick="new_address()" class=" button btn btn-primary">Ekle</a>
+                    </form>
 
                 </div>
 
@@ -70,7 +81,7 @@
                                     <br>
                                     <h3>Adreslerim</h3>
 
-                                    <div class="row">
+                                    <div class="row " id="address_row">
 
                                         {% for key,value in addresses.items %}
 
@@ -86,10 +97,11 @@
 
                                                                 <address>
                                                                     <input type="checkbox" id="address" name="address"
-                                                                           value="{{ address.address }}">
+                                                                           value="">
                                                                     {{ address.address }}
+
+                                                                    <p>{{ address.district }}/ {{ address.city }}</p>
                                                                 </address>
-                                                                <p>{{ address.district }}/ {{ address.city }}</p>
                                                                 <hr style="margin: 0; margin-bottom: 20px;">
                                                             </div><!-- End .shipping-address-box -->
 
@@ -116,7 +128,7 @@
 
                             <form action="#" method="post">
                                 {% csrf_token %}
-                                <div class="form-group ">
+                                <div class="form-group " readonly>
                                     <label>Ad </label>
                                     <text> {{ user_form.first_name }} </text>
                                 </div><!-- End .form-group -->
@@ -196,5 +208,168 @@
         </div><!-- End .col-lg-8 -->
     </div><!-- End .row -->
     </div><!-- End .container -->
+
+
+
+
+    <script>
+
+        function ilceGetir() {
+
+            var e = document.getElementById("id_city");
+
+            var il_id = e.options[e.selectedIndex].value;
+            $.ajax({
+                url: "{% url 'inoks:ilce-getir' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    il_id: il_id,
+
+                },
+                success: function (result) {
+
+
+                    let select = document.getElementById("ilce_id");
+
+                    select.options[select.options.length] = new Option('Text 1', 'Value1');
+
+                    $('#ilce_id').empty();
+
+                    for (let i = 0; i < result.ilceler.length; i++) {
+                        select.options[select.options.length] = new Option(result.ilceler[i].name, result.ilceler[i].name);
+                    }
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+
+
+            ilceGetir();
+            //console.log($('#ilce_id').select2('data'))
+            $('#ilce_id').val('{{ilce}}').trigger('change'); // Select the option with a value of '1'
+
+
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+
+        function new_address() {
+
+
+            debugger;
+            let html = '';
+
+
+            var e = document.getElementById("id_city");
+
+            var il = e.options[e.selectedIndex].value;
+
+
+            var ilce = document.getElementById("ilce_id");
+
+            var ilce_id = ilce.options[ilce.selectedIndex].value;
+
+
+            var name = document.getElementById("address_name").value;
+
+
+            var address = document.getElementById('address').value;
+
+            let city = il;
+            let district = ilce_id;
+            debugger;
+
+
+            $.ajax({
+                url: "{% url 'inoks:odeme-tamamla-yeni-adres' %}",
+                type: "post", // or "get"
+
+                data: {
+                    address: address,
+                    address_name: name,
+                    city: city,
+                    district: district
+
+                },
+
+
+                success: function (result) {
+                    console.log(result);
+
+                    if (result.status === 'Success') {
+                        //swal("Başarılı", "İlan Silindi", "success");
+
+
+                        const div = document.createElement('div');
+
+                        div.className = 'col-md-6';
+
+
+                        html += '<div class="card">';
+                        html += '<h4 class="card-header" style="background-color: #ffffff">Yeni</h4>\n';
+                        html += '<div>';
+                        html += ' <div class="" style="padding:15px">';
+                        html += ' <address> <input type="checkbox" id="address" name="address" value="' + result.a_id + '">';
+                        html += result.address;
+                        html += '<p>' + result.il + '</p>';
+                        html += '</address><hr style="margin: 0; margin-bottom: 20px;"></div></div></div>';
+
+
+                        div.innerHTML = html;
+
+                        document.getElementById('address_row').appendChild(div);
+
+                        $('#exampleModal').modal('hide');
+
+
+
+
+                    } else {
+                        //swal("Başarılı", result.messages, "error");
+
+                    }
+                }
+            });
+
+
+        }
+
+
+    </script>
 
 {% endblock %}

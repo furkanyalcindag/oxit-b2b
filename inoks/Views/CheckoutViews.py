@@ -11,6 +11,7 @@ from inoks.Forms.AddressForm import AddressForm
 from inoks.Forms.GuestUserForm import GuestUserForm
 from inoks.Forms.LoginProfilForm import LoginProfilForm
 from inoks.Forms.OrderUpdateForm import OrderForm
+from inoks.Forms.UserCheckoutForm import UserCheckoutForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
 from inoks.models import Product, Profile, Settings, City, Order, OrderProduct, OrderSituations
 from inoks.models.Address import Address
@@ -22,6 +23,7 @@ from inoks.models.UserProductObject import UserProductObject
 from inoks.models.discountObject import discountObject
 from inoks.services import general_methods
 from inoks.services.general_methods import couponControl
+from rest_framework.decorators import api_view
 
 
 def order_checkout(request):
@@ -86,11 +88,12 @@ def payment_islogin(request):
     kargo = Cargo.objects.get(name='Üzeri Kargo')
     kargo1 = 0
     kdv = Settings.objects.get(name='kdv')
-
+    city = City.objects.all()
+    address_title = ADDRESS_CHOISES
     user = request.user
-    user_form = UserUpdateForm(request.POST or None, instance=user)
+    user_form = UserCheckoutForm(instance=user)
     profile = Profile.objects.get(user=user)
-    profile_form = LoginProfilForm(request.POST or None, instance=profile)
+    profile_form = LoginProfilForm(instance=profile)
 
     addresses = AddressProfile.objects.filter(profile=profile)
     address_dict = dict()
@@ -104,8 +107,8 @@ def payment_islogin(request):
             user.email = user_form.cleaned_data['email']
             profile.mobilePhone = profile_form.cleaned_data['mobilePhone']
 
-            user.save()
-            profile_form.save()
+        # user.save()
+        # profile_form.save()
 
         for choice in ADDRESS_CHOISES:
             address_array = []
@@ -135,12 +138,14 @@ def payment_islogin(request):
         for order in orders:
             subtotal = order.subtotal + subtotal
         c_code = json.loads(request.POST['c_code'])
+
         if c_code == None:
             discount = discount
 
         else:
             code = c_code['c_code']
             discount = couponControl(code, subtotal)
+
         if orders:
             net_total = subtotal * 100 / (100 + float(kdv.value))
             if subtotal >= kargo.lower_limit:  # ücretsiz kargo
@@ -159,39 +164,45 @@ def payment_islogin(request):
                   {'card': orders, 'user_form': user_form, 'profile_form': profile_form, 'subtotal': Decimal(subtotal),
                    'total': Decimal(total),
                    'net_total': Decimal(net_total),
-                   'kdv': Decimal(kdv), 'kargo1': kargo1, 'addresses': address_dict, 'discount': discount})
+                   'kdv': Decimal(kdv), 'kargo1': kargo1, 'addresses': address_dict, 'discount': discount,
+                   'city': city, 'adres': address_title})
 
 
-@login_required
-def add_payment_address(request):
-    current_user = request.user
-    perm = general_methods.control_access(request)
+@api_view(http_method_names=['POST'])
+def new_address(request):
+    if request.POST:
+        discount = 0
+        message = ""
+        type = ""
+        addresses = []
+        try:
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            district = request.POST.get('district')
+            address_name = request.POST.get('address_name')
 
-    if not perm and request.user == current_user:
-        logout(request)
-        return redirect('accounts:login')
+            adres = Address()
+            adres.address = address
+            adres.city = City.objects.get(pk=int(city))
+            adres.district = district
+            adres.name = address_name
+            il = str(adres.city) + '/' + str(adres.district)
+            adres.save()
 
-    address_form = AddressForm(request.POST)
+            profile = Profile.objects.get(user=request.user)
 
-    profile = Profile.objects.get(user=current_user)
+            adresProfile = AddressProfile()
+            adresProfile.address = adres
+            adresProfile.profile = profile
 
-    if request.method == 'POST':
-        address_form = AddressForm(request.POST)
-        if address_form.is_valid():
+            adresProfile.save()
 
-            userAddress = Address(name=address_form.cleaned_data['name'],
-                                  address=address_form.cleaned_data['address'],
-                                  city=address_form.cleaned_data['city'],
-                                  district=address_form.cleaned_data['district'])
-            userAddress.save()
-            address_profile = AddressProfile(profile=profile, address=userAddress)
-            address_profile.save()
-            messages.success(request, 'Adres Eklendi')
-            return redirect('inoks:odeme-tamamla-user')
+            return JsonResponse(
+                {'status': 'Success', 'messages': "Adres Başarıyla Eklendi", 'address': adres.address,
+                 'il': il,'a_id':adres.pk,
+                 'message_type': 'success'
+                 })
 
-        else:
+        except Exception as e:
 
-            messages.warning(request, 'Alanları Kontrol Ediniz')
-
-    return render(request, 'checkout/odeme-tamamla-login.html',
-                  {'address_form': address_form})
+            return JsonResponse({'status': 'Fail', 'msg': "Adres Eklenemedi", 'message_type': 'error'})
