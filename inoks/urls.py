@@ -177,7 +177,7 @@ urlpatterns = [
     url(r'payment-type/bakiyem/(?P<pk>\d+)$', PaymentMethodViews.UpdateBakiyem, name='bakiyem'),
     url(r'payment-type/iyzico/(?P<pk>\d+)$', PaymentMethodViews.UpdateIyzico, name='iyzico'),
     url(r'payment-type/$', PaymentMethodViews.paymentMethod, name='payment-method'),
-    url(r'kupon-aktifligi/(?P<pk>\d+)$', PaymentMethodViews.paymentMethod_activity, name='odeme-yontemi-aktiflestir'),
+    url(r'odeme-yontemi-aktifligi/(?P<pk>\d+)$', PaymentMethodViews.paymentMethod_activity, name='odeme-yontemi-aktiflestir'),
 
     url(r'odeme-tamamla/$', CheckoutViews.payment_info_islogin, name='odeme-tamamla-login'),
     url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.odemeYap, name='kullanici-odeme-yap'),
