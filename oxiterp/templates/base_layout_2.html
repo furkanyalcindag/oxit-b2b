@@ -79,7 +79,7 @@
 
                             <div class="header-menu">
                                 <ul>
-
+                                    <li><a href="{% url 'inoks:kullanici-ekle' %}">Kayıt Ol</a></li>
                                     <li><a href="{% url 'inoks:kullanici-giris' %}" class="">Giriş Yap</a></li>
                                 </ul>
                             </div><!-- End .header-menu -->
@@ -105,7 +105,8 @@
                             {% csrf_token %}
                             <div class="header-search-wrapper">
 
-                                <input type="search" class="form-control" name="name" id="name" placeholder="Search...">
+                                <input type="search" class="form-control" name="name" id="name"
+                                       placeholder="Marka Ara...">
                                 <div class="select-custom">
 
                                     <select id="cat" name="cat" type="search">
@@ -677,8 +678,7 @@
     })
 
 
-
-   $('.item-count').on("change", ".item-count", function (event) {
+    $('.item-count').on("change", ".item-count", function (event) {
         var name = $(this).data('name');
         var count = Number($(this).val());
         shoppingCart.setCountForItem(name, count);
@@ -686,8 +686,8 @@
     });
 
     $(".delete-item2").click(function () {
-         var name = $(this).data('id');
-         console.log("hjgshjdgshjdgjhsdgjs");
+        var name = $(this).data('id');
+        console.log("hjgshjdgshjdgjhsdgjs");
         console.log(name);
         shoppingCart.removeItemFromCartAll(name);
         displayCart();

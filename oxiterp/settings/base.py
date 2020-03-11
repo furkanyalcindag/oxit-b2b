@@ -89,7 +89,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
                 'inoks.services.general_methods.getMenu',
-
+                'inoks.services.general_methods.options',
                 'inoks.services.general_methods.get_category_home',
                 'inoks.services.general_methods.getAdminMenu',
 
@@ -172,12 +172,12 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True"""
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.baven.net'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'info@baven.net'
-EMAIL_HOST_PASSWORD = 'SEhy15X0'
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+EMAIL_HOST = 'smtp.yandex.com.tr'
+EMAIL_PORT = '465'
+EMAIL_HOST_USER = 'burcu.dogan@oxityazilim.com'
+EMAIL_HOST_PASSWORD = 'oxit2016'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
 STATIC_ROOT = ''
 

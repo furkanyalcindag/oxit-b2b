@@ -1,0 +1,113 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+
+    <section class="content">
+
+
+        <section class="invoice">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+
+                                <th>Ürün</th>
+                                <th>Adet</th>
+                                <th>Fiyat</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for product in card %}
+                                <tr>
+
+                                    <td>{{ product.product.name }}</td>
+                                    <td>{{ product.quantity }}</td>
+                                    <td>{{ product.product.price }} ₺</td>
+
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+
+
+                        <div class="row">
+                            <div class="col-md-12 table-responsive" >
+                                <table class="table ">
+                                    <tbody>
+                                    <tr>
+                                        <td class="">
+                                            <strong>Toplam Sipariş</strong>
+                                        </td>
+                                        <td class="right">{{ order.net_total|floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">
+                                            <strong>KDV</strong>
+                                        </td>
+                                        <td class="right">{{ order.kdv|floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">
+                                            <strong>İndirim</strong>
+                                        </td>
+                                        <td class="right">{{ order.discount |floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">
+                                            <strong>Kargo</strong>
+                                        </td>
+                                        <td class="right">{{ order.cargo |floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">
+                                            <strong>Ödeme Yöntemi</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>{{ order.payment_type.name }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">
+                                            <strong>Toplam Tutar</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>{{ order.totalPrice |floatformat:'2' }}₺</strong>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+        </section>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <section class="content-header">
+                    <h1></h1>
+
+                    <!-- Ödeme formunun açılması için gereken HTML kodlar / Başlangıç -->
+                    <script src="https://www.paytr.com/js/iframeResizer.min.js"></script>
+                    <iframe src="https://www.paytr.com/odeme/guvenli/{{ token }}" id="paytriframe" frameborder="0"
+                            scrolling="no" style="width: 100%;"></iframe>
+                    <script>iFrameResize({}, '#paytriframe');</script>
+                    <!-- Ödeme formunun açılması için gereken HTML kodlar / Bitiş -->
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}

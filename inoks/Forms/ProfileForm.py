@@ -11,13 +11,14 @@ CHOICES_WITH_BLANK = (
 
 class ProfileForm(ModelForm):
     isContract = forms.BooleanField(required=True)
+    isNotification = forms.BooleanField(required=False)
 
     class Meta:
         model = Profile
 
         fields = (
             'profileImage', 'mobilePhone', 'gender', 'tc', 'birthDate', 'city',
-            'district', 'isContract',)
+            'district', 'isContract', 'isNotification')
         widgets = {
 
             'mobilePhone': forms.TextInput(

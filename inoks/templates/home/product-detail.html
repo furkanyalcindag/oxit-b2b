@@ -17,6 +17,7 @@
                                 {% for image in product.productImage.all %}
                                     <div class="product-item">
                                         <img class="product-single-image"
+
                                              src="/media/{{ image.productImage }}"
                                              data-zoom-image="/media/{{ image.productImage }}"/>
                                     </div>
@@ -192,13 +193,13 @@
 
                                     <div class="owl-item  " style="width: 277.5px; margin-right: 20px;">
                                         <div class="product-default">
-                                            {% for image in product.productImage.all %}
+                                            {% if product.productImage.all %}
                                                 <figure>
                                                     <a href="{% url 'inoks:urun-detay' product.slug %}">
-                                                        <img src="/media/{{ image.productImage }}">
+                                                        <img src="/media/{{ product.productImage.all.0.productImage }}">
                                                     </a>
                                                 </figure>
-                                            {% endfor %}
+                                            {% endif %}
                                             <div class="product-details">
 
                                                 <h2 class="product-title">

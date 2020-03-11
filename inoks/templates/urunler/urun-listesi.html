@@ -200,7 +200,7 @@
                                 <th>Ürün Adı</th>
                                 <th>Fiyatı</th>
                                 <th>Kategori</th>
-                                <th>Detay/Güncelleme/Silme</th>
+                                <th>Detay/Güncelleme/Silme/Grup</th>
 
 
                             </tr>
@@ -211,7 +211,7 @@
 
                             {% for product_lists in product_list %}
                                 <tr>
-                                <td>{{ forloop.counter }} </td>
+                                    <td>{{ forloop.counter }} </td>
                                     <td><input id="{{ forloop.counter }}" type="checkbox"
                                                name="check_list[]"
                                                value="{{ product_lists.id }}" onclick="checkbox()">
@@ -247,6 +247,7 @@
                                             <a class="btn btn-danger"
                                                data-toggle="modal" onclick=deleteProduct({{ product_lists.pk }})><i
                                                     class="fa fa-trash"></i>Sil</a>
+
                                         </div>
                                     </td>
 
@@ -352,7 +353,7 @@
                     html += ' <img class="profile-user-img img-responsive img-circle" src="' + image[0].productImage + '" alt="User profile picture">';
                     html += '<h3 class="profile-username text-center">' + product.name + ' /  ' + product.price + '  ' + 'TL' + '</h3>';
                     html += '<p class="text-muted text-center">' + product.info + '</p>';
-                    html+='<p class="text-muted text-center">'+'Stok Miktarı:'+' ' + product.stock + '</p>';
+                    html += '<p class="text-muted text-center">' + 'Stok Miktarı:' + ' ' + product.stock + '</p>';
 
 
                     $(".bodys").html(html);

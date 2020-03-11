@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from inoks.Views import ProductViews, UserViews, OrderViews, ReportViews, EarningsViews, DashboardViews, SettingViews, \
-    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews, CheckoutViews
+    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews, CheckoutViews, PaymentMethodViews
 
 app_name = 'inoks'
 
@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'home/product-detail/(?P<slug>[-\w\d]+)/$', HomeViews.get_product_detail, name='urun-detay'),
     url(r'home/checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
     url(r'home/search/$', HomeViews.search_category, name='search'),
+    url(r'home/odeme/$', CheckoutViews.get_payment_info_isLogin, name='checkout-odeme'),
 
     # Dashboard
     url(r'dashboard/admin-dashboard/$', DashboardViews.return_admin_dashboard, name='admin-dashboard'),
@@ -66,6 +67,7 @@ urlpatterns = [
     url(r'kullanici/adres-sil/(?P<pk>\d+)$', UserViews.user_delete_address, name='kullanici-adres-sil'),
     url(r'kullanici/adres-guncelle/(?P<pk>\d+)$', UserViews.user_address_update, name='kullanici-adres-guncelle'),
     url(r'kullanici/kulanici-iade-olustur/$', RefundViews.return_add_refund, name='kullanici-urun-iade-olustur'),
+    url(r'kullanici/siparis-urun/$', UserViews.user_product, name='siparis-urunleri'),
 
     # Urunler
     url(r'urunler/urun-ekle/$', ProductViews.return_add_products, name='urun-ekle'),
@@ -169,7 +171,16 @@ urlpatterns = [
     url(r'odeme-basarisiz/$', OrderViews.basarisiz_odeme, name='basarisiz-odeme'),
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
 
-    url(r'odeme-tamamla/$', CheckoutViews.payment_islogin, name='odeme-tamamla-login'),
+    # Odeme Yontemleri
+
+    url(r'payment-type/payTr/(?P<pk>\d+)$', PaymentMethodViews.UpdatePaytr, name='payTr'),
+    url(r'payment-type/bakiyem/(?P<pk>\d+)$', PaymentMethodViews.UpdateBakiyem, name='bakiyem'),
+    url(r'payment-type/iyzico/(?P<pk>\d+)$', PaymentMethodViews.UpdateIyzico, name='iyzico'),
+    url(r'payment-type/$', PaymentMethodViews.paymentMethod, name='payment-method'),
+    url(r'kupon-aktifligi/(?P<pk>\d+)$', PaymentMethodViews.paymentMethod_activity, name='odeme-yontemi-aktiflestir'),
+
+    url(r'odeme-tamamla/$', CheckoutViews.payment_info_islogin, name='odeme-tamamla-login'),
+    url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.odemeYap, name='kullanici-odeme-yap'),
     url(r'odeme-tamamla-adres/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
 
     # kupon

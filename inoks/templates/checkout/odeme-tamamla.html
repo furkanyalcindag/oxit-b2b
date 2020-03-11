@@ -1,0 +1,159 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+
+
+    <div class="container">
+
+        {% if messages %}
+            {% for message in messages %}
+
+
+                {% if message.tags == 'warning' %}
+
+                    <div class="alert " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if message.tags == 'success' %}
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+
+                            <div class="alert  " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li class="{{ message.tags }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+
+        {% endif %}
+        <ul class="checkout-progress-bar">
+            <li>
+                <span>Kargo Bilgileri</span>
+            </li>
+            <li class="active">
+                <span>Sipariş Tamamlandı</span>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="checkout-info-box" style="margin-top: 30px;">
+                    {% if invoice_address == address %}
+                        <h3 class="step-title">Fatura ve Teslimat Adresi </h3>
+                    {% else %}
+                        <h3 class="step-title">Teslimat Adresi </h3>
+                    {% endif %}
+                    <address>
+                        {{ address }} <br>
+                        {{ district }} / {{ city }}
+                    </address>
+                </div><!-- End .checkout-info-box -->
+                {% if invoice_address != address %}
+                    <div class="checkout-info-box" style="margin-top: 30px;">
+                        <h3 class="step-title">Fatura Adresi </h3>
+
+                        <address>
+                            {{ invoice_address }} <br>
+
+                        </address>
+                    </div><!-- End .checkout-info-box -->
+                {% endif %}
+                <div class="checkout-info-box">
+                    <h3 class="step-title">Ödeme Yöntemi: </h3>
+                    {% if payment_type == "Kapıda Ödeme" %}
+                        <p class="fa fa-home" style="margin-right: 10px;color: #999999;"> {{ payment_type }}</p>
+                    {% else %}
+                        <p class="fa fa-location-arrow"
+                           style="margin-right: 10px;color: #999999;"> {{ payment_type.name }}</p>
+                    {% endif %}
+
+                </div><!-- End .checkout-info-box -->
+            </div><!-- End .col-lg-4 -->
+
+            <div class="col-lg-8 order-lg-first">
+                <div class="checkout-payment">
+                    <h2 class="step-title">Sipariş Bilgileri</h2>
+
+
+                    <div class="cart-table-container">
+                        <table class="table table-cart">
+                            <thead>
+                            <tr>
+                                <th class="product-col" style="text-align: center;">Ürün</th>
+
+                                <th class="price-col">Fiyat</th>
+                                <th class="qty-col">Adet</th>
+                                <th>Toplam Ürün Fiyatı</th>
+
+                            </tr>
+                            </thead>
+                            <tbody id="pro_table">
+                            {% for product in orders %}
+                                <tr class="product-row">
+
+                                    <td><h2 class="product-title">
+                                        <a >{{ product.product_name }}</a>
+                                    </h2></td>
+                                    <td data-id="{{ product.id }}"
+                                        data-name="{{ product.product_name }}"
+                                        data-price="{{ product.price }}">{{ product.price|floatformat:'2' }}₺
+                                    </td>
+
+                                    <td>
+
+                                        <input class="class=item-count form-control" id="c{{ forloop.counter0 }}"
+                                               type=""
+                                               value="{{ product.count }}"
+                                               style="width: 39px;margin-left: 67px;" readonly>
+                                    </td>
+                                    <td>{{ product.subtotal|floatformat:'2' }}₺</td>
+
+
+                                </tr>
+
+
+                            {% endfor %}
+                            </tbody>
+
+
+                        </table>
+                    </div><!-- End .cart-table-container -->
+
+                </div><!-- End .checkout-payment -->
+
+
+            </div><!-- End .checkout-discount -->
+        </div><!-- End .col-lg-8 -->
+    </div><!-- End .row -->
+
+
+
+{% endblock %}

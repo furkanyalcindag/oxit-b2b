@@ -123,7 +123,7 @@ def coupon_delete(request, pk):
     return redirect('inoks:kupon')
 
 
-@login_required
+
 def coupon_control(request):
     if request.POST:
         discount = 0

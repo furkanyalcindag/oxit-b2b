@@ -23,7 +23,7 @@ from inoks.Forms.CargoForm import CargoForm
 from inoks.Forms.OrderForm import OrderForm
 from inoks.Forms.OrderFormAdmin import OrderFormAdmin
 from inoks.Forms.OrderSituationsForm import OrderSituationsForm
-from inoks.models import Order, OrderSituations, Profile, Product, OrderProduct, City, Settings
+from inoks.models import Order, OrderSituations, Profile, Product, OrderProduct, City, Settings, PaymentMethodPayTR
 from inoks.models.Cargo import Cargo
 from inoks.models.CartObject import CartObject
 from inoks.models.OrderObject import OrderObject
@@ -417,11 +417,11 @@ def return_my_orders(request):
 
     for order in orderss:
         orderObject = OrderObject(order=order, total_price=0)
-
+        orderObject.order = order
         orderObject.total_price = order.totalPrice
         orders.append(orderObject)
 
-    return render(request, 'siparisler/siparislerim.html', {'orders': orderss})
+    return render(request, 'siparisler/siparislerim.html', {'orders': orders})
 
 
 @api_view()
@@ -531,13 +531,14 @@ def build_string(*args):
 
 
 def odemeYap(request, siparis):
-    perm = general_methods.control_access(request)
+    """perm = general_methods.control_access(request)
 
     if not perm:
         logout(request)
-        return redirect('accounts:login')
+        return redirect('accounts:login')"""
 
     order = Order.objects.get(pk=siparis)
+    payTr = PaymentMethodPayTR.objects.get(payment_type__name='Paytr')
     order_products = OrderProduct.objects.filter(order=order)
 
     user_basket = []
@@ -566,9 +567,9 @@ def odemeYap(request, siparis):
 
     # data = base64.urlsafe_b64encode(json.dumps({'a': 123}).encode())
 
-    merchant_id = '146950'
-    merchant_key = 'Tw7p6HFLrbuyMBQ9'
-    merchant_salt = 'HNZx6niqsJJjiiRq'
+    merchant_id = payTr.merchantId
+    merchant_key = payTr.merchantKey
+    merchant_salt = payTr.merchantSalt
     #
     ## Müşterinizin sitenizde kayıtlı veya form vasıtasıyla aldığınız eposta adresi
     email = order.profile.user.email
@@ -778,6 +779,7 @@ def kargoBilgi(request, pk):
                   {'card': order_products, 'siparis_no': pk, 'order': order, 'total': order.totalPrice,
                    'userOrder': order.profile})
 
+
 @login_required
 def cargo_update(request, pk):
     perm = general_methods.control_access(request)
@@ -801,6 +803,7 @@ def cargo_update(request, pk):
             messages.warning(request, 'Alanları Kontrol Ediniz')
     return render(request, 'kargo/kargo-guncelle.html',
                   {'cargo_form': cargo_form})
+
 
 @login_required
 def get_cargo(request):
@@ -830,4 +833,3 @@ def cargo_delete(request, pk):
     cargo.delete()
     messages.success(request, 'Kargo Bilgisi Silindi.')
     return redirect('inoks:kargo-ücret-bilgileri')
-

@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'permission-save-api/$', views.permission_post, name="save-permission"),
     url(r'change-password/$', views.change_password, name='change_password'),
 
+
 ]

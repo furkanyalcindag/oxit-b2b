@@ -4,9 +4,7 @@ from django.forms import ModelForm
 from inoks.models.Profile import Profile
 
 
-class LoginProfilForm(ModelForm):
-    isContract = forms.BooleanField(required=True)
-    isNotification = forms.BooleanField(required=False)
+class LoginProfileUpdateForm(ModelForm):
     class Meta:
         model = Profile
 

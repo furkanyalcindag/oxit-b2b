@@ -7,11 +7,12 @@ from django.db.models import Sum
 from django.http import JsonResponse
 
 from inoks.models import Profile, Order, Menu, MenuAdmin, Refund, earningPayments, OrderSituations, ProductCategory, \
-    Settings
+    Settings, Product
 from inoks.models.Address import Address
 from inoks.models.Coupon import Coupon
 
 from inoks.models.ProfileControlObject import ProfileControlObject
+from inoks.models.UserProductObject import UserProductObject
 
 
 def getMenu(request):
@@ -606,3 +607,21 @@ def couponControl(coupon_code, total_order):
     except Exception as e:
 
         return discount
+
+
+def products_in_card(cards):
+    orders = []
+    for product in cards:
+        order = UserProductObject(id=0, product_name=None, price=0, count=0, image=None, subtotal=0, slug=None)
+        order.id = product['id']
+        order.product_name = product['name']
+        order.price = product['price']
+        order.count = product['count']
+        order.subtotal = product['count'] * product['price']
+        orders.append(order)
+
+
+    return orders
+
+
+

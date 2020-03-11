@@ -12,7 +12,8 @@ class UserCheckoutForm(ModelForm):
         fields = ('first_name', 'last_name', 'email')
         widgets = {
             'first_name': forms.TextInput(
-                attrs={'class': 'form-control ', 'placeholder': 'Adınız', 'value': '', 'required': 'required', 'readonly': 'readonly'
+                attrs={'class': 'form-control ', 'placeholder': 'Adınız', 'value': '', 'required': 'required',
+                       'readonly': 'readonly',
                        }),
             'last_name': forms.TextInput(
                 attrs={'class': 'form-control ', 'placeholder': ' Soyadınız', 'required': 'required',

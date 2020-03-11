@@ -29,7 +29,7 @@ class Profile(models.Model):
     isApprove = models.BooleanField(default=False, null=True, blank=True)
     isActive = models.BooleanField(default=False)
     isContract = models.BooleanField(default=False)
-    isNotification = models.BooleanField(default=False)
+    isNotification = models.BooleanField(default=False,null=True,blank=True)
     activePassiveDate = models.DateTimeField(null=True, blank=True)
     # creditCard = models.ManyToManyField(CreditCard, null=True, blank=True, verbose_name='Kredi Kartı')
     iban = models.TextField(blank=True, null=True, verbose_name='iban')

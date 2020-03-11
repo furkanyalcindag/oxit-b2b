@@ -15,3 +15,8 @@ from .OrderProduct import OrderProduct
 from .Settings import Settings
 from .ProductImage import ProductImage
 from .ProductGroup import ProductGroup
+from .PaymentMehtodIyzico import PaymentMethodIyzico
+from .PaymentMethodBakiyem import PaymentMethodBakiyem
+from .PaymentMethodPayTR import PaymentMethodPayTR
+from .PaymentMethod import PaymentMethod
+from .PaymentType import PaymentType

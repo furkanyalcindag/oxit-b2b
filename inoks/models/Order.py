@@ -1,6 +1,7 @@
 from django.db import models
 
 from inoks.models import Profile, City
+from inoks.models.PaymentType import PaymentType
 from inoks.models.Cargo import Cargo
 from inoks.models.OrderSituations import OrderSituations
 from inoks.models.Product import Product
@@ -16,14 +17,16 @@ class Order(models.Model):
     order_situations = models.ManyToManyField(OrderSituations, default='Ödeme Bekliyor')
     quantity = models.IntegerField(null=True, blank=True, verbose_name='Sipariş Adeti')
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='İl')
-    district = models.TextField(blank=False, null=False, verbose_name='İlçe')
+    district = models.TextField(blank=True, null=True, verbose_name='İlçe')
     address = models.TextField(blank=True, null=True, verbose_name='Adres')
     sponsor = models.TextField(blank=True, null=True, verbose_name='Sponsor')
-    payment_type = models.CharField(max_length=128, verbose_name='Ödeme Türü', choices=PAYMENT_CHOICES,
-                                    default=TRANSFER)
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.CASCADE, verbose_name='Ödeme Türü', )
     isContract = models.BooleanField(default=False)
     isApprove = models.BooleanField(default=False)
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    cargo = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True)
+    kdv = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True, verbose_name="KDV")
+    discount = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True, verbose_name="İndirim")
+    net_total = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True)
     isPayed = models.BooleanField(default=False)
     totalPrice = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True)
     creationDate = models.DateTimeField(auto_now_add=True, verbose_name='Kayıt Tarihi')

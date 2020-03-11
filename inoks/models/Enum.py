@@ -27,10 +27,12 @@ SCHOOL_CHOICES = (
 
 TRANSFER = 'Kredi Kartı'
 EFT = 'Havale/EFT'
+KAPIDA_ODEME = 'Kapıda Ödeme'
 PAYMENT_CHOICES = (
 
     (TRANSFER, 'Kredi Kartı'),
-    (EFT, 'Havale/EFT')
+    (EFT, 'Havale/EFT'),
+    (KAPIDA_ODEME, 'Kapıda Ödeme')
 )
 
 Evet = 'Evet'
@@ -38,6 +40,7 @@ Hayir = 'Hayır'
 
 OPEN_CHOICES = (
     (Evet, 'Evet'),
+    (Hayir, 'Hayır'),
     (Hayir, 'Hayır'),
 )
 

@@ -1,0 +1,54 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8 order-lg-first">
+                <div class="checkout-payment">
+                    <h2 class="step-title">Ürünler</h2>
+                    <div class="cart-table-container">
+                        <table class="table table-cart">
+                            <thead>
+                            <tr>
+                                <th class="product-col" style="text-align: center;">Ürün</th>
+
+                                <th class="price-col">Fiyat</th>
+                                <th class="qty-col">Adet</th>
+                                <th>Toplam Ürün Fiyatı</th>
+
+                            </tr>
+                            </thead>
+                            <tbody id="pro_table">
+                            {% for product in orders %}
+                                <tr class="product-row">
+
+                                    <td>
+                                        <a>{{ product.product.name }}</a>
+                                    </td>
+                                    <td>{{ product.product.price|floatformat:'2' }}₺
+                                    </td>
+
+                                     <td class="right">
+                                        <input value="{{ product.product.count }}"
+                                               style="width: 39px;margin-left: 67px;" readonly>
+                                    </td>
+                                    <td>{{ product.product.subtotal|floatformat:'2' }}₺</td>
+
+
+                                </tr>
+
+
+                            {% endfor %}
+                            </tbody>
+
+
+                        </table>
+                    </div><!-- End .cart-table-container -->
+
+                </div><!-- End .checkout-payment -->
+
+
+            </div><!-- End .checkout-discount -->
+        </div>
+    </div>
+{% endblock %}

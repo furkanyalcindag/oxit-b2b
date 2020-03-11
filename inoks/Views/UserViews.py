@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view
 from accounts.forms import ResetPassword
 from inoks.Forms.AddressForm import AddressForm
 from inoks.Forms.LoginProfilForm import LoginProfilForm
+from inoks.Forms.LoginProfilUpdateForm import LoginProfileUpdateForm
 from inoks.Forms.LoginUserForm import LoginUserForm
 from inoks.Forms.ProfileCreditCardForm import ProfileCreditCardForm
 from inoks.Forms.RefundForm import RefundForm
@@ -19,7 +20,7 @@ from inoks.Forms.ProfileForm import ProfileForm
 from inoks.Forms.ProfileUpdateForm import ProfileUpdateForm
 from inoks.Forms.ProfileUpdateMemberForm import ProfileUpdateMemberForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
-from inoks.models import Profile, Settings, Order, Refund
+from inoks.models import Profile, Settings, Order, Refund, OrderProduct
 from inoks.models.Address import Address
 from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
@@ -470,7 +471,7 @@ def user_register(request):
 
                 profil = Profile(user=user, mobilePhone=profile_form.cleaned_data['mobilePhone'])
                 profil.isContract = profile_form.cleaned_data['isContract']
-                profil.isContract = profile_form.cleaned_data['isNotification']
+                profil.isNotification = profile_form.cleaned_data['isNotification']
                 profil.save()
                 messages.success(request, 'Kullanıcı Kaydedildi.Giriş Yapabilirsiniz.')
                 return redirect('inoks:kullanici-giris')
@@ -508,7 +509,7 @@ def user_login(request):
 
             # logout yapılcak
         else:
-            messages.add_message(request, messages.SUCCESS, 'Mail Adresi Ve Şifre Uyumsuzluğu')
+            messages.add_message(request, messages.WARNING, 'Mail Adresi Ve Şifre Uyumsuzluğu')
             return render(request, 'kullanici/kullanici-login.html')
 
     return render(request, 'kullanici/kullanici-login.html')
@@ -524,7 +525,7 @@ def user_profil(request):
 
     user_form = UserUpdateForm(request.POST or None, instance=user)
     profile = Profile.objects.get(user=user)
-    profile_form = LoginProfilForm(request.POST or None, instance=profile)
+    profile_form = LoginProfileUpdateForm(request.POST or None, instance=profile)
 
     if request.method == 'POST':
 
@@ -580,12 +581,25 @@ def user_my_orders(request):
     orders = []
 
     for order in orderss:
+        order_product = OrderProduct.objects.filter(order=order)
         orderObject = OrderObject(order=order, total_price=0)
-
         orderObject.total_price = order.totalPrice
         orders.append(orderObject)
 
-    return render(request, 'kullanici/kullanici-siparisleri.html', {'orders': orderss})
+    return render(request, 'kullanici/kullanici-siparisleri.html', {'orders': orders, })
+
+
+def user_product(request):
+    current_user = request.user
+    userprofile = Profile.objects.get(user=current_user)
+    orderss = Order.objects.filter(profile_id=userprofile.id)
+
+    orders = []
+    order_product = ""
+    for order in orderss:
+            order_product = OrderProduct.objects.filter(order=order)
+
+    return render(request, 'mailTemplates/invoice.html', {'orders': order_product})
 
 
 @login_required
