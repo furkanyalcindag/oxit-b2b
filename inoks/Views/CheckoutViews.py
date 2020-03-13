@@ -3,10 +3,13 @@ import hashlib
 import hmac
 import json
 from decimal import Decimal
+
+import iyzipay
 import requests
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
 
 from django.http import JsonResponse
@@ -21,7 +24,7 @@ from inoks.Forms.OrderUpdateForm import OrderForm
 from inoks.Forms.UserCheckoutForm import UserCheckoutForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
 from inoks.models import Product, Profile, Settings, City, Order, OrderProduct, OrderSituations, PaymentType, \
-    PaymentMethod, PaymentMethodPayTR
+    PaymentMethod, PaymentMethodPayTR, PaymentMethodIyzico
 from inoks.models.Address import Address
 from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
@@ -187,7 +190,7 @@ def get_payment_info_isLogin(request):
     address = adres.address
     address_city = adres.city
     address_district = adres.district
-
+    orderProduct = ""
     subtotal = 0
 
     discount = 0
@@ -242,6 +245,7 @@ def get_payment_info_isLogin(request):
     order.kdv = kdv
     order.discount = discount
     order.net_total = net_total
+    order.subTotal = subtotal
 
     order.district = address_district
     order.save()
@@ -286,6 +290,9 @@ def get_payment_info_isLogin(request):
         if paymentMethod.name == 'Paytr':
             messages.success(request, 'Sipariş başarıyla eklendi.')
             return redirect('inoks:kullanici-odeme-yap', siparis=order.id)
+        if paymentMethod.name == 'Iyzico':
+            messages.success(request, 'Sipariş başarıyla eklendi.')
+            return redirect('inoks:iyzico-odeme-yap', siparis=order.id)
 
 
     else:
@@ -460,6 +467,100 @@ def odemeYap(request, siparis):
 
     return render(request, "checkout/kullanici-odeme.html",
                   {"token": json.loads(response.text)['token'], "card": order_products, "order": order})
+
+
+def payment_iyzico(request, siparis):
+    order = Order.objects.get(pk=siparis)
+    iyzico = PaymentMethodIyzico.objects.get(payment_type__name='Iyzico')
+    order_products = OrderProduct.objects.filter(order=order)
+    x = request
+    user_basket = []
+
+    """"" for product in order_products:
+     user_basket_content = []
+     user_basket_content.append(product.product.name)
+     user_basket_content.append(str(product.product.price))
+     user_basket_content.append(str(product.quantity))
+
+     user_basket.append(user_basket_content)"""
+
+    options = {
+        'api_key': 'sandbox-8P1STMqgfLakCt71B0yp6Vl4UhuRo5Ip',
+        'secret_key': 'sandbox-nMPjEGdEgOq1VJ8gUKYrojqZEDh5ipkS',
+        'base_url': 'sandbox-api.iyzipay.com',
+    }
+
+    buyer = {
+        'id': 'BY789',
+        'name': 'John',
+        'surname': 'Doe',
+        'gsmNumber': '+905350000000',
+        'email': 'email@email.com',
+        'identityNumber': '74300864791',
+        'lastLoginDate': '2015-10-05 12:43:35',
+        'registrationDate': '2013-04-21 15:12:09',
+        'registrationAddress': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        'ip': '85.34.78.112',
+        'city': 'Istanbul',
+        'country': 'Turkey',
+        'zipCode': '34732'
+    }
+
+    address = {
+        'contactName': 'Jane Doe',
+        'city': 'Istanbul',
+        'country': 'Turkey',
+        'address': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        'zipCode': '34732'
+    }
+
+    basket_items = [
+        {
+            'id': 'BI101',
+            'name': 'Binocular',
+            'category1': 'Collectibles',
+            'category2': 'Accessories',
+            'itemType': 'PHYSICAL',
+            'price': '0.3'
+        },
+        {
+            'id': 'BI102',
+            'name': 'Game code',
+            'category1': 'Game',
+            'category2': 'Online Game Items',
+            'itemType': 'VIRTUAL',
+            'price': '0.5'
+        },
+        {
+            'id': 'BI103',
+            'name': 'Usb',
+            'category1': 'Electronics',
+            'category2': 'Usb / Cable',
+            'itemType': 'PHYSICAL',
+            'price': '0.2'
+        }
+    ]
+
+    request = {
+        'locale': 'tr',
+        'conversationId': '123456789',
+        'price': '1',
+        'paidPrice': '1.2',
+        'currency': 'TRY',
+        'basketId': 'B67832',
+        'paymentGroup': 'PRODUCT',
+        "callbackUrl": "http://oxityazilim.com/",
+        "enabledInstallments": ['2', '3', '6', '9'],
+        'buyer': buyer,
+        'shippingAddress': address,
+        'billingAddress': address,
+        'basketItems': basket_items,
+        'debitCardAllowed': True
+    }
+
+    checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request, options)
+
+    return render(x, 'checkout/kullanici-iyzico-odeme.html', {'checkout_form': checkout_form_initialize})
 
 
 @api_view(http_method_names=['POST'])

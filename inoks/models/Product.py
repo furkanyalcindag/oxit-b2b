@@ -36,6 +36,7 @@ class Product(models.Model):
     speedIndex = models.CharField(null=True, blank=True, verbose_name='Hız Endeksi', max_length=100,
                                   choices=SPEED_CHOISES)
     slug = models.SlugField(null=True, unique=True)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return '%s ' % self.name

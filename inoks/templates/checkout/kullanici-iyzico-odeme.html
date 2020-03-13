@@ -1,0 +1,74 @@
+{% extends 'base_layout_2.html' %}
+{% load staticfiles %}
+{% block content %}
+    <style>
+        .demo-container {
+            width: 100%;
+            max-width: 350px;
+            margin: 50px auto;
+        }
+
+        form {
+            margin: 30px;
+        }
+
+        input {
+            width: 200px;
+            margin: 10px auto;
+            display: block;
+        }
+
+    </style>
+
+{{ checkout_form }}
+    <section class="invoice">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+
+                            <th>Ürün</th>
+                            <th>Adet</th>
+                            <th>Fiyat</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+
+                        </tbody>
+                    </table>
+
+
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table ">
+                                <tbody>
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+        </div>
+<div	id="iyzipay-checkout-form"	class="responsive"></div>
+    </section>
+
+
+
+
+
+
+
+
+{% endblock %}

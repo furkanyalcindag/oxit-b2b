@@ -27,6 +27,7 @@ class Order(models.Model):
     kdv = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True, verbose_name="KDV")
     discount = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True, verbose_name="İndirim")
     net_total = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True)
+    subTotal=models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True)
     isPayed = models.BooleanField(default=False)
     totalPrice = models.DecimalField(max_digits=8, decimal_places=2, null=True, default=True)
     creationDate = models.DateTimeField(auto_now_add=True, verbose_name='Kayıt Tarihi')

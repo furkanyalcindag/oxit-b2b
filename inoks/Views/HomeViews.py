@@ -8,7 +8,9 @@ from inoks.models.Brand import Brand
 
 
 def get_home_product(request):
-    products = Product.objects.order_by('-creationDate')[:20]
+
+    products = Product.objects.filter(isActive=1).order_by('-creationDate')[:20]
+
     brands = Brand.objects.all()
     categories = ProductCategory.objects.all()
 

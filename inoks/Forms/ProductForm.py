@@ -9,12 +9,13 @@ class ProductForm(ModelForm):
     #                            widget=forms.Select(
     #                               attrs={'class': 'form-control select2 select2-hidden-accessible',
     #                                     'style': 'width: 100%; '})
+    isActive = forms.BooleanField(required=False)
 
     class Meta:
         model = Product
         fields = (
             'name', 'price', 'stock', 'category', 'info', 'code', 'listPrice', 'brand', 'baseWidth', 'speedIndex',
-            'rimDiameter', 'vehicleType','sectionRate')
+            'rimDiameter', 'vehicleType', 'sectionRate','isActive')
         labels = {
             'price': 'Ürün Fiyatı',
 
@@ -59,7 +60,6 @@ class ProductForm(ModelForm):
 
             'speedIndex': forms.Select(
                 attrs={'class': 'form-control ', 'placeholder': 'Hız Endeksi', 'required': 'required'}),
-
 
         }
 

@@ -586,7 +586,7 @@ def user_my_orders(request):
         orderObject.total_price = order.totalPrice
         orders.append(orderObject)
 
-    return render(request, 'kullanici/kullanici-siparisleri.html', {'orders': orders, })
+    return render(request, 'kullanici/kullanici-siparisleri.html', {'orders': orders})
 
 
 def user_product(request):
@@ -597,9 +597,10 @@ def user_product(request):
     orders = []
     order_product = ""
     for order in orderss:
-            order_product = OrderProduct.objects.filter(order=order)
+        orders.append(order)
+        order_product = OrderProduct.objects.filter(order=order)
 
-    return render(request, 'mailTemplates/invoice.html', {'orders': order_product})
+    return render(request, 'mailTemplates/invoice.html', {'order_product': order_product, 'orders': orders})
 
 
 @login_required

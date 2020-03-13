@@ -19,24 +19,24 @@
                             </tr>
                             </thead>
                             <tbody id="pro_table">
-                            {% for product in orders %}
-                                <tr class="product-row">
+                            {% for product in order_product %}
 
-                                    <td>
-                                        <a>{{ product.product.name }}</a>
-                                    </td>
-                                    <td>{{ product.product.price|floatformat:'2' }}₺
-                                    </td>
+                                    <tr class="product-row">
 
-                                     <td class="right">
-                                        <input value="{{ product.product.count }}"
-                                               style="width: 39px;margin-left: 67px;" readonly>
-                                    </td>
-                                    <td>{{ product.product.subtotal|floatformat:'2' }}₺</td>
+                                        <td>
+                                            <a>{{ product.product.name }}</a>
+                                        </td>
+                                        <td>{{ product.product.price|floatformat:'2' }}₺
+                                        </td>
+
+                                        <td class="right">
+                                            <input value="{{ product.quantity }}"
+                                                   style="width: 38px;padding: 12px;    height: 37px;" readonly>
+                                        </td>
+                                        <td>{{ product.order.subTotal|floatformat:'2' }}₺</td>
 
 
-                                </tr>
-
+                                    </tr>
 
                             {% endfor %}
                             </tbody>

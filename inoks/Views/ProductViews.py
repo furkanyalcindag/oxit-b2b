@@ -52,7 +52,8 @@ def return_add_products(request):
                 sectionRate=product_form.cleaned_data['sectionRate'],
                 vehicleType=product_form.cleaned_data['vehicleType'],
                 stock=product_form.cleaned_data['stock'],
-                info=product_form.cleaned_data['info'])
+                info=product_form.cleaned_data['info'],
+                isActive=product_form.cleaned_data['isActive'])
 
             product.save()
 
@@ -329,7 +330,7 @@ def add_products_to_group(request, group_id):
             group.products.add(product)
             group.save()
 
-        messages.success(request, 'özellikler eklendi.')
+        messages.success(request, 'Özellikler eklendi.')
 
         return redirect('inoks:urun-grupla', group_id)
 
@@ -345,6 +346,7 @@ def delete_product_from_group(request, product_id, group_id):
     group.save()
     messages.success(request, 'Ürün başarıyla çıkarıldı.')
     return redirect('inoks:urun-grupla', group_id)
+
 
 @login_required
 def stock_update(request):
