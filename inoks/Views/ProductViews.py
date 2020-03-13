@@ -329,6 +329,7 @@ def add_products_to_group(request, group_id):
             product = Product.objects.get(pk=int(check))
             group.products.add(product)
             group.save()
+            group.save()
 
         messages.success(request, 'Özellikler eklendi.')
 

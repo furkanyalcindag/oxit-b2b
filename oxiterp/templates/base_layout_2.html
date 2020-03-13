@@ -151,27 +151,23 @@
             <div class="container">
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}">Anasayfa</a></li>
-
+                        <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}" style="font-size:1.5rem;">Anasayfa</a>
+                        </li>
                         <li class="">
-                            <a href="#" class="sf-with-ul">Kategoriler</a>
-
+                            <a href="#" class="sf-with-ul" style="font-size:1.5rem;">Kategoriler</a>
                             <ul style="display: none;">
                                 {% for cat in categories %}
-                                    <li><a href="{% url 'inoks:kategori-urunleri' cat.slug %}">{{ cat.name }}</a></li>
-
+                                    <li><a href="{% url 'inoks:kategori-urunleri' cat.slug %}"
+                                           style="font-size:1.3rem;">{{ cat.name }}</a></li>
                                 {% endfor %}
-
-
                             </ul>
                         </li>
 
-
                         <li>
-                            <a href="contact.html">Kurumsal</a>
+                            <a href="contact.html" style="font-size:1.5rem;">Kurumsal</a>
 
                         </li>
-                        <li><a href="contact.html">İletişim</a></li>
+                        <li><a href="contact.html" style="font-size:1.5rem;">İletişim</a></li>
 
 
                     </ul>
@@ -219,16 +215,15 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                        <input type="submit" name="urun_diger" class="btn btn-primary" value="Sipariş Ver"></input>
+                        <input type="submit" name="urun_diger" class="btn btn-primary" value="Sipariş Ver">
 
-                        <a class="button clear-cart btn btn-danger">Sepeti Boşalt</a>
+                        <a class="button clear-cart btn btn-danger" style="color:white">Sepeti Boşalt</a>
                     </div>
                     <input type="hidden" name="products_cart" id="products_cart">
                 </form>
             </div>
         </div>
     </div>
-
 
     <main class="main">
 

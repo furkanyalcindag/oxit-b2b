@@ -8,7 +8,6 @@ from inoks.models.Brand import Brand
 
 
 def get_home_product(request):
-
     products = Product.objects.filter(isActive=1).order_by('-creationDate')[:20]
 
     brands = Brand.objects.all()
@@ -18,7 +17,6 @@ def get_home_product(request):
                   {'products': products, 'brands': brands, 'categories': categories})
 
 
-
 def get_category_products(request, slug):
     category = ProductCategory.objects.get(slug=slug)
     products = category.product_set.all()
@@ -26,7 +24,7 @@ def get_category_products(request, slug):
     brands = Brand.objects.all()
 
     return render(request, 'home/get-category-products.html',
-                  {'products': products, 'categories': cat, 'brands': brands})
+                  {'products': products, 'categories': cat, 'brands': brands, 'category': category})
 
 
 def get_brand_products(request, slug):
@@ -36,7 +34,7 @@ def get_brand_products(request, slug):
 
     cat = ProductCategory.objects.all()
     return render(request, 'home/get-brand-products.html',
-                  {'products': products, 'categories': cat, 'brands': brands})
+                  {'products': products, 'categories': cat, 'brands': brands, 'brand': brand})
 
 
 def get_product_detail(request, slug):
@@ -50,14 +48,12 @@ def search_category(request):
     categories = ProductCategory.objects.all()
     brands = Brand.objects.all()
     products = ''
+    cat = ProductCategory.objects.get(pk=int(request.POST['cat']))
+
     if request.method == 'POST':
         # category = ProductCategory.objects.filter(pk=int(request.POST['cat']))
-        products = Product.objects.filter(category__in=[ProductCategory.objects.get(pk=int(request.POST['cat']))],
+        products = Product.objects.filter(category__in=[cat],
                                           name__icontains=request.POST['name'])
 
-        messages.warning(request, 'Kayıt Bulunamadı')
-
     return render(request, 'home/get-category-products.html',
-                  {'products': products, 'categories': categories, 'brands': brands})
-
-
+                  {'products': products, 'categories': categories, 'brands': brands, 'category': cat})
