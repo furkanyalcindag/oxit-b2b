@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800");
-@import url("https://fonts.googleapis.com/css?family=Oswald:200,300,400,500,600,700");
-@import url("https://fonts.googleapis.com/css?family=Shadows+Into+Light");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap" rel="stylesheet");
 html {
     font-size: 62.5%;
     font-size-adjust: 100%;
@@ -11,7 +9,7 @@ html {
 body {
     background-color: #fff;
     color: #7a7d82;
-    font: normal 400 1.4rem / 1.8 "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden
@@ -440,7 +438,7 @@ a:focus {
     margin-bottom: 1px;
     padding-top: .4rem;
     padding-bottom: .4rem;
-    color: #ffffff;
+    color: #000;
     font-size: 1.1rem;
     letter-spacing: .025rem;
     line-height: 1.5
@@ -449,7 +447,8 @@ a:focus {
 .header-top a {
     padding-top: .5rem;
     padding-bottom: .5rem;
-    color: inherit
+    color: #000;
+    font-size: 13px;
 }
 
 .header-top .container {
@@ -457,7 +456,7 @@ a:focus {
 }
 
 .header-top .container::before {
-    display: block;
+    display: none;
     position: absolute;
     right: 15px;
     bottom: -5px;
@@ -486,8 +485,8 @@ a:focus {
 }
 
 .header-middle {
-    padding-top: 3.5rem;
-    padding-bottom: 3.5rem
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem
 }
 
 .logo {
@@ -587,7 +586,7 @@ a:focus {
 }
 
 .header-menu a {
-    color: #777
+    color: #000
 }
 
 .header-menu a:hover,
@@ -764,7 +763,8 @@ a:focus {
     padding: .6rem 4.4rem .4rem 1.2rem;
     border: 1px solid #000000;
     border-radius: .2rem;
-    background-color: #000000;
+    margin-top: -20px;
+    background-color: #fff;
     box-shadow: 0 7px 8px rgba(0, 0, 0, 0.05)
 }
 
@@ -793,8 +793,8 @@ a:focus {
 .cart-dropdown .dropdown-toggle::before {
     display: inline-block;
     margin: 2px 0 0;
-    color: #fff;
-    font-family: 'porto';
+    color: #000;
+   font-family: 'porto';
     font-size: 2.5rem;
     line-height: 1;
     content: '\e87f'
@@ -812,8 +812,8 @@ a:focus {
     transform: translateY(-50%);
     transition: all .3s;
     border: 0;
-    color: #fff;
-    font-family: 'porto';
+    color: #000;
+  font-family: 'porto';
     font-size: 1.4rem;
     line-height: 1;
     content: '\e81c'
@@ -982,6 +982,7 @@ a:focus {
     -ms-flex-align: stretch;
     align-items: stretch;
     width: 100%;
+    margin-top: -20px;
     min-width: 250px;
     border: 1px solid #dbe0e2;
     border-radius: 20px;
@@ -1130,7 +1131,7 @@ a:focus {
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     color: #0af;
-    font-family: 'porto';
+  font-family: 'porto';
     font-size: 3rem;
     line-height: 1;
     content: '\e887'
@@ -1225,7 +1226,8 @@ a:focus {
 
 @media screen and (min-width: 768px) {
     .welcome-msg {
-        margin-right: 3rem
+        margin-right: 3rem;
+        font-size: 13px;
     }
 }
 
@@ -1268,7 +1270,7 @@ a:focus {
         padding: 0
     }
     .dropdown-expanded .header-menu a {
-        color: inherit
+        color: #000;
     }
     .dropdown-expanded .header-menu a:hover,
     .dropdown-expanded .header-menu a:focus {
@@ -1411,7 +1413,8 @@ a:focus {
 }
 
 .main-nav {
-    width: 100%
+    width: 100%;
+    text-align: center;
 }
 
 .menu,
@@ -1422,7 +1425,8 @@ a:focus {
 }
 
 .menu {
-    margin: 0 -1.5rem
+    margin: 0 -1.5rem;
+    display: inline-table;
 }
 
 .menu::after {
@@ -1445,9 +1449,10 @@ a:focus {
     display: block;
     padding: .7rem 1rem;
     transition: background .25s;
-    color: #696969;
-    font-size: 1.2rem;
-    font-weight: 600;
+    color: #000;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
     //text-transform: uppercase;
     white-space: nowrap
 }
@@ -1481,9 +1486,9 @@ a:focus {
 .menu>li>a {
     padding: 1.55rem 1.5rem;
     background-color: transparent;
-    color: #5e667a;
-    font-size: 1.3rem;
-    font-weight: 700;
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
     letter-spacing: .01rem
 }
 
@@ -1601,7 +1606,7 @@ a:focus {
     right: 1.5rem;
     margin-top: -1px;
     transform: translateY(-50%);
-    font-family: 'porto';
+  font-family: 'porto';
     font-size: 1.3rem;
     line-height: 1;
     content: '\e81c'
@@ -1629,13 +1634,13 @@ a:focus {
 .menu li.show>a,
 .menu li.active>a {
     background-color: #f4f4f4;
-    color: #696969
+    color: #000
 }
 
 .menu>li:hover>a,
 .menu>li.show>a,
 .menu>li.active>a {
-    color: #08c
+    color: #000
 }
 
 .menu>li:hover.float-right>a>span,
@@ -1855,7 +1860,7 @@ a:focus {
 .mmenu-btn::after {
     display: inline-block;
     margin-top: -2px;
-    font-family: 'porto';
+   font-family: 'porto';
     content: '\e81c'
 }
 
@@ -1892,7 +1897,7 @@ a:focus {
     left: 0;
     padding-top: .6rem;
     padding-bottom: .6rem;
-    background-color: #000000;
+    background-color: #f4f4f4;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1040;
     -webkit-animation-duration: .4s;
@@ -1902,9 +1907,26 @@ a:focus {
 }
 
 .sticky-header.fixed .main-nav {
-    width: auto;
+   width: 100%;
     background-color: transparent
 }
+
+
+
+.sticky-header.fixed .cart-dropdown .dropdown-toggle {
+    display: block;
+    position: relative;
+    padding: .6rem 4.4rem .4rem 1.2rem;
+    border: 1px solid #000000;
+    border-radius: .2rem;
+    margin-top: -5px;
+    background-color: #f4f4f4;
+    box-shadow: 0 7px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+
+
 
 .sticky-header.fixed .menu>li.float-right>a {
     padding: .55rem 1.5rem
@@ -1917,7 +1939,7 @@ a:focus {
 .sticky-header.fixed .menu>li>a {
     padding-top: .55rem;
     padding-bottom: .55rem;
-    color: #fff
+    color: #000
 }
 
 .sticky-header.fixed .menu>li>a .tip {
@@ -1927,8 +1949,8 @@ a:focus {
 .sticky-header.fixed .menu>li:hover>a,
 .sticky-header.fixed .menu>li.show>a,
 .sticky-header.fixed .menu>li.active>a {
-    background-color: #000000;
-    color: #ffffff
+
+    color: #000
 }
 
 .sticky-header.fixed .logo,
@@ -2017,7 +2039,7 @@ a:focus {
     padding: 1rem;
     background-color: #08c;
     color: #fff;
-    font-family: 'Shadows Into Light', cursive;
+   font-family: 'Ubuntu', sans-serif;
     font-size: 2.1rem;
     letter-spacing: .01em;
     line-height: 1;
@@ -2151,7 +2173,7 @@ a:focus {
     border-color: #08c;
     background-color: #08c;
     color: #fff;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: 0;
@@ -2456,7 +2478,7 @@ a:focus {
     position: absolute;
     background-color: #333;
     color: #fff;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-weight: 400;
     letter-spacing: 0.01em;
     text-align: center;
@@ -2573,7 +2595,7 @@ a:focus {
     letter-spacing: 0.005em;
     font-weight: 600;
     color: #999;
-    font-family: "Open Sans";
+    font-family: 'Ubuntu', sans-serif;
     margin-right: 3px
 }
 
@@ -2600,7 +2622,7 @@ a:focus {
     display: inline-block;
     font-size: 13px;
     letter-spacing: 0.1em;
-    font-family: 'porto'
+   font-family: 'Ubuntu', sans-serif;
 }
 
 .ratings-container .product-ratings {
@@ -2787,7 +2809,7 @@ a:focus {
     font-size: 1.3rem;
     font-weight: 400;
     letter-spacing: 0.025em;
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     //text-transform: uppercase;
     visibility: hidden;
     opacity: 0;
@@ -3040,7 +3062,7 @@ a:focus {
     font-size: 1.3rem;
     font-weight: 400;
     letter-spacing: 0.025em;
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     //text-transform: uppercase
 }
 
@@ -3060,7 +3082,7 @@ a:focus {
     font-size: 1.3rem;
     font-weight: 400;
     letter-spacing: 0.025em;
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     //text-transform: uppercase
 }
 
@@ -3513,7 +3535,7 @@ a:focus {
     min-width: 28px;
     margin: 0;
     padding: .5rem;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 2.4rem;
     line-height: 1;
     z-index: 2
@@ -3717,7 +3739,7 @@ a:focus {
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     color: #fff;
-    font-family: 'porto';
+   font-family: 'porto';
     font-size: 1.1rem;
     line-height: 1;
     content: '\e84e'
@@ -4171,7 +4193,7 @@ a:focus {
 }
 
 .banner .banner-subtitle span {
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 2.4rem
 }
 
@@ -4268,7 +4290,7 @@ a:focus {
     margin-top: -.3rem;
     padding-right: 1rem;
     color: #8e8e8e;
-    font-family: 'porto';
+   font-family: 'porto';
     font-size: 1.3rem;
     content: '\e81a';
     vertical-align: middle
@@ -4286,7 +4308,7 @@ a:focus {
 .page-header h1 span {
     display: block;
     margin-bottom: .4rem;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 700;
@@ -5116,7 +5138,7 @@ form h2 {
     border-radius: 0;
     background-color: #fff;
     color: #7a7d82;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 1.5
@@ -5236,7 +5258,7 @@ label {
     right: 1.9rem;
     transform: translateY(-51%);
     color: #34373f;
-    font-family: 'porto';
+   font-family: 'porto';
     font-size: 1.5rem;
     content: '\e81c'
 }
@@ -5260,7 +5282,7 @@ label {
 }
 
 .form-group-custom-control .custom-control-label {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-weight: 400;
     letter-spacing: 0;
     text-transform: initial
@@ -5347,7 +5369,7 @@ label {
     padding: 1.25rem 2rem;
     transition: all .3s;
     border-radius: 0;
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1.4rem;
     letter-spacing: .1rem;
     line-height: 1.5;
@@ -5366,7 +5388,7 @@ label {
     padding-top: 0;
     padding-bottom: 0;
     color: #282d3b;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 13px;
     letter-spacing: 0;
     text-transform: initial
@@ -5571,7 +5593,7 @@ label {
     margin-right: 10px;
     margin-left: 10px;
     background-color: #08c;
-    font-family: Oswald;
+    font-family: 'Ubuntu', sans-serif;
     text-decoration: none;
     //text-transform: uppercase
 }
@@ -5831,7 +5853,7 @@ a:focus {
 }
 
 .tooltip {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1.3rem
 }
 
@@ -6216,7 +6238,7 @@ a:focus {
     top: 0;
     left: -1rem;
     color: #08c;
-    font-family: 'porto';
+ font-family: 'porto';
     font-size: 2.1rem;
     font-weight: 400;
     line-height: 1;
@@ -6312,7 +6334,7 @@ a:focus {
     align-items: center;
     margin-bottom: 0;
     border-radius: 0;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-weight: 700
 }
 
@@ -6436,7 +6458,7 @@ a:focus {
 }
 
 .sorter-btn::before {
-    font-family: 'porto';
+   font-family: 'porto';
     content: '\e890'
 }
 
@@ -6559,7 +6581,7 @@ a:focus {
 
 .login-popup label {
     color: #777;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-size: 1.2rem;
     font-weight: 400;
     line-height: 1;
@@ -6649,7 +6671,7 @@ a:focus {
     border-radius: 0;
     background-color: transparent;
     color: #555;
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1.4rem;
     letter-spacing: .08em;
     line-height: 32px;
@@ -6777,7 +6799,7 @@ a:focus {
 }
 
 .home-top-container {
-    padding-top: 2.7rem
+    padding-top: 0rem
 }
 
 .product-list figure img {
@@ -6890,7 +6912,7 @@ a:focus {
 .home-slide-content h1 {
     margin-bottom: .4rem;
     color: #2c373c;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -.06rem;
@@ -6901,7 +6923,7 @@ a:focus {
 .home-slide-content h3 {
     margin-bottom: .1rem;
     color: #2c373c;
-    font-family: "Open Sans", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
     font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 0;
@@ -6910,7 +6932,7 @@ a:focus {
 }
 
 .home-slide-content h3 span {
-    font-family: "Oswald", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 2.6rem
 }
 
@@ -7075,7 +7097,7 @@ a:focus {
 .side-custom-menu .btn {
     padding: 1.45rem 1rem;
     border-radius: .2rem;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: 0
@@ -7236,7 +7258,7 @@ a:focus {
 .sidebar-shop .widget-title {
     margin: 0;
     color: #21293c;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.1;
@@ -7262,7 +7284,7 @@ a:focus {
     top: 0;
     right: .1rem;
     transition: all .35s;
-    font-family: 'porto';
+   font-family: 'porto';
     font-size: 1.7rem;
     font-weight: 400;
     content: '\e81b'
@@ -7411,7 +7433,7 @@ a:focus {
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     color: #fff;
-    font-family: 'porto';
+  font-family: 'porto';
     font-size: 1.1rem;
     line-height: 1;
     content: '\e84e'
@@ -7805,7 +7827,7 @@ a:focus {
     -ms-flex-pack: center;
     justify-content: center;
     font-size: 1.8rem;
-    font-family: 'porto';
+    font-family: 'Ubuntu', sans-serif;
     color: #08c;
     background-color: white;
     border: 1px solid #d4d4d4;
@@ -7842,7 +7864,7 @@ a:focus {
     margin-top: 4px;
     font-size: 1.9rem;
     content: '\e87f';
-    font-family: 'porto'
+    font-family: 'porto';
 }
 
 .add-wishlist::before {
@@ -7854,7 +7876,7 @@ a:focus {
 }
 
 .add-cart {
-    font-family: "Oswald", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     font-weight: 400;
     //text-transform: uppercase;
     padding: .85rem .5rem;
@@ -7897,7 +7919,7 @@ a:focus {
 
 .product-single-details {
     margin-top: -.6rem;
-    font-family: "Open Sans", sans-serif
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .product-single-details .product-title {
@@ -8210,7 +8232,7 @@ a:focus {
     min-width: 31px;
     margin: 0;
     padding: .5rem;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 2.4rem;
     line-height: 1;
     z-index: 2
@@ -9283,7 +9305,7 @@ a:focus {
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     transition: all .35s;
-    font-family: 'porto';
+  font-family: 'porto';
     font-size: 2rem;
     font-weight: 400;
     content: '\e81b'
@@ -9569,7 +9591,7 @@ a:focus {
 
 .table.table-cart tfoot .btn {
     padding: .85rem 2rem;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     letter-spacing: 0;
     text-transform: initial
 }
@@ -9699,7 +9721,7 @@ tbody .product-col {
     right: .4rem;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-    font-family: 'porto';
+   font-family: 'porto';
     font-size: 1.4rem;
     content: '\e81b'
 }
@@ -9911,7 +9933,7 @@ tbody .product-col {
 }
 
 .checkout-progress-bar li.active>span::after {
-    font-family: 'porto';
+   font-family: 'porto';
     content: '\e84e'
 }
 
@@ -10011,7 +10033,7 @@ tbody .product-col {
     padding-top: .2rem;
     background-color: #ff5501;
     color: #fff;
-    font-family: 'porto';
+  font-family: 'porto';
     font-size: 1.9rem;
     line-height: 2.1rem;
     text-align: center;
@@ -10027,7 +10049,7 @@ tbody .product-col {
 }
 
 .address-box-action .btn {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     letter-spacing: 0;
     text-transform: initial
 }
@@ -10045,7 +10067,7 @@ tbody .product-col {
 .btn-new-address {
     margin-bottom: 1.2rem;
     padding: .95rem 1.3rem;
-    font-family: "Open Sans", sans-serif;
+   font-family: 'Ubuntu', sans-serif;
     letter-spacing: 0;
     text-transform: initial
 }
@@ -11347,7 +11369,7 @@ button::-moz-focus-inner {
     color: #FFF;
     font-style: normal;
     font-size: 28px;
-    font-family: Arial, Baskerville, monospace
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .mfp-close:hover,

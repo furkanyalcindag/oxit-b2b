@@ -41,28 +41,20 @@
 
 <div class="page-wrapper">
     <header class="header">
-        <div class="header-top" style="background-color: black;">
+        <div class="header-top">
             <div class="container">
-                <div class="header-left header-dropdowns">
+                <div class="header-left ">
 
 
-                    <div class="header-dropdown">
-                        <!-- End .header-menu -->
-                    </div><!-- End .header-dropown -->
+                    <p class="welcome-msg">0850 346 34 62 </p>
+                    <p class="welcome-msg">info@oxityazilim.com </p>
 
-                    <div class="dropdown compare-dropdown">
-                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false" data-display="static">
 
-                            <a href="tel:#" class="fa fa-phone"><strong> 0850 346 34 62</strong></a>
-                        </a>
-
-                        <!-- End .dropdown-menu -->
-                    </div><!-- End .dropdown -->
                 </div><!-- End .header-left -->
 
                 <div class="header-right">
                     {% if user.is_authenticated %}
+
                         <p class="welcome-msg">Hoşgeldiniz {{ user.first_name }} {{ user.last_name }} </p>
                         <div class="header-dropdown dropdown-expanded">
                             <div class="header-menu">
@@ -151,10 +143,10 @@
             <div class="container">
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}" style="font-size:1.5rem;">Anasayfa</a>
-                        </li>
+                        <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}">Anasayfa</a></li>
+                        <li><a href="#">Kurumsal</a></li>
                         <li class="">
-                            <a href="#" class="sf-with-ul" style="font-size:1.5rem;">Kategoriler</a>
+                            <a href="#" class="sf-with-ul">Kategoriler</a>
                             <ul style="display: none;">
                                 {% for cat in categories %}
                                     <li><a href="{% url 'inoks:kategori-urunleri' cat.slug %}"
@@ -162,12 +154,12 @@
                                 {% endfor %}
                             </ul>
                         </li>
+                        <li><a href="#">Yaz Lastiği</a></li>
+                      <li><a href="#" >Kış Lastiği</a></li>
+                      <li><a href="#" >4 Mevsim Lastik</a></li>
 
-                        <li>
-                            <a href="contact.html" style="font-size:1.5rem;">Kurumsal</a>
 
-                        </li>
-                        <li><a href="contact.html" style="font-size:1.5rem;">İletişim</a></li>
+                        <li><a href="#">İletişim</a></li>
 
 
                     </ul>
