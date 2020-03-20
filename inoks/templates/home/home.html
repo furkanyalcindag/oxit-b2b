@@ -1,8 +1,6 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
 
-
-
     <div class="home-top-container">
 
  <div class="home-slider owl-carousel owl-carousel-lazy">
@@ -82,10 +80,7 @@
                                         </div>
                                     </div>
                                 {% endfor %}
-
-
                             </div>
-
 
                         </div><!-- End .col-lg-9 -->
 
@@ -100,14 +95,13 @@
                                         </h3>
                                         {% for cat in categories %}
                                             <div class="collapse show" id="widget-body-1">
-                                                <div class="widget-body">
+
                                                     <ul class="cat-list">
                                                         <li>
-                                                            <a href="{% url 'inoks:kategori-urunleri' cat.slug %}">{{ cat.name }}</a>
+                                                            <a href="{% url 'inoks:kategori-urunleri' cat.slug %}"> {{ cat.name }}</a>
                                                         </li>
-
                                                     </ul>
-                                                </div><!-- End .widget-body -->
+
                                             </div>
                                         {% endfor %}
 

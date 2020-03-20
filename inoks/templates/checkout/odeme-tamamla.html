@@ -96,6 +96,7 @@
                     {% endif %}
 
                 </div><!-- End .checkout-info-box -->
+
             </div><!-- End .col-lg-4 -->
 
             <div class="col-lg-8 order-lg-first">
@@ -120,7 +121,7 @@
                                 <tr class="product-row">
 
                                     <td><h2 class="product-title">
-                                        <a >{{ product.product_name }}</a>
+                                        <a>{{ product.product_name }}</a>
                                     </h2></td>
                                     <td data-id="{{ product.id }}"
                                         data-name="{{ product.product_name }}"
@@ -141,10 +142,13 @@
 
 
                             {% endfor %}
+
+
                             </tbody>
 
 
                         </table>
+
                     </div><!-- End .cart-table-container -->
 
                 </div><!-- End .checkout-payment -->

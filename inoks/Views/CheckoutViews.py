@@ -9,27 +9,30 @@ import requests
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
-
+from django.contrib.auth.models import Group
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.template.defaultfilters import floatformat
 from django.template.loader import render_to_string
 
 from inoks.Forms.AddressForm import AddressForm
+from inoks.Forms.GuestCheckoutForm import GuestCheckoutForm
 from inoks.Forms.GuestUserForm import GuestUserForm
 from inoks.Forms.LoginProfilForm import LoginProfilForm
 from inoks.Forms.OrderUpdateForm import OrderForm
 from inoks.Forms.UserCheckoutForm import UserCheckoutForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
 from inoks.models import Product, Profile, Settings, City, Order, OrderProduct, OrderSituations, PaymentType, \
-    PaymentMethod, PaymentMethodPayTR, PaymentMethodIyzico
+    PaymentMethod, PaymentMethodPayTR, PaymentMethodIyzico, IyzicoToken
 from inoks.models.Address import Address
 from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
 from inoks.models.Cargo import Cargo
 from inoks.models.Enum import ADDRESS_CHOISES, PAYMENT_CHOICES
+from inoks.models.GuestUser import GuestUser
 from inoks.models.OrderProductObject import OrderProductObject
 from inoks.models.UserProductObject import UserProductObject
 from inoks.models.discountObject import discountObject
@@ -78,19 +81,202 @@ def order_checkout(request):
                 total = Decimal(subtotal) + kargo.price
                 kdv = Decimal(total) - Decimal(net_total)
         return render(request, 'checkout/siparis-detay.html',
-                      {'orders': orders, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
-                       'net_total': Decimal(net_total),
+                      {'orders': orders, 'subtotal': subtotal, 'total': total,
+                       'net_total': net_total,
                        'kdv': Decimal(kdv),
                        'kargo': kargo, 'kargo1': kargo1})
 
     return render(request, 'checkout/siparis-detay.html',
-                  {'orders': orders, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
-                   'net_total': Decimal(net_total),
+                  {'orders': orders, 'subtotal': subtotal, 'total': total,
+                   'net_total': net_total,
                    'kdv': kdv})
 
 
+# MİSAFİR KULLANICI İŞLEMLERİ
+
+def add_guest(request, c_code, subtotal):
+    city = City.objects.all()
+    discount = 0
+    kargo = Cargo.objects.get(name='Üzeri Kargo')
+    kargo1 = 0
+    kdv = Settings.objects.get(name='kdv')
+
+    payment_types = PaymentType.objects.all()
+    guestForm = GuestUserForm(request.POST)
+    guest = GuestUser()
+    payment_types = PaymentType.objects.all()
+    discount = 0
+    if c_code == None:
+        discount = discount
+
+    else:
+
+        discount = couponControl(c_code, subtotal)
+
+    # Misafir Kullanıcı
+    if request.method == 'POST':
+        # discount = str(discount)
+        # discount = base64.b64encode(discount.encode('utf-8'))
+        if guestForm.is_valid():
+            guest = GuestUser(city=guestForm.cleaned_data['city'], district=guestForm.cleaned_data['district'],
+                              address=guestForm.cleaned_data['address'], firstName=guestForm.cleaned_data['firstName'],
+                              lastName=guestForm.cleaned_data['lastName'],
+                              email=guestForm.cleaned_data['email'],
+                              tc=guestForm.cleaned_data['tc'],
+                              mobilePhone=guestForm.cleaned_data['mobilePhone'],
+                              )
+            guest.isContract = guestForm.cleaned_data['isContract']
+            guest.isActive = True
+            guest.save()
+
+        guest = GuestUser.objects.get(pk=guest.pk)
+        return redirect('inoks:odeme-tamamla-guest-user', pk=guest.pk, discount=discount)
+
+    return render(request, 'checkout/odeme-tamamla-add-guest.html',
+                  {'guestForm': guestForm, 'guest': guest, 'discount': discount, 'kargo': kargo, 'kdv': kdv,
+                   'payment_type': payment_types})
+
+
+def payment_info_isGuest(request, pk, discount):
+    kargo = Cargo.objects.get(name='Üzeri Kargo')
+    kargo1 = 0
+    kdv = Settings.objects.get(name='kdv')
+    data = discount
+    data = float(data)
+    payment_types = PaymentType.objects.all()
+    guest = GuestUser.objects.get(pk=pk)
+    guestForm = GuestCheckoutForm(instance=guest)
+    orders = []
+    city = City.objects.all()
+
+    return render(request, 'checkout/odeme-tamamla-guest.html',
+                  {'guestForm': guestForm, 'kargo': kargo,
+                   'guest': guest, 'kargo1': kargo1, 'discount': data,
+                   'kdv': kdv, 'city': guest.city, 'address': guest.address,
+                   'payment_type': payment_types, 'invoice_city': city})
+
+
+def get_payment_info_isGuest(request, pk):
+    guest = GuestUser.objects.get(pk=pk)
+    payment_type = request.POST['payment_type']
+    paymentType = PaymentType.objects.get(name=payment_type)
+
+    orderProduct = ""
+    subtotal = 0
+
+    discount = 0
+    net_total = 0.0
+    total = 0
+    kargo = Cargo.objects.get(name='Üzeri Kargo')
+    kdv = Settings.objects.get(name='kdv')
+    kargo1 = 0
+
+    products = general_methods.products_in_card(json.loads(request.POST['card']))  # Sepetteki ürünler çağrılıyor
+
+    for order in products:
+        subtotal = order.subtotal + subtotal
+
+    c_code = json.loads(request.POST['c_code'])
+
+    if c_code == None:
+        discount = discount
+
+    else:
+        code = c_code['c_code']
+        discount = couponControl(code, subtotal)
+
+    if products:
+        net_total = subtotal * 100 / (100 + float(kdv.value))
+        if subtotal >= kargo.lower_limit:  # ücretsiz kargo
+            kargo1 = 0
+            total = subtotal
+            kdv = total - net_total
+            total = Decimal(subtotal) - Decimal(discount)
+
+        else:
+            kargo1 = kargo.price  # ücretli kargo
+            total = subtotal
+            kdv = total - net_total
+            total = subtotal + kargo.price - discount
+
+    # siparis olusturuluyor
+    order = Order(guestUser=guest)
+
+    if request.POST['address-value'] == 'TRUE':  # fatura adresi = adres
+        order.otherAddress = guest.address
+        order.city = guest.city
+        order.district = guest.district
+    else:
+
+        order.otherAddress = request.POST['invoice_address']  # Farklı fatura adresi
+        order.city = guest.city
+        order.district = guest.district
+
+    order.payment_type = paymentType
+    order.totalPrice = total
+    order.cargo = kargo1
+    order.address = guest.address
+    order.kdv = kdv
+    order.discount = discount
+    order.netTotal = net_total
+    order.subTotal = subtotal
+    order.isGuest = True
+    order.save()
+
+    # siparişin ürünleri
+    for product_order in products:
+        product = Product.objects.get(pk=product_order.id)
+        orderProduct = OrderProduct(order=order, product=product,
+                                    quantity=product_order.count)
+        orderProduct.save()
+
+    invoice_data = {'orders': products, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
+                    'net_total': net_total, 'discount': discount,
+                    'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
+                    'payment_type': order.payment_type, 'invoice_address': order.otherAddress, 'order': order,
+                    'profile': guest}
+
+    subject, from_email, to = 'Oxit Bilişim Teknolojileri', 'burcu.dogan@oxityazilim.com', guest.email
+    text_content = 'Fatura Bilgileri '
+
+    html_body = render_to_string("mailTemplates/invoice.html", invoice_data)
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_body, "text/html")
+    msg.send()
+
+    messages.success(request, 'Siparişiniz Başarıyla Oluştruldu.')
+
+    if order.payment_type == 'Havale/EFT':
+        messages.success(request, 'Sipariş başarıyla eklendi.')
+        return redirect('inoks:havale-eft-bilgi', siparis=order.id)
+
+    elif order.payment_type.name == 'Kredi Kartı':
+        paymentMethod = PaymentMethod.objects.get(isActive=True)
+        if paymentMethod.name == 'Paytr':
+            messages.success(request, 'Sipariş başarıyla eklendi.')
+            return redirect('inoks:payTr-make-creditCard-payment', siparis=order.id)
+        if paymentMethod.name == 'Iyzico':
+            messages.success(request, 'Sipariş başarıyla eklendi.')
+            return redirect('inoks:iyzipay-make-creditcard-payment', siparis=order.id)
+
+
+    else:
+
+        return render(request, 'checkout/odeme-tamamla.html',
+                      {'orders': products, 'subtotal': subtotal, 'total': total, 'kargo1': kargo1,
+                       'net_total': net_total, 'guest': guest, 'order': order, 'discount': discount,
+                       'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
+                       'payment_type': order.payment_type, 'invoice_address': order.otherAddress})
+
+
+def guest_post(request):
+    return render(request, 'checkout/guestpost.html')
+
+
+# KAYITLI KULLANICI İŞLEMLERİ
 @login_required
-def payment_info_islogin(request):
+def payment_info_isUser(request):
     card = ""
     subtotal = 0
     discount = 0
@@ -160,25 +346,25 @@ def payment_info_islogin(request):
             if subtotal >= kargo.lower_limit:  # ücretsiz kargo
                 kargo1 = 0
                 total = subtotal
-                kdv = Decimal(total) - Decimal(net_total)
+                kdv = total - net_total
                 total = subtotal - float(discount)
 
             else:
                 kargo1 = kargo.price  # ücretli kargo
-                total = Decimal(subtotal)
-                kdv = Decimal(total) - Decimal(net_total)
-                total = Decimal(subtotal) + kargo.price - float(discount)
+                total = subtotal
+                kdv = total - net_total
+                total = subtotal + kargo.price - discount
 
-    return render(request, 'checkout/odeme-tamamla-login.html',
-                  {'card': orders, 'user_form': user_form, 'profile_form': profile_form, 'subtotal': Decimal(subtotal),
-                   'total': Decimal(total),
-                   'net_total': Decimal(net_total),
+    return render(request, 'checkout/odeme-tamamla-user.html',
+                  {'card': orders, 'user_form': user_form, 'profile_form': profile_form, 'subtotal': subtotal,
+                   'total': total,
+                   'net_total': net_total,
                    'kdv': kdv, 'kargo1': kargo1, 'addresses': address_dict, 'discount': discount,
                    'city': city, 'adres': address_title, 'payment_type': payment_types})
 
 
 @login_required
-def get_payment_info_isLogin(request):
+def get_payment_info_isUser(request):
     current_user = request.user
     profile = Profile.objects.get(user=current_user)
 
@@ -219,20 +405,21 @@ def get_payment_info_isLogin(request):
         if subtotal >= kargo.lower_limit:  # ücretsiz kargo
             kargo1 = 0
             total = subtotal
-            kdv = Decimal(total) - Decimal(net_total)
-            total = subtotal - float(discount)
+            kdv = total - net_total
+            total = Decimal(subtotal) - Decimal(discount)
 
         else:
             kargo1 = kargo.price  # ücretli kargo
-            total = Decimal(subtotal)
-            kdv = Decimal(total) - Decimal(net_total)
-            total = Decimal(subtotal) + kargo.price - float(discount)
+            total = subtotal
+            kdv = total - net_total
+            total = subtotal + kargo.price - discount
 
     order = Order()
 
     if request.POST['address-value'] == 'TRUE':  # fatura adresi = adres
         order.otherAddress = address
     else:
+
         order.otherAddress = request.POST['invoice_address']  # Farklı fatura adresi
 
     # siparis olusturuluyor
@@ -246,7 +433,7 @@ def get_payment_info_isLogin(request):
     order.discount = discount
     order.net_total = net_total
     order.subTotal = subtotal
-
+    order.isGuest = False
     order.district = address_district
     order.save()
 
@@ -272,13 +459,6 @@ def get_payment_info_isLogin(request):
     msg.attach_alternative(html_body, "text/html")
     msg.send() """
 
-    # stok guncelleme
-    if orderProduct is not None:
-        for product_order in products:
-            product = Product.objects.get(pk=product_order.id)
-            product.stock = product.stock - 1
-            product.save()
-
     messages.success(request, 'Siparişiniz Başarıyla Oluştruldu.')
 
     if order.payment_type == 'Havale/EFT':
@@ -292,7 +472,7 @@ def get_payment_info_isLogin(request):
             return redirect('inoks:kullanici-odeme-yap', siparis=order.id)
         if paymentMethod.name == 'Iyzico':
             messages.success(request, 'Sipariş başarıyla eklendi.')
-            return redirect('inoks:iyzico-odeme-yap', siparis=order.id)
+            return redirect('inoks:iyzipay-make-creditcard-payment', siparis=order.id)
 
 
     else:
@@ -304,7 +484,49 @@ def get_payment_info_isLogin(request):
                        'payment_type': order.payment_type, 'invoice_address': order.otherAddress})
 
 
-def odemeYap(request, siparis):
+@api_view(http_method_names=['POST'])
+def new_address(request):
+    if request.POST:
+        discount = 0
+        message = ""
+        type = ""
+        addresses = []
+        try:
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            district = request.POST.get('district')
+            address_name = request.POST.get('address_name')
+
+            adres = Address()
+            adres.address = address
+            adres.city = City.objects.get(pk=int(city))
+            adres.district = district
+            adres.name = address_name
+            il = str(adres.city) + '/' + str(adres.district)
+            adres.save()
+
+            profile = Profile.objects.get(user=request.user)
+
+            adresProfile = AddressProfile()
+            adresProfile.address = adres
+            adresProfile.profile = profile
+
+            adresProfile.save()
+
+            return JsonResponse(
+                {'status': 'Success', 'messages': "Adres Başarıyla Eklendi", 'address': adres.address,
+                 'il': il, 'a_id': adres.pk,
+                 'message_type': 'success'
+                 })
+
+        except Exception as e:
+
+            return JsonResponse({'status': 'Fail', 'msg': "Adres Eklenemedi", 'message_type': 'error'})
+
+
+# ÖDEME İŞLEMLERİ
+
+def payment_payTr(request, siparis):
     """perm = general_methods.control_access(request)
 
     if not perm:
@@ -312,6 +534,7 @@ def odemeYap(request, siparis):
         return redirect('accounts:login')"""
 
     order = Order.objects.get(pk=siparis)
+
     payTr = PaymentMethodPayTR.objects.get(payment_type__name='Paytr')
     order_products = OrderProduct.objects.filter(order=order)
 
@@ -347,24 +570,30 @@ def odemeYap(request, siparis):
     merchant_salt = payTr.merchantSalt
     #
     ## Müşterinizin sitenizde kayıtlı veya form vasıtasıyla aldığınız eposta adresi
-    email = order.profile.user.email
-    #
+    if order.isGuest:
+        email = order.guestUser.email
+        user_name = order.guestUser.email
+        user_address = order.guestUser.address
+        user_phone = order.guestUser.mobilePhone
+    else:
+        email = order.profile.user.email
+
+        ## Müşterinizin sitenizde kayıtlı veya form aracılığıyla aldığınız ad ve soyad bilgisi
+        user_name = order.profile.user.first_name + " " + order.profile.user.last_name
+
+        ## Müşterinizin sitenizde kayıtlı veya form aracılığıyla aldığınız adres bilgisi
+        user_address = order.address
+
+        ## Müşterinizin sitenizde kayıtlı veya form aracılığıyla aldığınız telefon bilgisi
+        user_phone = order.profile.mobilePhone
+
     ## Tahsil edilecek tutar.
     payment_amount = int(order.totalPrice * 100)
     # 9.99 için 9.99 * 100 = 999 gönderilmelidir.
     #
     ## Sipariş numarası: Her işlemde benzersiz olmalıdır!! Bu bilgi bildirim sayfanıza yapılacak bildirimde geri gönderilir.
     merchant_oid = order.id
-    #
-    ## Müşterinizin sitenizde kayıtlı veya form aracılığıyla aldığınız ad ve soyad bilgisi
-    user_name = order.profile.user.first_name + " " + order.profile.user.last_name
-    #
-    ## Müşterinizin sitenizde kayıtlı veya form aracılığıyla aldığınız adres bilgisi
-    user_address = order.address
-    #
-    ## Müşterinizin sitenizde kayıtlı veya form aracılığıyla aldığınız telefon bilgisi
-    user_phone = order.profile.mobilePhone
-    #
+
     ## Başarılı ödeme sonrası müşterinizin yönlendirileceği sayfa
     ## !!! Bu sayfa siparişi onaylayacağınız sayfa değildir! Yalnızca müşterinizi bilgilendireceğiniz sayfadır!
     ## !!! Siparişi onaylayacağız sayfa "Bildirim URL" sayfasıdır (Bakınız: 2.ADIM Klasörü).
@@ -471,133 +700,101 @@ def odemeYap(request, siparis):
 
 def payment_iyzico(request, siparis):
     order = Order.objects.get(pk=siparis)
+
     iyzico = PaymentMethodIyzico.objects.get(payment_type__name='Iyzico')
     order_products = OrderProduct.objects.filter(order=order)
     x = request
+
     user_basket = []
-
-    """"" for product in order_products:
-     user_basket_content = []
-     user_basket_content.append(product.product.name)
-     user_basket_content.append(str(product.product.price))
-     user_basket_content.append(str(product.quantity))
-
-     user_basket.append(user_basket_content)"""
+    user_basket1 = ['1', '2', '3', '4']
 
     options = {
-        'api_key': 'sandbox-8P1STMqgfLakCt71B0yp6Vl4UhuRo5Ip',
-        'secret_key': 'sandbox-nMPjEGdEgOq1VJ8gUKYrojqZEDh5ipkS',
-        'base_url': 'sandbox-api.iyzipay.com',
+        'api_key': iyzico.apiKey,
+        'secret_key': iyzico.secretKey,
+        'base_url': iyzipay.base_url,
     }
 
-    buyer = {
-        'id': 'BY789',
-        'name': 'John',
-        'surname': 'Doe',
-        'gsmNumber': '+905350000000',
-        'email': 'email@email.com',
-        'identityNumber': '74300864791',
-        'lastLoginDate': '2015-10-05 12:43:35',
-        'registrationDate': '2013-04-21 15:12:09',
-        'registrationAddress': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-        'ip': '85.34.78.112',
-        'city': 'Istanbul',
-        'country': 'Turkey',
-        'zipCode': '34732'
-    }
+    request = dict([('locale', 'tr')])
+    request['conversationId'] = '123456789'
+    request['price'] = str(order.subTotal)
+    request['paidPrice'] = str(order.totalPrice)
+    request['basketId'] = str(order.pk)
+    request['paymentGroup'] = 'PRODUCT'
+    request['callbackUrl'] = 'http://88.224.76.95:83/oxit/odeme-bildirim-iyzico/'
+    request['installment'] = '4'
 
-    address = {
-        'contactName': 'Jane Doe',
-        'city': 'Istanbul',
-        'country': 'Turkey',
-        'address': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-        'zipCode': '34732'
-    }
+    address = dict([('address', order.address)])
+    address['zipCode'] = '34732'
 
-    basket_items = [
-        {
-            'id': 'BI101',
-            'name': 'Binocular',
-            'category1': 'Collectibles',
-            'category2': 'Accessories',
-            'itemType': 'PHYSICAL',
-            'price': '0.3'
-        },
-        {
-            'id': 'BI102',
-            'name': 'Game code',
-            'category1': 'Game',
-            'category2': 'Online Game Items',
-            'itemType': 'VIRTUAL',
-            'price': '0.5'
-        },
-        {
-            'id': 'BI103',
-            'name': 'Usb',
-            'category1': 'Electronics',
-            'category2': 'Usb / Cable',
-            'itemType': 'PHYSICAL',
-            'price': '0.2'
-        }
-    ]
+    address['city'] = order.city.name
+    address['country'] = 'Turkey'
+    request['shippingAddress'] = address
+    request['billingAddress'] = address
 
-    request = {
-        'locale': 'tr',
-        'conversationId': '123456789',
-        'price': '1',
-        'paidPrice': '1.2',
-        'currency': 'TRY',
-        'basketId': 'B67832',
-        'paymentGroup': 'PRODUCT',
-        "callbackUrl": "http://oxityazilim.com/",
-        "enabledInstallments": ['2', '3', '6', '9'],
-        'buyer': buyer,
-        'shippingAddress': address,
-        'billingAddress': address,
-        'basketItems': basket_items,
-        'debitCardAllowed': True
-    }
+    if order.isGuest:
+        user = order.guestUser
+        address['contactName'] = user.firstName + ' ' + user.lastName
+        buyer = dict([('id', str(user.pk))])
+        buyer['name'] = user.firstName
+        buyer['surname'] = user.lastName
+        buyer['gsmNumber'] = user.mobilePhone
+        buyer['email'] = user.email
+        buyer['identityNumber'] = '62535652352'
+        buyer['lastLoginDate'] = '2020-03-18 18:03:24.86029+03'
+        buyer['registrationDate'] ='2020-03-18 18:03:24.86029+03'
+        buyer['registrationAddress'] = order.address
+        buyer['ip'] = '85.34.78.112'
+        buyer['city'] = order.city.name
+        buyer['country'] = 'Turkey'
+        buyer['zipCode'] = '34732'
+    else:
 
-    checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request, options)
+        user = x.user
+        profile = Profile.objects.get(user=user)
+        address['contactName'] = user.first_name + ' ' + user.last_name
 
-    return render(x, 'checkout/kullanici-iyzico-odeme.html', {'checkout_form': checkout_form_initialize})
+        buyer = dict([('id', str(user.pk))])
+        buyer['name'] = user.first_name
+        buyer['surname'] = user.last_name
+        buyer['gsmNumber'] = profile.mobilePhone
+        buyer['email'] = user.email
+        buyer['identityNumber'] = '62535652352'
+        buyer['lastLoginDate'] = str(user.last_login)
+        buyer['registrationDate'] = str(user.date_joined)
+        buyer['registrationAddress'] = order.address
+        buyer['ip'] = '85.34.78.112'
+        buyer['city'] = order.city.name
+        buyer['country'] = 'Turkey'
+        buyer['zipCode'] = '34732'
+    request['buyer'] = buyer
 
 
-@api_view(http_method_names=['POST'])
-def new_address(request):
-    if request.POST:
-        discount = 0
-        message = ""
-        type = ""
-        addresses = []
-        try:
-            address = request.POST.get('address')
-            city = request.POST.get('city')
-            district = request.POST.get('district')
-            address_name = request.POST.get('address_name')
 
-            adres = Address()
-            adres.address = address
-            adres.city = City.objects.get(pk=int(city))
-            adres.district = district
-            adres.name = address_name
-            il = str(adres.city) + '/' + str(adres.district)
-            adres.save()
+    basket_items = []
+    for product in order_products:
+        basket_item = dict()
+        basket_item['id'] = 'BI101'
 
-            profile = Profile.objects.get(user=request.user)
+        basket_item['name'] = product.product.name
+        basket_item['category1'] = 'product.product.category.name'
+        basket_item['itemType'] = 'PHYSICAL'
+        basket_item['price'] = str(product.product.price * product.quantity)
+        # basket_item['cargo'] = 'str(product.order.cargo.name)'
 
-            adresProfile = AddressProfile()
-            adresProfile.address = adres
-            adresProfile.profile = profile
+        basket_items.append(basket_item)
 
-            adresProfile.save()
+    request['basketItems'] = basket_items
 
-            return JsonResponse(
-                {'status': 'Success', 'messages': "Adres Başarıyla Eklendi", 'address': adres.address,
-                 'il': il, 'a_id': adres.pk,
-                 'message_type': 'success'
-                 })
-
-        except Exception as e:
-
-            return JsonResponse({'status': 'Fail', 'msg': "Adres Eklenemedi", 'message_type': 'error'})
+    checkout_form_initialize = iyzipay.CheckoutFormInitialize()
+    checkout_form_initialize_response = checkout_form_initialize.create(request, options)
+    response = checkout_form_initialize_response.read().decode('utf-8')
+    json_instance = json.loads(response)
+    html = json_instance['checkoutFormContent'].replace('<script type="text/javascript">', '').replace(
+        '</script>', '')
+    token = json_instance['token']
+    if IyzicoToken.objects.filter(order_id=order).count() == 0:
+        order_token = IyzicoToken(token=token, order_id=order)
+        order_token.save()
+    request = x
+    return render(x, 'checkout/kullanici-iyzico-odeme.html',
+                  {'checkout_form': html, "card": order_products, "order": order})

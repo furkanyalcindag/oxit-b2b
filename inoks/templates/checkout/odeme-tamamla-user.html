@@ -1,8 +1,6 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
-
-
-
+    {% load staticfiles %}
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -124,7 +122,7 @@
 
                                                                     <address>
                                                                         <input type="radio" id="address" name="address"
-                                                                               value=" {{ address.id }}">
+                                                                               value=" {{ address.id }}" checked>
                                                                         {{ address.address }}
                                                                         <input type="text" style="display: none"
                                                                                value="{{ address.district }}"
@@ -170,7 +168,7 @@
                                 <div class="collapse" id="checkout-discount-section" style="display:block">
                                     <input type="text" class="form-control form-control-sm" name="invoice_address"
                                            placeholder="Fatura Adresi Ekle" value=""
-                                           required=""></div>
+                                    ></div>
                                 <input id="address-value" name="address-value" type="hidden" value=""/>
                                 <div></div>
                             </div>
@@ -184,21 +182,23 @@
                         <div class="card-body">
                             <h3 class="step-title" style="margin-bottom: 20px;">Ödeme Yöntemi</h3>
 
-                                {% for payment_type in payment_type %}
-                                    {% if payment_type.name == 'Kapıda Ödeme' %}
-                                        <input type="radio" id="kapi" name="payment_type" value="{{ payment_type.name }}" checked>
-                                        <i class="fa fa-home"
-                                           style="margin-right: 10px;color: #999999;"> {{ payment_type.name }}</i><br>
-                                    {% elif payment_type.name == 'Havale/EFT' %}
-                                        <input type="radio" id="havale" name="payment_type" value="{{ payment_type.name }}">
-                                        <i class="fa fa-location-arrow" style="margin-right: 10px;color: #999999;">
-                                            {{ payment_type.name }}</i> <br>
-                                    {% else %}
-                                        <input type="radio" id="creditCard" name="payment_type" value="{{ payment_type.name }}">
-                                        <i class="fa fa-credit-card" style="margin-right: 10px;color: #999999;">
-                                            {{ payment_type.name }}</i>
-                                    {% endif %}
-                                {% endfor %}
+                            {% for payment_type in payment_type %}
+                                {% if payment_type.name == 'Kapıda Ödeme' %}
+                                    <input type="radio" id="kapi" name="payment_type" value="{{ payment_type.name }}"
+                                           checked>
+                                    <i class="fa fa-home"
+                                       style="margin-right: 10px;color: #999999;"> {{ payment_type.name }}</i><br>
+                                {% elif payment_type.name == 'Havale/EFT' %}
+                                    <input type="radio" id="havale" name="payment_type" value="{{ payment_type.name }}">
+                                    <i class="fa fa-location-arrow" style="margin-right: 10px;color: #999999;">
+                                        {{ payment_type.name }}</i> <br>
+                                {% else %}
+                                    <input type="radio" id="creditCard" name="payment_type"
+                                           value="{{ payment_type.name }}">
+                                    <i class="fa fa-credit-card" style="margin-right: 10px;color: #999999;">
+                                        {{ payment_type.name }}</i>
+                                {% endif %}
+                            {% endfor %}
 
                         </div>
                     </div>
@@ -248,8 +248,10 @@
 
         </form>
     </div><!-- End .container -->
-
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
     <script>
+
+
         function checkBox() {
 
             var checkBox = document.getElementById("myCheck_address");
@@ -264,6 +266,7 @@
             $("input[id='myCheck_address']").on('change', function () {
                 $(this).val(this.checked ? "TRUE" : "FALSE");
                 document.getElementById('address-value').value = document.getElementById('myCheck_address').value;
+
 
             })
 

@@ -1,0 +1,374 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+    <div class="container">
+        {% if guest.pk %}
+            <form action="{% url 'inoks:checkout-odeme-guest' guest.pk %}" method="post" id="form" name="form">
+
+                <input id="card" type="hidden" name="card" value={{ card.price }}/>
+                <input id="c_code" type="hidden" name="c_code" value={{ c_code }}/>
+                <ul class="checkout-progress-bar">
+                    <li class="active">
+                        <span>Kargo Bilgileri</span>
+                    </li>
+                    <li>
+                        <span>Sipariş Tamamlandı</span>
+                    </li>
+                </ul>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <ul class="checkout-steps">
+                            <li>
+                                <h2 class="step-title" style="margin-bottom: 20px;">Ödeme İşlemleri</h2>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-9 order-lg-last dashboard-content">
+                                            <h3 class="">Kişi Bilgileri</h3>
+
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label>Ad </label>
+                                                {{ guestForm.firstName }}
+                                            </div><!-- End .form-group -->
+
+                                            <div class="form-group ">
+                                                <label>Soyad </label>
+                                                {{ guestForm.lastName }}
+                                            </div><!-- End .form-group -->
+                                            <div class="form-group ">
+                                                <label>TC </label>
+                                                {{ guestForm.tc }}
+                                            </div><!-- End .form-group -->
+                                            <div class="form-group ">
+                                                <label>Email </label>
+                                                {{ guestForm.email }}
+                                            </div><!-- End .form-group -->
+
+                                            <div class="form-group ">
+                                                <label>Telefon </label>
+                                                {{ guestForm.mobilePhone }}
+                                            </div><!-- End .form-group -->
+
+                                            <h3>Adres</h3>
+                                            <div class="form-control" style="height: auto">
+                                                <input type="hidden" id="address" name="address" value="{{ address }}">
+                                                {{ address }}
+                                                <p>{{ district }}/ {{ city }}</p>
+
+
+                                            </div>
+                                            <div class="">
+                                                <h4>
+                                                    <input type="checkbox" id="myCheck_address"
+                                                           onclick="checkBox()" value='FALSE' name="myCheck_address"
+                                                           class="collapsed"
+                                                           aria-controls="checkout-discount-section"> Fatura adresi ile
+                                                    teslimat adresim
+                                                    aynıdır.
+                                                </h4>
+                                                <div class="collapse" id="checkout-discount-section"
+                                                     style="display:block">
+                                                    <input type="text" class="form-control form-control-sm"
+                                                           name="invoice_address"
+                                                           placeholder="Fatura Adresi Ekle" value="">
+
+
+                                                </div>
+                                                <input id="address-value" name="address-value" type="hidden" value="" />
+                                                <div></div>
+                                            </div>
+
+                                        </div><!-- End .col-lg-9 -->
+
+                                    </div><!-- End .row -->
+
+                                </div>
+
+                            </li>
+
+                        </ul>
+                    </div><!-- End .col-lg-8 -->
+
+                    <div class="col-lg-4" style="margin-top:32px;">
+                        <div class="card" style="background-color: #ffffff;margin-top:40px;">
+                            <div class="card-body">
+                                <h3 class="step-title" style="margin-bottom: 20px;">Ödeme Yöntemi</h3>
+
+                                {% for payment_type in payment_type %}
+                                    {% if payment_type.name == 'Kapıda Ödeme' %}
+                                        <input type="radio" id="kapi" name="payment_type"
+                                               value="{{ payment_type.name }}"
+                                               checked>
+                                        <i class="fa fa-home"
+                                           style="margin-right: 10px;color: #999999;"> {{ payment_type.name }}</i><br>
+                                    {% elif payment_type.name == 'Havale/EFT' %}
+                                        <input type="radio" id="havale" name="payment_type"
+                                               value="{{ payment_type.name }}">
+                                        <i class="fa fa-location-arrow" style="margin-right: 10px;color: #999999;">
+                                            {{ payment_type.name }}</i> <br>
+                                    {% else %}
+                                        <input type="radio" id="creditCard" name="payment_type"
+                                               value="{{ payment_type.name }}">
+                                        <i class="fa fa-credit-card" style="margin-right: 10px;color: #999999;">
+                                            {{ payment_type.name }}</i>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                        <div class="cart-summary" style="background-color: #ffffff">
+                            <h3>Sipariş Detayı</h3>
+
+                            <table class="table table-totals">
+                                <tbody>
+
+                                <tr>
+                                    <td>Toplam Sipariş</td>
+                                    <td id="net_total">{{ net_total|floatformat:'2' }}₺</td>
+                                </tr>
+
+                                <tr>
+                                    <td>KDV</td>
+                                    <td id="tax">{{ kdv|floatformat:'2' }}₺</td>
+                                </tr>
+                                <tr>
+                                    <td>Kargo</td>
+                                    <td id="shipping">{{ kargo1 }}₺</td>
+                                </tr>
+                                <tr>
+                                    <td>İndirim</td>
+                                    <td id="shipping">{{ discount }}₺</td>
+                                </tr>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td>Toplam Tutar</td>
+                                    <td id="total_price">{{ total |floatformat:'2' }}₺</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                            <div class="checkout-methods">
+                                <input class="btn btn-primary" onclick="odemeTamamla()" type="submit"
+                                       value="Ödemeyi Tamamla" formmethod="post"
+                                       formnovalidate>
+                            </div><!-- End .checkout-methods -->
+                        </div><!-- End .cart-summary -->
+
+
+                    </div><!-- End .col-lg-4 -->
+                </div><!-- End .row -->
+
+            </form>
+        {% endif %}
+    </div><!-- End .container -->
+
+    <script>
+
+
+        function checkBox() {
+
+            var checkBox = document.getElementById("myCheck_address");
+            var checkout = document.getElementById("checkout-discount-section");
+
+            if (checkBox.checked === true) {
+                checkout.style.display = "none";
+            } else {
+                checkout.style.display = "block";
+            }
+            debugger;
+            $("input[id='myCheck_address']").on('change', function () {
+                $(this).val(this.checked ? "TRUE" : "FALSE");
+                document.getElementById('address-value').value = document.getElementById('myCheck_address').value;
+
+
+            })
+
+
+        }
+
+
+        function ilceGetir() {
+
+            var e = document.getElementById("id_city");
+
+            var il_id = e.options[e.selectedIndex].value;
+            $.ajax({
+                url: "{% url 'inoks:ilce-getir' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    il_id: il_id,
+
+                },
+                success: function (result) {
+
+
+                    let select = document.getElementById("ilce_id");
+
+                    select.options[select.options.length] = new Option('Text 1', 'Value1');
+
+                    $('#ilce_id').empty();
+
+                    for (let i = 0; i < result.ilceler.length; i++) {
+                        select.options[select.options.length] = new Option(result.ilceler[i].name, result.ilceler[i].name);
+                    }
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+
+
+            ilceGetir();
+            //console.log($('#ilce_id').select2('data'))
+            $('#ilce_id').val('{{ilce}}').trigger('change'); // Select the option with a value of '1'
+
+
+        });
+
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+
+        function new_address() {
+
+
+            debugger;
+            let html = '';
+
+
+            var e = document.getElementById("id_city");
+
+            var il = e.options[e.selectedIndex].value;
+
+
+            var ilce = document.getElementById("ilce_id");
+
+            var ilce_id = ilce.options[ilce.selectedIndex].value;
+
+
+            var name = document.getElementById("address_name").value;
+
+
+            var address = document.getElementById('address').value;
+
+            let city = il;
+            let district = ilce_id;
+            debugger;
+
+
+            $.ajax({
+                url: "{% url 'inoks:odeme-tamamla-yeni-adres' %}",
+                type: "post", // or "get"
+
+                data: {
+                    address: address,
+                    address_name: name,
+                    city: city,
+                    district: district
+
+                },
+
+
+                success: function (result) {
+                    console.log(result);
+
+                    if (result.status === 'Success') {
+                        //swal("Başarılı", "İlan Silindi", "success");
+
+
+                        const div = document.createElement('div');
+
+                        div.className = 'col-md-6';
+
+
+                        html += '<div class="card">';
+                        html += '<h4 class="card-header" style="background-color: #ffffff">Yeni</h4>\n';
+                        html += '<div>';
+                        html += ' <div class="" style="padding:15px">';
+                        html += ' <address> <input type="checkbox" id="address" name="address" value="' + result.a_id + '">';
+                        html += result.address;
+                        html += '<p>' + result.il + '</p>';
+                        html += '</address><hr style="margin: 0; margin-bottom: 20px;"></div></div></div>';
+
+
+                        div.innerHTML = html;
+
+                        document.getElementById('address_row').appendChild(div);
+
+                        $('#exampleModal').modal('hide');
+
+
+                    } else {
+                        //swal("Başarılı", result.messages, "error");
+
+                    }
+                }
+            });
+
+
+        }
+
+
+        function odemeTamamla() {
+
+
+            card = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            document.getElementById('card').value = JSON.stringify(card);
+
+            console.log(card);
+
+            debugger;
+            c_code = sessionStorage.getItem('c_code');
+
+            if (c_code != null) {
+                discount = JSON.parse(c_code);
+                document.getElementById('c_code').value = JSON.stringify(discount);
+            } else {
+                document.getElementById('c_code').value = JSON.stringify(null);
+                console.log(c_code);
+            }
+
+
+            window.document.test.submit();
+
+
+        }
+
+
+    </script>
+
+{% endblock %}

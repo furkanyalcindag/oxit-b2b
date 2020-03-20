@@ -612,13 +612,13 @@ def couponControl(coupon_code, total_order):
 def products_in_card(cards):
     orders = []
     for product in cards:
-        order = UserProductObject(id=0, product_name=None, price=0, count=0, image=None, subtotal=0, slug=None)
-        order.id = product['id']
-        order.product_name = product['name']
-        order.price = product['price']
-        order.count = product['count']
-        order.subtotal = product['count'] * product['price']
-        orders.append(order)
+        product_card = UserProductObject(id=0, product_name=None, price=0, count=0, image=None, subtotal=0, slug=None)
+        product_card.id = product['id']
+        product_card.product_name = product['name']
+        product_card.price = product['price']
+        product_card.count = product['count']
+        product_card.subtotal = product['count'] * product['price']
+        orders.append(product_card)
 
 
     return orders

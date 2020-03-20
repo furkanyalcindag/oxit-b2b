@@ -35,7 +35,8 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls'))
     path('bayi/', include('accounts.urls')),
     # path('egitim/', include('education.urls')),
-    path('oxit/', include('inoks.urls')),
+    path('', include('inoks.urls')),
+
 
 ]
 

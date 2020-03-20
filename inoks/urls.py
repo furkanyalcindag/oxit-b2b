@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 
 from inoks.Views import ProductViews, UserViews, OrderViews, ReportViews, EarningsViews, DashboardViews, SettingViews, \
     TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews, CheckoutViews, PaymentMethodViews
@@ -8,13 +9,14 @@ app_name = 'inoks'
 urlpatterns = [
     # HOME
 
-    url(r'home/$', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
+    path('', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
     url(r'home/category-product/(?P<slug>[-\w\d]+)/$', HomeViews.get_category_products, name='kategori-urunleri'),
     url(r'home/brand-product/(?P<slug>[-\w\d]+)/$', HomeViews.get_brand_products, name='markanin-urunleri'),
     url(r'home/product-detail/(?P<slug>[-\w\d]+)/$', HomeViews.get_product_detail, name='urun-detay'),
     url(r'home/checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
     url(r'home/search/$', HomeViews.search_category, name='search'),
-    url(r'home/odeme/$', CheckoutViews.get_payment_info_isLogin, name='checkout-odeme'),
+    url(r'home/odeme/$', CheckoutViews.get_payment_info_isUser, name='checkout-odeme'),
+    url(r'home/odeme-guest/(?P<pk>\d+)$', CheckoutViews.get_payment_info_isGuest, name='checkout-odeme-guest'),
 
     # Dashboard
     url(r'dashboard/admin-dashboard/$', DashboardViews.return_admin_dashboard, name='admin-dashboard'),
@@ -167,6 +169,7 @@ urlpatterns = [
     # odeme
     url(r'odeme-modul/(?P<siparis>\d+)$', OrderViews.odemeYap, name='odeme-yap'),
     url(r'odeme-bildirim/$', OrderViews.odeme_sonuc, name='odeme-sonuc'),
+    url(r'odeme-bildirim-iyzico/$', OrderViews.odeme_sonuc_iyzico, name='odeme-sonuc-iyzico'),
     url(r'odeme-basarili/$', OrderViews.basarili_odeme, name='odeme-basarili'),
     url(r'odeme-basarisiz/$', OrderViews.basarisiz_odeme, name='basarisiz-odeme'),
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
@@ -180,9 +183,14 @@ urlpatterns = [
     url(r'odeme-yontemi-aktifligi/(?P<pk>\d+)$', PaymentMethodViews.paymentMethod_activity,
         name='odeme-yontemi-aktiflestir'),
 
-    url(r'odeme-tamamla/$', CheckoutViews.payment_info_islogin, name='odeme-tamamla-login'),
-    url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.odemeYap, name='kullanici-odeme-yap'),
-    url(r'iyzico/(?P<siparis>\d+)$', CheckoutViews.payment_iyzico, name='iyzico-odeme-yap'),
+    # checkout
+
+    url(r'payment-user/$', CheckoutViews.payment_info_isUser, name='odeme-tamamla-login'),
+    url(r'payment-add-guest/(?P<c_code>[-\w\d]+)/(?P<subtotal>\d+\.\d+)$', CheckoutViews.add_guest, name='odeme-add-guest-user'),
+    url(r'payment-guest/(?P<pk>\d+)/(?P<discount>\d+\.\d+)$', CheckoutViews.payment_info_isGuest, name='odeme-tamamla-guest-user'),
+
+    url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.payment_payTr, name='payTr-make-creditCard-payment'),
+    url(r'iyzico/(?P<siparis>\d+)$', CheckoutViews.payment_iyzico, name='iyzipay-make-creditcard-payment'),
     url(r'odeme-tamamla-adres/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
 
     # kupon

@@ -6,6 +6,7 @@ import json
 import pickle
 import sys
 
+import iyzipay
 import requests
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -23,7 +24,8 @@ from inoks.Forms.CargoForm import CargoForm
 from inoks.Forms.OrderForm import OrderForm
 from inoks.Forms.OrderFormAdmin import OrderFormAdmin
 from inoks.Forms.OrderSituationsForm import OrderSituationsForm
-from inoks.models import Order, OrderSituations, Profile, Product, OrderProduct, City, Settings, PaymentMethodPayTR
+from inoks.models import Order, OrderSituations, Profile, Product, OrderProduct, City, Settings, PaymentMethodPayTR, \
+    PaymentMethodIyzico, IyzicoToken
 from inoks.models.Cargo import Cargo
 from inoks.models.CartObject import CartObject
 from inoks.models.OrderObject import OrderObject
@@ -211,7 +213,7 @@ def return_add_orders_from_cart(request):
     products = Product.objects.all()
     current_user = request.user
     profile = Profile.objects.get(user=current_user)
-    order_form = OrderForm(initial={'address': profile.address, 'city': profile.city, 'district': profile.district})
+    order_form = OrderForm(initial={'address': profile.address, 'city': profile.city, 'district': profile.district,'guest_user':None})
     order_form.fields['city'].queryset = City.objects.filter(id=profile.city_id)
 
     myDict = dict(request.GET)
@@ -255,7 +257,6 @@ def return_add_orders_from_cart(request):
 
                           city=order_form.cleaned_data['city'],
                           district=order_form.cleaned_data['district'],
-
                           address=order_form.cleaned_data['address'],
                           payment_type=order_form.cleaned_data['payment_type'],
                           isContract=order_form.cleaned_data['isContract'], otherAddress=request.POST['diger_adres'],
@@ -736,6 +737,45 @@ def odeme_sonuc(request):
         order.delete()
 
     print("OK")
+
+    response = HttpResponse()
+    response.write("OK")
+
+    return render(request, "odeme/odeme-bildirim.html", {"odeme": "OK"})
+
+
+@csrf_exempt
+def odeme_sonuc_iyzico(request):
+    x = request
+    iyzico = PaymentMethodIyzico.objects.get(payment_type__name='Iyzico')
+    order_token = IyzicoToken.objects.get(token=x.POST.get('token')).order_id
+    request = dict([('locale', 'tr')])
+    request['conversationId'] = str(order_token.id)
+    request['token'] = x.POST.get('token')
+    order = Order.objects.get(pk=int(request['conversationId']))
+
+    options = {
+
+        'api_key': iyzico.apiKey,
+        'secret_key': iyzico.secretKey,
+        'base_url': iyzipay.base_url,
+    }
+
+    checkout_form_result = iyzipay.CheckoutForm().retrieve(request, options)
+    status = json.loads(checkout_form_result.read())['status']
+
+    if status == "success":  ## Ödeme Onaylandı
+        order.isPayed = True
+        orderProducts = OrderProduct.objects.filter(order=order)
+        for orderProduct in orderProducts:
+            product = Product.objects.get(pk=orderProduct.product.pk)
+            product.stock = product.stock - orderProduct.quantity
+            product.save()
+        order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
+        order.save()
+
+    else:
+        order.delete()
 
     response = HttpResponse()
     response.write("OK")

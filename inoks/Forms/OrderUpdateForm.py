@@ -24,7 +24,7 @@ class OrderForm(ModelForm):
         fields = (
             'profile', 'product', 'quantity', 'city', 'district', 'address', 'sponsor',
             'payment_type',
-            'isContract')
+            'isContract',)
         widgets = {
             'profile': forms.Select(attrs={'class': 'form-control select2 select2-hidden-accessible',
                                            'style': 'width: 100%; '}),
@@ -60,5 +60,3 @@ class OrderForm(ModelForm):
                 # The widget for a ModelMultipleChoiceField expects
                 # a list of primary key for the selected data.
                 initial['category'] = [t.pk for t in kwargs['instance'].category.all()]
-
-
