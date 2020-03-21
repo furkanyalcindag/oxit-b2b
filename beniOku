@@ -1,0 +1,3 @@
+Notification:
+model oluşturuldu. Migrate edilmesi gerekli.
+sipariş verildiğinde kendisi notification ekliyor veritabanından oluşturulmasına gerek yok.
