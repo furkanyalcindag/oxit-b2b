@@ -92,6 +92,7 @@ TEMPLATES = [
                 'inoks.services.general_methods.options',
                 'inoks.services.general_methods.get_category_home',
                 'inoks.services.general_methods.getAdminMenu',
+                'inoks.services.general_methods.notifications',
 
                 # "education.services.general_methods.append_privileges",
             ],

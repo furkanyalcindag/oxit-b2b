@@ -10,13 +10,10 @@ urlpatterns = [
     # HOME
 
     path('', HomeViews.get_home_product, name='kullanici-urun-sayfasi'),
-    url(r'home/category-product/(?P<slug>[-\w\d]+)/$', HomeViews.get_category_products, name='kategori-urunleri'),
-    url(r'home/brand-product/(?P<slug>[-\w\d]+)/$', HomeViews.get_brand_products, name='markanin-urunleri'),
-    url(r'home/product-detail/(?P<slug>[-\w\d]+)/$', HomeViews.get_product_detail, name='urun-detay'),
-    url(r'home/checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
-    url(r'home/search/$', HomeViews.search_category, name='search'),
-    url(r'home/odeme/$', CheckoutViews.get_payment_info_isUser, name='checkout-odeme'),
-    url(r'home/odeme-guest/(?P<pk>\d+)$', CheckoutViews.get_payment_info_isGuest, name='checkout-odeme-guest'),
+    url(r'product/(?P<slug>[-\w\d]+)/$', HomeViews.get_category_products, name='kategori-urunleri'),
+    url(r'brand/(?P<slug>[-\w\d]+)/$', HomeViews.get_brand_products, name='markanin-urunleri'),
+    url(r'detail/(?P<slug>[-\w\d]+)/$', HomeViews.get_product_detail, name='urun-detay'),
+    url(r'search/$', HomeViews.search_category, name='search'),
 
     # Dashboard
     url(r'dashboard/admin-dashboard/$', DashboardViews.return_admin_dashboard, name='admin-dashboard'),
@@ -58,18 +55,18 @@ urlpatterns = [
         name='bayi-kart-sil'),
 
     # Kulllanici
-    url(r'kullanici/kullanici-ekle/$', UserViews.user_register, name='kullanici-ekle'),
-    url(r'kullanici/kullanici-login/$', UserViews.user_login, name='kullanici-giris'),
-    url(r'kullanici/kullanici-logout/$', UserViews.user_logout, name='kullanici-logout'),
-    url(r'kullanici/profil/$', UserViews.user_profil, name='kullanici-profil'),
-    url(r'kullanici/sifre-guncelle/$', UserViews.user_change_password, name='sifre-guncelle'),
-    url(r'kullanici/siparislerim/$', UserViews.user_my_orders, name='kullanici-siparisleri'),
-    url(r'kullanici/adres-ekle/$', UserViews.add_user_address, name='kullanici-adres-ekle'),
-    url(r'kullanici/adres-bilgileri/$', UserViews.get_address, name='kullanici-adres-bilgileri'),
-    url(r'kullanici/adres-sil/(?P<pk>\d+)$', UserViews.user_delete_address, name='kullanici-adres-sil'),
-    url(r'kullanici/adres-guncelle/(?P<pk>\d+)$', UserViews.user_address_update, name='kullanici-adres-guncelle'),
-    url(r'kullanici/kulanici-iade-olustur/$', RefundViews.return_add_refund, name='kullanici-urun-iade-olustur'),
-    url(r'kullanici/siparis-urun/$', UserViews.user_product, name='siparis-urunleri'),
+    url(r'account-register/$', UserViews.user_register, name='kullanici-ekle'),
+    url(r'account-login/$', UserViews.user_login, name='kullanici-giris'),
+    url(r'account-logout/$', UserViews.user_logout, name='kullanici-logout'),
+    url(r'profile/$', UserViews.user_profil, name='kullanici-profil'),
+    url(r'change-password/$', UserViews.user_change_password, name='sifre-guncelle'),
+    url(r'order/$', UserViews.user_my_orders, name='kullanici-siparisleri'),
+    url(r'new-address/$', UserViews.add_user_address, name='kullanici-adres-ekle'),
+    url(r'address/$', UserViews.get_address, name='kullanici-adres-bilgileri'),
+    url(r'delete-address/(?P<pk>\d+)$', UserViews.user_delete_address, name='kullanici-adres-sil'),
+    url(r'address-update/(?P<pk>\d+)$', UserViews.user_address_update, name='kullanici-adres-guncelle'),
+    url(r'refund/$', RefundViews.return_add_refund, name='kullanici-urun-iade-olustur'),
+    url(r'products/$', UserViews.user_product, name='siparis-urunleri'),
 
     # Urunler
     url(r'urunler/urun-ekle/$', ProductViews.return_add_products, name='urun-ekle'),
@@ -174,24 +171,29 @@ urlpatterns = [
     url(r'odeme-basarisiz/$', OrderViews.basarisiz_odeme, name='basarisiz-odeme'),
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
 
-    # Odeme Yontemleri
+    # Odeme YontemleriS
 
-    url(r'payment-type/payTr/(?P<pk>\d+)$', PaymentMethodViews.UpdatePaytr, name='payTr'),
-    url(r'payment-type/bakiyem/(?P<pk>\d+)$', PaymentMethodViews.UpdateBakiyem, name='bakiyem'),
-    url(r'payment-type/iyzico/(?P<pk>\d+)$', PaymentMethodViews.UpdateIyzico, name='iyzico'),
-    url(r'payment-type/$', PaymentMethodViews.paymentMethod, name='payment-method'),
-    url(r'odeme-yontemi-aktifligi/(?P<pk>\d+)$', PaymentMethodViews.paymentMethod_activity,
+    url(r'payment-method/payTr/(?P<pk>\d+)$', PaymentMethodViews.UpdatePaytr, name='payTr'),
+    url(r'payment-method/bakiyem/(?P<pk>\d+)$', PaymentMethodViews.UpdateBakiyem, name='bakiyem'),
+    url(r'payment-method/iyzico/(?P<pk>\d+)$', PaymentMethodViews.UpdateIyzico, name='iyzico'),
+    url(r'payment-method/$', PaymentMethodViews.paymentMethod, name='payment-method'),
+    url(r'payment-method-status/(?P<pk>\d+)$', PaymentMethodViews.paymentMethod_activity,
         name='odeme-yontemi-aktiflestir'),
 
     # checkout
+    url(r'checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
+    url(r'user-products/$', CheckoutViews.get_payment_info_isUser, name='checkout-odeme'),
+    url(r'checkout-user/$', CheckoutViews.payment_info_isUser, name='odeme-tamamla-kayıtlı-kullanıcı'),
+    url(r'guest-user-products/(?P<pk>\d+)$', CheckoutViews.get_payment_info_isGuest, name='checkout-odeme-guest'),
 
-    url(r'payment-user/$', CheckoutViews.payment_info_isUser, name='odeme-tamamla-login'),
-    url(r'payment-add-guest/(?P<c_code>[-\w\d]+)/(?P<subtotal>\d+\.\d+)$', CheckoutViews.add_guest, name='odeme-add-guest-user'),
-    url(r'payment-guest/(?P<pk>\d+)/(?P<discount>\d+\.\d+)$', CheckoutViews.payment_info_isGuest, name='odeme-tamamla-guest-user'),
+    url(r'guest/(?P<c_code>[-\w\d]+)/(?P<subtotal>\d+\.\d+)$', CheckoutViews.add_guest,
+        name='misafir-kullanıcı-ekle'),
+    url(r'checkout-guest-user/(?P<pk>\d+)/(?P<discount>\d+\.\d+)$', CheckoutViews.payment_info_isGuest,
+        name='odeme-bilgileri-guest-user'),
 
     url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.payment_payTr, name='payTr-make-creditCard-payment'),
     url(r'iyzico/(?P<siparis>\d+)$', CheckoutViews.payment_iyzico, name='iyzipay-make-creditcard-payment'),
-    url(r'odeme-tamamla-adres/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
+    url(r'new-address/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
 
     # kupon
     url(r'kupon-bilgileri/$', CouponViews.coupon_create, name='kupon'),

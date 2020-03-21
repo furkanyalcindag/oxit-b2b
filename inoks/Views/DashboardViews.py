@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 
 from inoks import tasks
-from inoks.models import Profile, Product, Order, ProductCategory, City, OrderProduct
+from inoks.models import Profile, Product, Order, ProductCategory, City, OrderProduct, Notification
 from inoks.models.ProfileControlObject import ProfileControlObject
 from inoks.serializers.order_serializers import OrderSerializer
 from inoks.serializers.profile_serializers import ProfileSerializer
@@ -143,12 +143,10 @@ def return_user_dashboard(request):
 
     trees = general_methods.rtrnProfileBySponsorID(profilList)
 
-
-
-
     return render(request, 'dashboard/user-dashboard.html',
                   {'my_orders': my_orders, 'onerilenler': onerilenler,
-                   'total_price': total_order_price, 'total_product': x, 'coksatanlar': arrayUrun,'member_count':len(trees)-1})
+                   'total_price': total_order_price, 'total_product': x, 'coksatanlar': arrayUrun,
+                   'member_count': len(trees) - 1})
 
 
 @api_view()
@@ -246,3 +244,4 @@ def getMyOrder(request, pk):
     responseData['order'] = data.data
     responseData['order'][0]
     return JsonResponse(responseData, safe=True)
+

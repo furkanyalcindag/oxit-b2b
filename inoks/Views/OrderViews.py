@@ -799,6 +799,7 @@ def havale_eft(request, siparis):
         return redirect('accounts:login')
 
     order = Order.objects.get(pk=siparis)
+
     order_products = OrderProduct.objects.filter(order=order)
 
     return render(request, 'odeme/havale-eft-bilgi.html',

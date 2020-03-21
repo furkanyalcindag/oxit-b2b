@@ -26,7 +26,7 @@ from inoks.Forms.OrderUpdateForm import OrderForm
 from inoks.Forms.UserCheckoutForm import UserCheckoutForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
 from inoks.models import Product, Profile, Settings, City, Order, OrderProduct, OrderSituations, PaymentType, \
-    PaymentMethod, PaymentMethodPayTR, PaymentMethodIyzico, IyzicoToken
+    PaymentMethod, PaymentMethodPayTR, PaymentMethodIyzico, IyzicoToken, Notification
 from inoks.models.Address import Address
 from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
@@ -130,7 +130,7 @@ def add_guest(request, c_code, subtotal):
             guest.save()
 
         guest = GuestUser.objects.get(pk=guest.pk)
-        return redirect('inoks:odeme-tamamla-guest-user', pk=guest.pk, discount=discount)
+        return redirect('inoks:odeme-bilgileri-guest-user', pk=guest.pk, discount=discount)
 
     return render(request, 'checkout/odeme-tamamla-add-guest.html',
                   {'guestForm': guestForm, 'guest': guest, 'discount': discount, 'kargo': kargo, 'kdv': kdv,
@@ -255,14 +255,25 @@ def get_payment_info_isGuest(request, pk):
         paymentMethod = PaymentMethod.objects.get(isActive=True)
         if paymentMethod.name == 'Paytr':
             messages.success(request, 'Sipariş başarıyla eklendi.')
-            return redirect('inoks:payTr-make-creditCard-payment', siparis=order.id)
+            return redirect('inoks:kullanici-odeme-yap', siparis=order.id)
         if paymentMethod.name == 'Iyzico':
             messages.success(request, 'Sipariş başarıyla eklendi.')
             return redirect('inoks:iyzipay-make-creditcard-payment', siparis=order.id)
 
 
     else:
-
+        order.isPayed = True
+        orderProducts = OrderProduct.objects.filter(order=order)
+        for orderProduct in orderProducts:
+            product = Product.objects.get(pk=orderProduct.product.pk)
+            product.stock = product.stock - orderProduct.quantity
+            if product.stock <= 5:
+                notification = Notification()
+                notification.message = "Kod: " + product.code + " olan ürün stoğunu güncelleyin."
+                notification.save()
+            product.save()
+        order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
+        order.save()
         return render(request, 'checkout/odeme-tamamla.html',
                       {'orders': products, 'subtotal': subtotal, 'total': total, 'kargo1': kargo1,
                        'net_total': net_total, 'guest': guest, 'order': order, 'discount': discount,
@@ -476,6 +487,17 @@ def get_payment_info_isUser(request):
 
 
     else:
+        order.isPayed = True
+        orderProducts = OrderProduct.objects.filter(order=order)
+        for orderProduct in orderProducts:
+            product = Product.objects.get(pk=orderProduct.product.pk)
+            product.stock = product.stock - orderProduct.quantity
+            if product.stock <= 5:
+                notification = Notification()
+                notification.message = "Kod: " + product.code + " olan ürün stoğunu güncelleyin.Stok: " + product.stock + ""
+            product.save()
+        order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
+        order.save()
 
         return render(request, 'checkout/odeme-tamamla.html',
                       {'orders': products, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
@@ -741,7 +763,7 @@ def payment_iyzico(request, siparis):
         buyer['email'] = user.email
         buyer['identityNumber'] = '62535652352'
         buyer['lastLoginDate'] = '2020-03-18 18:03:24.86029+03'
-        buyer['registrationDate'] ='2020-03-18 18:03:24.86029+03'
+        buyer['registrationDate'] = '2020-03-18 18:03:24.86029+03'
         buyer['registrationAddress'] = order.address
         buyer['ip'] = '85.34.78.112'
         buyer['city'] = order.city.name
@@ -767,8 +789,6 @@ def payment_iyzico(request, siparis):
         buyer['country'] = 'Turkey'
         buyer['zipCode'] = '34732'
     request['buyer'] = buyer
-
-
 
     basket_items = []
     for product in order_products:

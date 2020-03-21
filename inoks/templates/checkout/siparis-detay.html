@@ -3,7 +3,7 @@
 
     {% load app_filter %}
 
-    <form name="test" method="post" action="{% url 'inoks:odeme-tamamla-login' %}">
+    <form name="test" method="post" action="{% url 'inoks:odeme-tamamla-kayıtlı-kullanıcı' %}">
         {% csrf_token %}
         <input id="card" type="hidden" name="card" value={{ card.price }}/>
         <input id="c_code" type="hidden" name="c_code" value={{ c_code }}/>
@@ -291,9 +291,11 @@
             if (c_code != null) {
                 discount = c_code;
                 document.getElementById('c_code').value = discount;
+                 c_code = c_code["c_code"];
             } else {
                 document.getElementById('c_code').value = JSON.stringify(null);
                 console.log(c_code);
+                c_code=null;
             }
             let subTotal = 0;
             for (let i = 0; i < card.length; i++) {
@@ -301,8 +303,14 @@
             }
 
             debugger;
-            c_code = c_code["c_code"];
-            window.location.href = "http://127.0.0.1:8000/payment-add-guest/" + c_code + "/" + subTotal + "";
+
+            let url = "{% url 'inoks:misafir-kullanıcı-ekle' 'code' 1.0 %}";
+
+            console.log(url);
+            url =url.replace('code', c_code);
+            url =url.replace('1.0', subTotal);
+            console.log(url);
+            window.location.href = url;
 
 
         }

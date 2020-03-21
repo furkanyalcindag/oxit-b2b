@@ -7,7 +7,7 @@ from django.db.models import Sum
 from django.http import JsonResponse
 
 from inoks.models import Profile, Order, Menu, MenuAdmin, Refund, earningPayments, OrderSituations, ProductCategory, \
-    Settings, Product
+    Settings, Product, Notification
 from inoks.models.Address import Address
 from inoks.models.Coupon import Coupon
 
@@ -620,8 +620,10 @@ def products_in_card(cards):
         product_card.subtotal = product['count'] * product['price']
         orders.append(product_card)
 
-
     return orders
 
 
 
+def notifications(request):
+    notification = Notification.objects.all()
+    return {'notification': notification}
