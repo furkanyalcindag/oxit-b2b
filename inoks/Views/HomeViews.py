@@ -3,7 +3,7 @@ from django.db.models import Count, Q
 from django.shortcuts import render
 
 from inoks.filters.ProductFilter import ProductFilter
-from inoks.models import ProductCategory, Product, ProductGroup
+from inoks.models import ProductCategory, Product, ProductGroup, Settings
 from inoks.models.Brand import Brand
 
 
@@ -57,3 +57,8 @@ def search_category(request):
 
     return render(request, 'home/get-category-products.html',
                   {'products': products, 'categories': categories, 'brands': brands, 'category': cat})
+
+
+def get_corporate(request):
+    corporate = Settings.objects.get(name='Kurumsal')
+    return render(request, 'home/Corporate.html', {'corporate': corporate})

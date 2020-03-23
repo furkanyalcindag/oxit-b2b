@@ -13,11 +13,11 @@ from inoks.services.general_methods import activeRefund, passiveRefund
 
 @login_required
 def return_add_refund(request):
-    perm = general_methods.control_access(request)
+    """perm = general_methods.control_access(request)
 
     if not perm:
         logout(request)
-        return redirect('accounts:login')
+        return redirect('accounts:login')"""
     refund_form = RefundForm()
 
     if request.method == 'POST':
@@ -25,16 +25,15 @@ def return_add_refund(request):
         refund_form = RefundForm(request.POST, request.FILES)
 
         if refund_form.is_valid():
-            current_user = request.user
-            refunduser = Profile.objects.get(user=current_user)
 
             refund = Refund(order=refund_form.cleaned_data['order'],
                             product=refund_form.cleaned_data['product'],
                             orderQuantity=refund_form.cleaned_data['orderQuantity'],
-                            isOpen=refund_form.cleaned_data['isOpen'],
-                            profile=refunduser)
+                            isOpen=refund_form.cleaned_data['isOpen'], )
 
             refund.save()
+
+
 
             refund.refundSituations.add(refund_form.cleaned_data['refundSituations'])
 

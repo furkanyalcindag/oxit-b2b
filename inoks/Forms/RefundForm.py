@@ -5,6 +5,7 @@ from inoks.models import RefundSituations, Refund, Product
 
 
 class RefundForm(ModelForm):
+
     refundSituations = forms.ModelChoiceField(queryset=RefundSituations.objects.all(),
                                               to_field_name='name',
                                               empty_label="Seçiniz",
@@ -13,11 +14,11 @@ class RefundForm(ModelForm):
                                                          'style': 'width: 100%; '}))
 
     product = forms.ModelChoiceField(queryset=Product.objects.exclude(name__icontains="paket"),
-                                              to_field_name='name',
-                                              empty_label="Seçiniz",
-                                              widget=forms.Select(
-                                                  attrs={'class': 'form-control select2 select2-hidden-accessible',
-                                                         'style': 'width: 100%; '}))
+                                     to_field_name='name',
+                                     empty_label="Seçiniz",
+                                     widget=forms.Select(
+                                         attrs={'class': 'form-control select2 select2-hidden-accessible',
+                                                'style': 'width: 100%; '}))
 
     class Meta:
         model = Refund
@@ -36,7 +37,7 @@ class RefundForm(ModelForm):
                                            'style': 'width: 100%; '}),
 
             'orderQuantity': forms.NumberInput(
-                attrs={'class': 'form-control ', 'min':'1', 'placeholder': 'Ürün Miktarı', 'required': 'required'}),
+                attrs={'class': 'form-control ', 'min': '1', 'placeholder': 'Ürün Miktarı', 'required': 'required'}),
 
             'isOpen': forms.Select(attrs={'class': 'form-control select2 select2-hidden-accessible',
                                           'style': 'width: 100%;'})

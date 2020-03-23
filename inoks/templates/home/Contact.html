@@ -1,0 +1,119 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+    <nav aria-label="breadcrumb" class="breadcrumb-nav" style="margin-bottom: 20px;" >
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}"><i class="icon-home"></i></a>
+                </li>
+
+                <li class="breadcrumb-item active" aria-current="page">İletişim</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="light-title">İletişim </h2>
+
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <div class="form-group required-field">
+                        <label for="contact-name">Ad Soyad</label>
+                        <input type="text" class="form-control" id="contact-name" name="contact-name" required="">
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group required-field">
+                        <label for="contact-email">E-Posta</label>
+                        <input type="email" class="form-control" id="contact-email" name="contact-email" required="">
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group">
+                        <label for="contact-phone">Telefon</label>
+                        <input type="tel" class="form-control" id="contact-phone" name="contact-phone">
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group required-field">
+                        <label for="contact-message">Mesajınız</label>
+                        <textarea cols="30" rows="1" id="contact-message" class="form-control" name="contact-message"
+                                  required=""></textarea>
+                    </div><!-- End .form-group -->
+
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">Gönder</button>
+                    </div><!-- End .form-footer -->
+                </form>
+            </div><!-- End .col-md-8 -->
+
+            <div class="col-md-4">
+                <h2 class="light-title"><strong>İletişim</strong></h2>
+
+                <div class="contact-info">
+                    <div>
+                        <i class="icon-phone"></i>
+                        <p><a href="tel:">{{ phone.value }}</a></p>
+
+                    </div>
+                    <div>
+                        <i class="icon-mobile"></i>
+                        <p><a href="tel:">{{ company_mobilePhone.value }}</a></p>
+
+                    </div>
+                    <div>
+                        <i class="icon-mail-alt"></i>
+                        <p><a href="mailto:#">{{ email.value }}</a></p>
+
+                    </div>
+                    <div>
+                        <i class="icon-skype"></i>
+                        <p>porto_skype</p>
+                        <p>porto_template</p>
+                    </div>
+                </div><!-- End .contact-info -->
+            </div><!-- End .col-md-4 -->
+        </div>
+    </div>
+{% endblock %}

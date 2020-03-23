@@ -38,10 +38,11 @@ class Product(models.Model):
     slug = models.SlugField(null=True, unique=True)
     isActive = models.BooleanField(default=True)
 
+
     def __str__(self):
         return '%s ' % self.name
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super().save(*args,**kwargs)
+        return super().save(*args, **kwargs)

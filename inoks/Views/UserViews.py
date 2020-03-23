@@ -6,6 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from rest_framework.decorators import api_view
 
 from accounts.forms import ResetPassword
@@ -20,7 +21,7 @@ from inoks.Forms.ProfileForm import ProfileForm
 from inoks.Forms.ProfileUpdateForm import ProfileUpdateForm
 from inoks.Forms.ProfileUpdateMemberForm import ProfileUpdateMemberForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
-from inoks.models import Profile, Settings, Order, Refund, OrderProduct
+from inoks.models import Profile, Settings, Order, Refund, OrderProduct, Notification
 from inoks.models.Address import Address
 from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
@@ -29,6 +30,7 @@ from inoks.models.CreditCard import CreditCard
 from inoks.models.Enum import ADDRESS_CHOISES
 from inoks.models.OrderObject import OrderObject
 from inoks.models.ProfileCreditCard import ProfileCreditCard
+from inoks.models.RefundObject import RefundObject
 from inoks.serializers.profile_serializers import ProfileSerializer
 from inoks.services import general_methods
 from inoks.services.general_methods import activeUser, passiveUser, reactiveUser
@@ -668,56 +670,81 @@ def get_address(request):
     return render(request, 'kullanici/kullanici-adres-bilgileri.html', {'addresses': address_dict})
 
 
-@login_required
-def user_add_refund(request):
-    perm = general_methods.control_access(request)
+def user_add_refund(request):  # Kulanıcı İade Oluştur
+    """" perm = general_methods.control_access(request)
 
-    if not perm:
-        logout(request)
-        return redirect('accounts:login')
+     if not perm:
+         logout(request)
+         return redirect('accounts:login')"""
     refund_form = RefundForm()
-
+    email = ""
     if request.method == 'POST':
 
         refund_form = RefundForm(request.POST, request.FILES)
 
         if refund_form.is_valid():
-            current_user = request.user
-            refunduser = Profile.objects.get(user=current_user)
 
             refund = Refund(order=refund_form.cleaned_data['order'],
                             product=refund_form.cleaned_data['product'],
                             orderQuantity=refund_form.cleaned_data['orderQuantity'],
                             isOpen=refund_form.cleaned_data['isOpen'],
-                            profile=refunduser)
-
+                            )
             refund.save()
 
             refund.refundSituations.add(refund_form.cleaned_data['refundSituations'])
 
             refund.save()
-            messages.success(request, 'İade Kaydı Başarıyla Oluşturulmuştur.')
-            return redirect('inoks:iade-olustur')
+            notification = Notification()
+            notification.key = "kullanici iade"
+            if refund.order.isGuest:
+                notification.message = refund.order.guestUser.firstName + ' ' + refund.order.guestUser.lastName + ' ' + refund.product.code + 'kodlu ürünü iade etmek istiyor.(Misafir Kullanıcı)'
+                email = refund.order.guestUser.email
+            else:
+                notification.message = refund.order.profile.user.first_name + ' ' + refund.order.profile.user.last_name + ' ' + refund.product.code + ' kodlu ürünü iade etmek istiyor'
+                email = refund.order.profile.user.email
+            notification.save()
+            invoice_data = {'refund_id': refund.id}
 
+            subject, from_email, to = 'Oxit Bilişim Teknolojileri', 'burcu.dogan@oxityazilim.com', email
+            text_content = 'İade Bilgisi'
+
+            html_body = render_to_string("mailTemplates/refund.html", invoice_data)
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_body, "text/html")
+            msg.send()
+
+            messages.success(request, 'Mesajınız başarıyla alınmıştır.En yakın sürede dönüş sağlanacaktır.')
         else:
+            messages.warning(request, 'Üznünüz bir hata oluştu.Lütfen mesajınızı yeniden gönderin.')
 
-            messages.warning(request, 'Alanları Kontrol Ediniz')
+            return redirect('inoks:kullanici-iade-olustur')
 
     return render(request, 'kullanici/kullanici-iade-olustur.html', {'refund_form': refund_form})
 
 
 @login_required
 def user_my_refunds(request):
-    perm = general_methods.control_access(request)
+    """ perm = general_methods.control_access(request)
 
-    if not perm:
-        logout(request)
-        return redirect('accounts:login')
+     if not perm:
+         logout(request)
+         return redirect('accounts:login')"""
+    refundList = []
     current_user = request.user
     refund = Profile.objects.get(user=current_user)
-
-    refund_list = Refund.objects.filter(profile_id=refund.id)
+    refund_list = Refund.objects.filter(order__profile_id=refund)
     return render(request, 'kullanici/kullanici-urun-iade.html', {'refund_list': refund_list})
+
+
+def guest_my_refunds(request):
+    refund_list = []
+    if request.POST:
+        refund = request.POST['guestRefund']
+        refund_list = Refund.objects.get(pk=refund)
+        return render(request, 'kullanici/misafirKullanici-urun-iade.html', {'refund_list': refund_list})
+
+    return render(request, 'kullanici/misafirKullanici-iade-sorgula.html', {'refund_list': refund_list})
 
 
 @login_required

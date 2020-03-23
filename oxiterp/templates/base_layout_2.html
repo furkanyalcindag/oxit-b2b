@@ -144,7 +144,7 @@
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
                         <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}">Anasayfa</a></li>
-                        <li><a href="#">Kurumsal</a></li>
+                        <li><a href="{% url 'inoks:corporate' %}">Kurumsal</a></li>
                         <li class="">
                             <a href="#" class="sf-with-ul">Kategoriler</a>
                             <ul style="display: none;">
@@ -282,15 +282,15 @@
                         </div><!-- End .widget -->
 
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                                 <div class="widget">
-                                    <h4 class="widget-title">My Account</h4>
+                                    <h4 class="widget-title">Bilgiler</h4>
 
                                     <div class="row">
                                         <div class="col-sm-6 col-md-12">
                                             <ul class="links">
                                                 <li><a href="about.html">Hakkımızda</a></li>
-                                                <li><a href="contact.html">İletişim</a></li>
+                                                <li><a href="{% url 'inoks:iletisim-formu' %}">İletişim</a></li>
 
                                             </ul>
                                         </div><!-- End .col-sm-6 -->
@@ -299,7 +299,7 @@
                                 </div><!-- End .widget -->
                             </div><!-- End .col-md-5 -->
 
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="widget">
                                     <h4 class="widget-title">Main Features</h4>
 
@@ -308,6 +308,22 @@
                                             <ul class="links">
                                                 <li><a href="#">Super Fast Magento Theme</a></li>
                                                 <li><a href="#">1st Fully working Ajax Theme</a></li>
+                                                <li><a href="#">20 Unique Homepage Layouts</a></li>
+                                            </ul>
+                                        </div><!-- End .col-sm-6 -->
+
+                                    </div><!-- End .row -->
+                                </div><!-- End .widget -->
+                            </div><!-- End .col-md-7 -->
+                            <div class="col-md-4">
+                                <div class="widget">
+                                    <h4 class="widget-title">Size Özel</h4>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <ul class="links">
+                                                <li><a href="{% url 'inoks:kullanici-iade-olustur' %}">Ürün İadesi </a></li>
+                                                <li><a href="{% url 'inoks:misafir-kullanici-iadeleri' %}">Ürün İade Bilgisi</a></li>
                                                 <li><a href="#">20 Unique Homepage Layouts</a></li>
                                             </ul>
                                         </div><!-- End .col-sm-6 -->

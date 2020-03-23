@@ -1,0 +1,114 @@
+{% extends 'base_layout_2.html' %}
+
+{% block content %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-9 order-lg-last dashboard-content">
+
+                <div class="row">
+
+                    <div class="box-body" style="margin:80px;">
+
+                        <h3 class="box-title">İadelerim</h3>
+                        <table id="iadelerim" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Sipariş Numarası</th>
+                                <th>Ürün Kodu / Adı / Fiyatı</th>
+                                <th>İade Miktarı</th>
+                                <th>İade Nedeni / Kullanıldı Mı ?</th>
+                                <th>İade Tarihi</th>
+                                <th>Durum</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>{{ forloop.counter }} </td>
+
+                                <td>{{ refund_list.id }}</td>
+                                <td>{{ refund_list.product.id }} - {{ refund_list.product.name }}
+                                    - {{ refund_list.product.price }} TL
+                                </td>
+                                <td>{{ refund_list.orderQuantity }} Adet</td>
+                                <td>
+                                    {% for refundSituations in refund_list.refundSituations.all %}
+
+                                        {{ refundSituations.name }} - {{ refund_list.isOpen }}
+
+                                    {% endfor %}
+
+                                </td>
+
+
+                                <td>{{ refund_list.refundDate }}</td>
+                                <td> {% if refund_list.isApprove == True %}
+                                    <font style="color: darkgreen"> Onaylandı </font>
+                                {% elif  refund_list.isApprove == False %}
+                                    <font style="color: red"> Reddedildi </font>
+                                {% else %} <font style="color: blue"> Bekleniyor </font>
+
+                                {% endif %} </td>
+
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+
+
+
+
+
+{% endblock %}

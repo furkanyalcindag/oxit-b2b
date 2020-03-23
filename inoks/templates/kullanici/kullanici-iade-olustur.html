@@ -48,22 +48,24 @@
     {% endif %}
     <div class="container">
         <div class="row">
-            <aside class="sidebar col-lg-3">
-                <div class="widget widget-dashboard">
-                    <h3 class="widget-title">Hesabım</h3>
-                    <div id="myDIV">
-                        <ul class="list">
+            {% if user.is_authenticated %}
+                <aside class="sidebar col-lg-3">
+                    <div class="widget widget-dashboard">
+                        <h3 class="widget-title">Hesabım</h3>
+                        <div id="myDIV">
+                            <ul class="list">
 
-                            <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
-                            <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
-                            <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
-                            <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
-                            <li><a href="{% url 'inoks:kullanici-iadelerim' %}" class="">İadelerim</a></li>
+                                <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                                <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                                <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                                <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                                <li><a href="{% url 'inoks:kullanici-iadelerim' %}" class="">İadelerim</a></li>
 
-                        </ul>
-                    </div>
-                </div><!-- End .widget -->
-            </aside><!-- End .col-lg-3 -->
+                            </ul>
+                        </div>
+                    </div><!-- End .widget -->
+                </aside><!-- End .col-lg-3 -->
+            {% endif %}
             <div class="col-lg-9 order-lg-last dashboard-content">
 
 

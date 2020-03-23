@@ -106,6 +106,7 @@ def add_guest(request, c_code, subtotal):
     guest = GuestUser()
     payment_types = PaymentType.objects.all()
     discount = 0
+    contract = Settings.objects.get(name='Sozlesme')
     if c_code == None:
         discount = discount
 
@@ -134,7 +135,7 @@ def add_guest(request, c_code, subtotal):
 
     return render(request, 'checkout/odeme-tamamla-add-guest.html',
                   {'guestForm': guestForm, 'guest': guest, 'discount': discount, 'kargo': kargo, 'kdv': kdv,
-                   'payment_type': payment_types})
+                   'payment_type': payment_types, 'contract': contract})
 
 
 def payment_info_isGuest(request, pk, discount):
@@ -282,7 +283,7 @@ def get_payment_info_isGuest(request, pk):
 
 
 def guest_post(request):
-    return render(request, 'checkout/guestpost.html')
+    return render(request, 'checkout/odeme-tamamla-misafir-kullanıcı.html')
 
 
 # KAYITLI KULLANICI İŞLEMLERİ

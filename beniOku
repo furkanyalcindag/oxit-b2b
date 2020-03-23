@@ -1,3 +1,17 @@
 Notification:
 model oluşturuldu. Migrate edilmesi gerekli.
 sipariş verildiğinde kendisi notification ekliyor veritabanından oluşturulmasına gerek yok.
+
+
+İletişim Formu :
+Veri tabanında Settings'e aşağıda verilen şekilde key değerleri girilmeli ve bunlara karşılık gelecek value değerleri oluşturulmalıdır.
+company_phone
+company_email
+company_name
+company_mobilePhone
+
+Admin den (http://127.0.0.1:8000/kurumsal) ya da veri tabanından 'Kurumsal' adlı key ile buna karşılık gelecek value oluşturulmalıdır.
+Admin den (http://127.0.0.1:8000/sozlesme) ya da veri tabanından 'Sozlesme' adlı key ile buna karşılık gelecek value oluşturulmalıdır.
+
+İade Modülü:
+İade Modülü için migrate yapılmalıdır.

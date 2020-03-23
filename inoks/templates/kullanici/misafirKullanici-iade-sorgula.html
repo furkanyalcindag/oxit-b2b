@@ -1,0 +1,73 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+    <div class="container">
+        <div class="row">
+           <div class="col-md-8">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">İade Sorgula</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form method="post" role="form" action="{% url 'inoks:misafir-kullanici-iadeleri' %}">
+
+                        {% csrf_token %}
+
+
+                        <div class="form-group">
+                            <label> Sipariş Numarası</label><br>
+                            <input type="text" placeholder="İade Numaranız" name="guestRefund"
+                                   id="guestRefund" style="width:50%; height:40px;">
+                        </div>
+                        <button class="btn small btn-primary" style="size: 50px;" type="submit">Sorgula</button>
+                    </form>
+
+                </div>
+      </div>
+    </div>
+
+
+{% endblock %}

@@ -3,7 +3,7 @@
 
     {% load app_filter %}
 
-    <form name="test" method="post" action="{% url 'inoks:odeme-tamamla-kayıtlı-kullanıcı' %}">
+    <form name="test" method="post" action="{% url 'inoks:odeme-tamamla-kayitli-kullanici' %}">
         {% csrf_token %}
         <input id="card" type="hidden" name="card" value={{ card.price }}/>
         <input id="c_code" type="hidden" name="c_code" value={{ c_code }}/>

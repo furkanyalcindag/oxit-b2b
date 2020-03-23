@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'brand/(?P<slug>[-\w\d]+)/$', HomeViews.get_brand_products, name='markanin-urunleri'),
     url(r'detail/(?P<slug>[-\w\d]+)/$', HomeViews.get_product_detail, name='urun-detay'),
     url(r'search/$', HomeViews.search_category, name='search'),
+    url(r'corporate/$', HomeViews.get_corporate, name='corporate'),
 
     # Dashboard
     url(r'dashboard/admin-dashboard/$', DashboardViews.return_admin_dashboard, name='admin-dashboard'),
@@ -130,7 +131,9 @@ urlpatterns = [
 
     # Kullanıcı-İade
     url(r'kullanici/iade-olustur/$', UserViews.user_add_refund, name='kullanici-iade-olustur'),
+    url(r'guest-user-refunds/$', UserViews.guest_my_refunds, name='misafir-kullanici-iadeleri'),
     url(r'kullanici/iadelerim/$', UserViews.user_my_refunds, name='kullanici-iadelerim'),
+
 
     # Raporlar
     url(r'raporlar/rapor-olustur/$', ReportViews.return_create_report, name='rapor-olustur'),
@@ -153,6 +156,7 @@ urlpatterns = [
     url(r'adres-bilgisi/$', SettingViews.return_address, name="iletisim"),
     url(r'mail-bilgisi/$', SettingViews.return_mail, name="iletisim"),
     url(r'telefon-bilgisi/$', SettingViews.return_phone, name="iletisim"),
+    url(r'contact/$', SettingViews.return_contact, name="iletisim-formu"),
 
     # SoyAgacı
     url(r'soyagaci/soy-agacim/$', TreeViews.return_my_tree, name='soy-agacim'),
@@ -183,7 +187,7 @@ urlpatterns = [
     # checkout
     url(r'checkout/$', CheckoutViews.order_checkout, name='kullanici-checkout'),
     url(r'user-products/$', CheckoutViews.get_payment_info_isUser, name='checkout-odeme'),
-    url(r'checkout-user/$', CheckoutViews.payment_info_isUser, name='odeme-tamamla-kayıtlı-kullanıcı'),
+    url(r'checkout-user/$', CheckoutViews.payment_info_isUser, name='odeme-tamamla-kayitli-kullanici'),
     url(r'guest-user-products/(?P<pk>\d+)$', CheckoutViews.get_payment_info_isGuest, name='checkout-odeme-guest'),
 
     url(r'guest/(?P<c_code>[-\w\d]+)/(?P<subtotal>\d+\.\d+)$', CheckoutViews.add_guest,
