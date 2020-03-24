@@ -100,8 +100,7 @@ def return_contact(request):
         msg.send()
 
         messages.success(request, 'Mesajınız başarıyla alınmıştır.En yakın sürede dönüş sağlanacaktır.')
-    else:
-        messages.warning(request, 'Üznünüz bir hata oluştu.Lütfen mesajınızı yeniden gönderin.')
+
     return render(request, 'home/Contact.html',
                   {'phone': phone, 'email': email, 'address': address, 'company_name': company_name,
                    'company_mobilePhone': company_mobilePhone})

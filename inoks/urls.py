@@ -190,9 +190,9 @@ urlpatterns = [
     url(r'checkout-user/$', CheckoutViews.payment_info_isUser, name='odeme-tamamla-kayitli-kullanici'),
     url(r'guest-user-products/(?P<pk>\d+)$', CheckoutViews.get_payment_info_isGuest, name='checkout-odeme-guest'),
 
-    url(r'guest/(?P<c_code>[-\w\d]+)/(?P<subtotal>\d+\.\d+)$', CheckoutViews.add_guest,
+    url(r'guest/(?P<c_code>[-\w\d]+)/(?P<subtotal>[-\w\d]+)$', CheckoutViews.add_guest,
         name='misafir-kullanıcı-ekle'),
-    url(r'checkout-guest-user/(?P<pk>\d+)/(?P<discount>\d+\.\d+)$', CheckoutViews.payment_info_isGuest,
+    url(r'checkout-guest-user/(?P<pk>\d+)/(?P<discount>\d+\.\d{2})/$', CheckoutViews.payment_info_isGuest,
         name='odeme-bilgileri-guest-user'),
 
     url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.payment_payTr, name='payTr-make-creditCard-payment'),

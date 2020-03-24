@@ -282,38 +282,44 @@
 
             card = JSON.parse(sessionStorage.getItem('shoppingCart'));
             document.getElementById('card').value = JSON.stringify(card);
-
             console.log(card);
 
             debugger;
+
             let c_code = JSON.parse(sessionStorage.getItem('c_code'));
 
             if (c_code != null) {
                 discount = c_code;
                 document.getElementById('c_code').value = discount;
-                 c_code = c_code["c_code"];
+                c_code = c_code["c_code"];
             } else {
                 document.getElementById('c_code').value = JSON.stringify(null);
                 console.log(c_code);
-                c_code=null;
+                c_code = null;
             }
             let subTotal = 0;
             for (let i = 0; i < card.length; i++) {
                 subTotal += card[i].price * card[i].count;
             }
-
             debugger;
 
-            let url = "{% url 'inoks:misafir-kullanıcı-ekle' 'code' 1.0 %}";
+            subTotal = window.btoa(subTotal);
+            let url = "{% url 'inoks:misafir-kullanıcı-ekle' 'code' 'subtotal' %}";
 
             console.log(url);
-            url =url.replace('code', c_code);
-            url =url.replace('1.0', subTotal);
+
+            url = url.replace('code', c_code);
+            url = url.replace('subtotal', subTotal);
             console.log(url);
+            url = encodeURIComponent(url);
             window.location.href = url;
 
 
         }
+
+
+
+
 
         function guncelle2(coupon, discount) {
 
@@ -513,6 +519,39 @@
 
         }
 
+        function couponControl2(c_code, subtotal) {
+
+            let total = 0;
+            let coupon = c_code;
+
+
+            $.ajax({
+                url: "{% url 'inoks:kupon-kontrol' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    coupon_code: coupon,
+                    total_order: subtotal
+
+                },
+                success: function (result) {
+
+                    if (result.status === 'Success') {
+                        //swal("Başarılı", "İlan Silindi", "success");
+                        console.log(result);
+                        guncelle2(coupon, result)
+
+
+                    } else {
+                        //swal("Başarılı", result.messages, "error");
+                        discount = result
+                    }
+                }
+            });
+
+
+        }
+
         function couponControl() {
 
             let total = 0;
@@ -571,7 +610,8 @@
 
                     } else {
                         //swal("Başarılı", result.messages, "error");
-                        discount = result
+                        discount = result;
+
                     }
                 }
             });

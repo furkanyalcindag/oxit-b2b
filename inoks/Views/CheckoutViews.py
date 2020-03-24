@@ -23,6 +23,7 @@ from inoks.Forms.GuestCheckoutForm import GuestCheckoutForm
 from inoks.Forms.GuestUserForm import GuestUserForm
 from inoks.Forms.LoginProfilForm import LoginProfilForm
 from inoks.Forms.OrderUpdateForm import OrderForm
+from inoks.Forms.ProfileCheckoutForm import ProfileCheckoutForm
 from inoks.Forms.UserCheckoutForm import UserCheckoutForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
 from inoks.models import Product, Profile, Settings, City, Order, OrderProduct, OrderSituations, PaymentType, \
@@ -106,18 +107,18 @@ def add_guest(request, c_code, subtotal):
     guest = GuestUser()
     payment_types = PaymentType.objects.all()
     discount = 0
+
     contract = Settings.objects.get(name='Sozlesme')
     if c_code == None:
         discount = discount
 
     else:
-
+        subtotal = Decimal(base64.b64decode(subtotal).decode('utf-8'))
         discount = couponControl(c_code, subtotal)
 
     # Misafir Kullanıcı
     if request.method == 'POST':
-        # discount = str(discount)
-        # discount = base64.b64encode(discount.encode('utf-8'))
+
         if guestForm.is_valid():
             guest = GuestUser(city=guestForm.cleaned_data['city'], district=guestForm.cleaned_data['district'],
                               address=guestForm.cleaned_data['address'], firstName=guestForm.cleaned_data['firstName'],
@@ -130,8 +131,10 @@ def add_guest(request, c_code, subtotal):
             guest.isActive = True
             guest.save()
 
+        # discount = str(discount)
+        # discount = base64.b64encode(discount.encode('utf-8'))
         guest = GuestUser.objects.get(pk=guest.pk)
-        return redirect('inoks:odeme-bilgileri-guest-user', pk=guest.pk, discount=discount)
+        return redirect('inoks:odeme-bilgileri-guest-user', guest.pk, discount)
 
     return render(request, 'checkout/odeme-tamamla-add-guest.html',
                   {'guestForm': guestForm, 'guest': guest, 'discount': discount, 'kargo': kargo, 'kdv': kdv,
@@ -142,17 +145,18 @@ def payment_info_isGuest(request, pk, discount):
     kargo = Cargo.objects.get(name='Üzeri Kargo')
     kargo1 = 0
     kdv = Settings.objects.get(name='kdv')
-    data = discount
-    data = float(data)
+    # data = discount
+    # data = float(data)
+    # Decimal(base64.b64decode(discount).decode('utf-8'))
     payment_types = PaymentType.objects.all()
-    guest = GuestUser.objects.get(pk=pk)
+    guest = GuestUser.objects.get(pk=int(pk))
     guestForm = GuestCheckoutForm(instance=guest)
     orders = []
     city = City.objects.all()
 
     return render(request, 'checkout/odeme-tamamla-guest.html',
                   {'guestForm': guestForm, 'kargo': kargo,
-                   'guest': guest, 'kargo1': kargo1, 'discount': data,
+                   'guest': guest, 'kargo1': kargo1, 'discount': discount,
                    'kdv': kdv, 'city': guest.city, 'address': guest.address,
                    'payment_type': payment_types, 'invoice_city': city})
 
@@ -161,7 +165,7 @@ def get_payment_info_isGuest(request, pk):
     guest = GuestUser.objects.get(pk=pk)
     payment_type = request.POST['payment_type']
     paymentType = PaymentType.objects.get(name=payment_type)
-
+    city = City.objects.all()
     orderProduct = ""
     subtotal = 0
 
@@ -210,8 +214,8 @@ def get_payment_info_isGuest(request, pk):
     else:
 
         order.otherAddress = request.POST['invoice_address']  # Farklı fatura adresi
-        order.city = guest.city
-        order.district = guest.district
+        order.city = request.POST['invoice_city']
+        order.district = request.POST['invoice_district']
 
     order.payment_type = paymentType
     order.totalPrice = total
@@ -279,7 +283,7 @@ def get_payment_info_isGuest(request, pk):
                       {'orders': products, 'subtotal': subtotal, 'total': total, 'kargo1': kargo1,
                        'net_total': net_total, 'guest': guest, 'order': order, 'discount': discount,
                        'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
-                       'payment_type': order.payment_type, 'invoice_address': order.otherAddress})
+                       'payment_type': order.payment_type, 'invoice_address': order.otherAddress, 'city_invoice': city})
 
 
 def guest_post(request):
@@ -303,7 +307,7 @@ def payment_info_isUser(request):
     user = request.user
     user_form = UserCheckoutForm(instance=user)
     profile = Profile.objects.get(user=user)
-    profile_form = LoginProfilForm(instance=profile)
+    profile_form = ProfileCheckoutForm(instance=profile)
 
     addresses = AddressProfile.objects.filter(profile=profile)
     address_dict = dict()

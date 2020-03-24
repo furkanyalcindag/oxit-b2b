@@ -55,9 +55,9 @@
                                             <h3 style="margin-top:48px;">Adres</h3>
                                             <div class="form-control" style="height: auto">
                                                 <input type="hidden" id="address" name="address" value="{{ address }}">
-                                                {{ address }}
-                                                <p>{{ district }}/ {{ city }}</p>
-
+                                                {{ guest.address }}
+                                                <p>{{ guest.district }} / {{ guest.city }}</p>
+                                                <input id="discount1" name="discount1" type="hidden" value=""/>
                                             </div>
                                             <div class="">
                                                 <h4>
@@ -74,11 +74,9 @@
                                                            name="invoice_address"
                                                            placeholder="Fatura Adresi Ekle" value="">
 
-
                                                 </div>
                                                 <input id="address-value" name="address-value" type="hidden" value=""/>
 
-                                                <div></div>
                                             </div>
 
                                         </div><!-- End .col-lg-9 -->
@@ -334,11 +332,11 @@
             let kargo = document.getElementById("kargo").value;
             let kargo1;
             let total;
-            let discount1=document.getElementById("discount").value;
+            let discount1 = document.getElementById("discount").value;
             let discount;
 
             if (c_code != null)
-                discount =discount1 ;
+                discount = discount1;
 
             else
                 discount = 0;
@@ -353,7 +351,7 @@
                 kargo1 = 0;
                 total = subTotal;
                 kdv = Number(total) - Number(net_total);
-                total = subTotal -parseFloat(discount);
+                total = subTotal - parseFloat(discount);
             } else {
                 kargo1 = Number(kargo);
                 total = subTotal;
@@ -367,40 +365,37 @@
             html += ' <tr><td>Toplam Sipariş</td><td id="net_total">' + net_total.toFixed(2) + '₺</td> </tr>';
             html += ' <tr><td>KDV</td> <td id="shipping">' + kdv.toFixed(2) + '₺</td></tr>';
             html += '<tr><td>Kargo</td> <td id="shipping">' + Number(kargo1) + '₺</td> </tr>';
-            html += '<tr><td>İndirim</td><td id="total_price">' +discount + '₺</td>';
-            html += '<tr><td>Toplam</td> <td id="shipping">' + Number(total) + '₺</td> </tr>';
+            html += '<tr><td>İndirim</td><td id="total_price">' + discount + '₺</td>';
+            html += '<tr><td>Toplam</td> <td id="shipping">' + total.toFixed(2) + '₺</td> </tr>';
             html += '</tr></tfoot></table>';
 
             document.getElementById('card_product').innerHTML = html;
+            discount1 = window.btoa(discount);
+            document.getElementById('discount1').value = discount1;
 
         }
 
         function odemeTamamlaGuest() {
 
 
+            card = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            document.getElementById('card').value = JSON.stringify(card);
+
+            console.log(card);
+
+            debugger;
+            c_code = sessionStorage.getItem('c_code');
+
+            if (c_code != null) {
+                discount = JSON.parse(c_code);
+                document.getElementById('c_code').value = JSON.stringify(discount);
+            } else {
+                document.getElementById('c_code').value = JSON.stringify(null);
+                console.log(c_code);
+            }
 
 
-                card = JSON.parse(sessionStorage.getItem('shoppingCart'));
-                document.getElementById('card').value = JSON.stringify(card);
-
-                console.log(card);
-
-                debugger;
-                c_code = sessionStorage.getItem('c_code');
-
-                if (c_code != null) {
-                    discount = JSON.parse(c_code);
-                    document.getElementById('c_code').value = JSON.stringify(discount);
-                } else {
-                    document.getElementById('c_code').value = JSON.stringify(null);
-                    console.log(c_code);
-                }
-
-
-
-                window.document.form.submit();
-
-
+            window.document.form.submit();
 
 
         }
