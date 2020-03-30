@@ -41,33 +41,6 @@ Hayir = 'Hayır'
 OPEN_CHOICES = (
     (Evet, 'Evet'),
     (Hayir, 'Hayır'),
-    (Hayir, 'Hayır'),
-)
-
-BATHROOM = '-'
-BATHROOM2 = '1'
-BATHROOM3 = '2'
-BATHROOM4 = '3'
-BATHROOM5 = '4'
-BATHROOM6 = '5'
-
-BATHROOM_CHOICES = (
-    (BATHROOM, '-'),
-    (BATHROOM2, '1'),
-    (BATHROOM3, '2'),
-    (BATHROOM4, '3'),
-    (BATHROOM5, '4'),
-    (BATHROOM6, '5')
-)
-
-OLCU = 'OLCU1'
-OLCU2 = 'OLCU2'
-OLCU3 = 'OLCU3'
-
-OLCU_CHOISES = (
-    (OLCU, 'OLCU1'),
-    (OLCU2, 'OLCU2'),
-    (OLCU3, 'OLCU3')
 
 )
 
@@ -114,4 +87,26 @@ ADDRESS_CHOISES = (
     (ADDRESS1, 'EV'),
     (ADDRESS2, 'İŞ'),
     (ADDRESS3, 'DİĞER')
+)
+
+OPTION1 = 'Seçenek'
+OPTION2 = 'Radyo Düğmesi'
+OPTION3 = 'Onay Kutusu'
+OPTION4 = 'Metin'
+OPTION5 = 'Metin Alanı'
+OPTION6 = 'Dosya'
+OPTION7 = 'Tarih'
+OPTION8 = 'Zaman'
+OPTION9 = 'Tarih Zaman'
+
+OPTION_CHOICES = (
+    (OPTION1, 'Seçenek'),
+    (OPTION2, 'Radyo Düğmesi'),
+    (OPTION3, 'Onay Kutusu'),
+    (OPTION4, 'Metin'),
+    (OPTION5, 'Metin Alanı'),
+    (OPTION6, 'Dosya'),
+    (OPTION7, 'Tarih'),
+    (OPTION8, 'Zaman'),
+    (OPTION9, 'Tarih Zaman')
 )

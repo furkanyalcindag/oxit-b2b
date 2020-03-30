@@ -3,24 +3,22 @@
 
     <div class="home-top-container">
 
- <div class="home-slider owl-carousel owl-carousel-lazy">
-                                <div class="home-slide">
-                                    <div class="owl-lazy slide-bg" data-src="http://www.ekiciotolastik.com/images/resim14.jpg"></div>
+        <div class="home-slider owl-carousel owl-carousel-lazy">
+            <div class="home-slide">
+                <div class="owl-lazy slide-bg" data-src="http://www.ekiciotolastik.com/images/resim14.jpg"></div>
 
-                                </div><!-- End .home-slide -->
+            </div><!-- End .home-slide -->
 
-                                <div class="home-slide">
-                                    <div class="owl-lazy slide-bg" data-src="http://bulvarotolastik.com/uploads/images/tyui.jpg"></div>
+            <div class="home-slide">
+                <div class="owl-lazy slide-bg" data-src="http://bulvarotolastik.com/uploads/images/tyui.jpg"></div>
 
-                                </div><!-- End .home-slide -->
+            </div><!-- End .home-slide -->
 
-                                <div class="home-slide">
-                                    <div class="owl-lazy slide-bg" data-src="http://www.ekiciotolastik.com/images/resim14.jpg"></div>
+            <div class="home-slide">
+                <div class="owl-lazy slide-bg" data-src="http://www.ekiciotolastik.com/images/resim14.jpg"></div>
 
-                                </div><!-- End .home-slide -->
-                            </div>
-
-
+            </div><!-- End .home-slide -->
+        </div>
 
 
     </div>
@@ -60,11 +58,28 @@
                                                         <a href="{% url 'inoks:urun-detay' product.slug %}"> {{ product.brand }}</a>
                                                     </b>
                                                 </h2>
-                                                <div class="price-box">
-                                                    <span class="product-price">{{ product.price }} ₺</span>
-                                                </div><!-- End .price-box -->
-                                                <div class="product-action">
+                                                {% if product.getDiscountHome > 0 %}
+                                                    <div class="price-box">
+                                                        <span class="old-price">{{ product.price }} ₺</span><br>
+                                                        <span class="product-price">{{ product.getDiscountHome }}₺</span>
+                                                    </div><!-- End .price-box -->
+                                                {% else %}
+                                                    <div class="price-box">
 
+                                                        <span class="product-price">{{ product.price }} ₺</span>
+                                                    </div><!-- End .price-box -->
+                                                {% endif %}
+                                                <div class="product-action">
+                                                    {% if product.getDiscountHome > 0 %}
+                                                    <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
+                                                            data-id="{{ product.id }}"
+                                                            data-name="{{ product.name }}"
+                                                            data-price=" {{ product.getDiscountHome }}"
+                                                            data-toggle="modal"
+                                                    ><i class="icon-bag"></i>Sepete
+                                                        Ekle
+                                                    </button>
+                                                    {% else %}
                                                     <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
                                                             data-id="{{ product.id }}"
                                                             data-name="{{ product.name }}"
@@ -73,6 +88,7 @@
                                                     ><i class="icon-bag"></i>Sepete
                                                         Ekle
                                                     </button>
+                                                    {% endif %}
 
 
                                                 </div>
@@ -96,11 +112,11 @@
                                         {% for cat in categories %}
                                             <div class="collapse show" id="widget-body-1">
 
-                                                    <ul class="cat-list">
-                                                        <li>
-                                                            <a href="{% url 'inoks:kategori-urunleri' cat.slug %}"> {{ cat.name }}</a>
-                                                        </li>
-                                                    </ul>
+                                                <ul class="cat-list">
+                                                    <li>
+                                                        <a href="{% url 'inoks:kategori-urunleri' cat.slug %}"> {{ cat.name }}</a>
+                                                    </li>
+                                                </ul>
 
                                             </div>
                                         {% endfor %}

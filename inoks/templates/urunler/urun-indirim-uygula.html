@@ -1,0 +1,169 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+{% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+
+    {% endif %}
+
+    <section class="content" style="margin-top: 50px;">
+
+        <div class="row">
+
+            <section class="col-lg-12 ">
+
+                <div class="box-body">
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">{{ product.name }} 'a İndirim Uygula</h3>
+                        </div>
+                         <div class="box-header with-border">
+                            <div class="btn-group">
+                                <a href="{% url "inoks:indirimli urun listesi" %}"
+                                   type="button" class="btn btn-success"><i
+                                        class="fa fa-edit"></i>İndirimli Ürün Listesi
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <table id="urun" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+
+                                    <th>Ürün Adı</th>
+                                    <th>Bayiye İndirimli Fiyatı</th>
+                                    <th>Müşteriye İndirimli Fiyat</th>
+                                    <th>Bayi İndirimi</th>
+                                    <th>Müşteri İndirimi</th>
+                                    <th>İndirim Başlangıç Tarihi</th>
+                                    <th>İndirim Bitiş Tarihi</th>
+                                    <th></th>
+                                    <th></th>
+
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                <tr>
+                                    <td style="margin-right: 30px;">{{ product.name }}</td>
+                                    <td>
+                                        <div class="form-group">
+
+                                            {{ form.discountPriceReseller }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            {{ form.discountPriceCustomer }}
+                                            <!-- /.input group -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+
+                                            {{ form.isDiscountReseller }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            {{ form.isDiscountCustomer }}
+                                            <!-- /.input group -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                {{ form.creationDate }}
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                {{ form.finishDate }}
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Uygula</button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+
+                            </table>
+
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+
+                </div>
+            </section>
+
+
+        </div>
+        <!-- /.row (main row) -->
+
+    </section>
+
+
+{% endblock %}

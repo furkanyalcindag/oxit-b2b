@@ -269,13 +269,12 @@
 
 
                                     <td width=200px>
-                                        <a href="{% url 'inoks:siparis-urunleri' %}" class="button btn btn-success">Urunler</a>
+                                        <a href="{% url 'inoks:siparis-urunleri' order.order.pk %}" class="btn btn-success">Ürünler</a>
 
                                     </td>
 
                                     <td>{{ order.order.totalPrice }} TL</td>
-                                    <td><a href="{% url 'inoks:siparis-urunleri' %}"
-                                           class="btn btn-warning">Kargo Bilgisi </a></td>
+                                    <td><a href="" class="btn btn-warning">Kargo Bilgisi </a></td>
 
                                 </tr>
 

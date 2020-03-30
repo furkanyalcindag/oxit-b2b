@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from portotheme.com/html/porto_ecommerce/demo_4/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 12 Feb 2020 14:21:34 GMT -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,17 +15,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/images/icons/favicon.ico' %}">
 
-    <script type="text/javascript">
-        WebFontConfig = {
-            google: {families: ['Open+Sans:300,400,600,700,800', 'Poppins:300,400,500,600,700', 'Segoe Script:300,400,500,600,700']}
-        };
-        (function (d) {
-            var wf = d.createElement('script'), s = d.scripts[0];
-            wf.src = 'assets/js/webfont.js';
-            wf.async = true;
-            s.parentNode.insertBefore(wf, s);
-        })(document);
-    </script>
+
 
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
@@ -35,7 +24,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %} ">
+
 </head>
 <body>
 
@@ -123,14 +112,21 @@
                     <button class="mobile-menu-toggler" type="button">
                         <i class="icon-menu"></i>
                     </button>
-
-
                     <div class="dropdown cart-dropdown">
                         <button class="dropdown-toggle " role="button"
                                 aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#cart"
                                 data-display="static">
                             <span class="cart-count total-count">2</span>
                         </button>
+
+
+                    </div>
+                    <div>
+                        <div >
+                            <a href="{% url 'inoks:favori-urunler' %}" class="paction add-wishlist" title="Add to Wishlist">
+                                                <span>Add to Wishlist</span>
+                                            </a>
+                        </div>
 
 
                     </div>
@@ -144,7 +140,7 @@
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
                         <li class="active"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}">Anasayfa</a></li>
-                        <li><a href="{% url 'inoks:corporate' %}">Kurumsal</a></li>
+
                         <li class="">
                             <a href="#" class="sf-with-ul">Kategoriler</a>
                             <ul style="display: none;">
@@ -155,11 +151,8 @@
                             </ul>
                         </li>
                         <li><a href="#">Yaz Lastiği</a></li>
-                      <li><a href="#" >Kış Lastiği</a></li>
-                      <li><a href="#" >4 Mevsim Lastik</a></li>
-
-
-                        <li><a href="#">İletişim</a></li>
+                        <li><a href="#">Kış Lastiği</a></li>
+                        <li><a href="#">4 Mevsim Lastik</a></li>
 
 
                     </ul>
@@ -322,8 +315,10 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <ul class="links">
-                                                <li><a href="{% url 'inoks:kullanici-iade-olustur' %}">Ürün İadesi </a></li>
-                                                <li><a href="{% url 'inoks:misafir-kullanici-iadeleri' %}">Ürün İade Bilgisi</a></li>
+                                                <li><a href="{% url 'inoks:kullanici-iade-olustur' %}">Ürün İadesi </a>
+                                                </li>
+                                                <li><a href="{% url 'inoks:misafir-kullanici-iadeleri' %}">Ürün İade
+                                                    Bilgisi</a></li>
                                                 <li><a href="#">20 Unique Homepage Layouts</a></li>
                                             </ul>
                                         </div><!-- End .col-sm-6 -->

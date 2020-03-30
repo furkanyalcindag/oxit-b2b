@@ -1,6 +1,6 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
-    <nav aria-label="breadcrumb" class="breadcrumb-nav" ">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav" >
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}"><i class="icon-home"></i></a></li>
@@ -38,19 +38,39 @@
 
                                                 {% endif %}
                                             </figure>
-                                            <div class="product-details">
+                                             <div class="product-details">
                                                 <!-- End .product-container -->
                                                 <h2 class="product-title">
-                                                    <a href="{% url 'inoks:urun-detay' product.slug %}">{{ product.name }}</a>
+                                                    <a href="{% url 'inoks:urun-detay' product.slug %}"
+                                                       style="padding: 10px; white-space: normal;">{{ product.name }}</a>
                                                 </h2>
                                                 <h2 class="product-title">
-                                                    <b> {{ product.brand }} </b>
+                                                    <b>
+                                                        <a href="{% url 'inoks:urun-detay' product.slug %}"> {{ product.brand }}</a>
+                                                    </b>
                                                 </h2>
-                                                <div class="price-box">
-                                                    <span class="product-price">{{ product.price }} ₺</span>
-                                                </div><!-- End .price-box -->
+                                                {% if product.getDiscountHome > 0 %}
+                                                    <div class="price-box">
+                                                        <span class="old-price">{{ product.price }} ₺</span><br>
+                                                        <span class="product-price">{{ product.getDiscountHome }}₺</span>
+                                                    </div><!-- End .price-box -->
+                                                {% else %}
+                                                    <div class="price-box">
+
+                                                        <span class="product-price">{{ product.price }} ₺</span>
+                                                    </div><!-- End .price-box -->
+                                                {% endif %}
                                                 <div class="product-action">
-                                                    <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+                                                    {% if product.getDiscountHome > 0 %}
+                                                    <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
+                                                            data-id="{{ product.id }}"
+                                                            data-name="{{ product.name }}"
+                                                            data-price=" {{ product.getDiscountHome }}"
+                                                            data-toggle="modal"
+                                                    ><i class="icon-bag"></i>Sepete
+                                                        Ekle
+                                                    </button>
+                                                    {% else %}
                                                     <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
                                                             data-id="{{ product.id }}"
                                                             data-name="{{ product.name }}"
@@ -59,9 +79,9 @@
                                                     ><i class="icon-bag"></i>Sepete
                                                         Ekle
                                                     </button>
+                                                    {% endif %}
 
-                                                    <a href="ajax/product-quick-view.html" class="btn-quickview"
-                                                       title="Quick View"><i class="fas fa-external-link-alt"></i></a>
+
                                                 </div>
                                             </div><!-- End .product-details -->
                                         </div>

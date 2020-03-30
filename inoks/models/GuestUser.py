@@ -1,6 +1,6 @@
 from django.db import models
-from inoks.models import City, Order
-from inoks.models.Address import Address
+
+from inoks.models import City
 
 
 class GuestUser(models.Model):

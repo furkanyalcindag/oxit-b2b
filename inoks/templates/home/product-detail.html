@@ -1,10 +1,75 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
-    <script>
+    <style>
 
+        .checked {
+            color: orange;
+        }
 
-    </script>
+    </style>
     <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+
+
+                {% if message.tags == 'warning' %}
+
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fa fa-ban"></i> Hata !</h5>
+
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if message.tags == 'success' %}
+
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fa fa-heart"></i> Favori Ürün</h5>
+
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+
+        {% endif %}
+
+
+
+
+        <div class="alert alert-info alert-dismissible" style="display: none" id="favorite_msg">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fa fa-heart"></i> Favori Ürün</h5>
+
+
+            <ul class="messages" id="msg">
+
+
+            </ul>
+
+
+        </div>
+
+
         <div class="product-single-container product-single-default">
             <div class="row">
                 <div class="col-lg-4 product-single-gallery">
@@ -52,12 +117,28 @@
                         <h1 class="product-title" style="margin-top:20px">{{ product.name }}</h1>
 
                         <br>
+                        {% if ratings.all %}
+                            <div class="ratings-container">
+                                <div class="product-ratings">
+                                    <span class="ratings" style="width:{{ point }}%"></span><!-- End .ratings -->
 
-                        <div class="price-box">
-                            <!--   <span class="old-price">$81.00 ₺</span> -->
-                            <span class="product-price">{{ product.price }} ₺</span>
-                        </div><!-- End .price-box -->
+                                </div><!-- End .product-ratings -->
+                            </div>
+                        {% endif %}
+                        {% if product.getDiscountHome > 0 %}
+                            <div class="price-box">
+                                <!--   <span class="old-price">$81.00 ₺</span> -->
+                                <span class="old-price">{{ product.price }} ₺</span>
+                                <span class="product-price">{{ product.getDiscountHome }}₺</span>
 
+                            </div><!-- End .price-box -->
+                        {% else %}
+                            <div class="price-box">
+                                <!--   <span class="old-price">$81.00 ₺</span> -->
+
+                                <span class="product-price">{{ product.price }} ₺</span>
+                            </div><!-- End .price-box -->
+                        {% endif %}
                         <table class="table table-size">
 
                             <tbody>
@@ -112,16 +193,42 @@
                             </tbody>
                         </table>
                         <br>
-                        <div class="product-action">
+                     <select class="form-control" name="type" id="type">
+                                        {% for option in optionProducts %}
+                                            <option value="">{{ option.option_value.name}}</option><br>
+                                    {% endfor %}
+                                    </select>
+                        <div class="product-action product-all-icons">
 
-                            <button class="btn-icon add-to-cart" style="font-family: INITIAL;"
-                                    data-id="{{ product.id }}"
-                                    data-name="{{ product.name }}"
-                                    data-price=" {{ product.price }}"
-                                    data-toggle="modal"
-                            ><i class="icon-bag"></i>Sepete
-                                Ekle
-                            </button>
+
+                            {% if product.getDiscountHome > 0 %}
+
+                                <button class="btn-icon add-to-cart" style="font-family: INITIAL;"
+                                        data-id="{{ product.id }}"
+                                        data-name="{{ product.name }}"
+                                        data-price=" {{ product.getDiscountHome }}"
+                                        data-toggle="modal"
+                                ><i class="icon-bag"></i>Sepete
+                                    Ekle
+                                </button>
+
+                                <button onclick="add_favorite({{ product.pk }})"><i
+                                        class="fa fa-heart  fa-2x" style="margin: 15px;"></i></button>
+                            {% else %}
+                                <button class="btn-icon add-to-cart" style="font-family: INITIAL;"
+                                        data-id="{{ product.id }}"
+                                        data-name="{{ product.name }}"
+                                        data-price=" {{ product.price }}"
+                                        data-toggle="modal"
+                                ><i class="icon-bag"></i>Sepete
+                                    Ekle
+                                </button>
+
+                                <button onclick="add_favorite({{ product.pk }})"><i
+                                        class="fa fa-heart  fa-2x" style="margin: 15px;"></i>
+                                </button>
+
+                            {% endif %}
 
 
                         </div>
@@ -162,8 +269,51 @@
 
 
             </div>
+            {% if ratings.all %}
+                <div class="row">
+                    <div class="col-lg-12 ">
+
+                        <div class="product-single-tabs">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="product-tab-desc" data-toggle="tab"
+                                       href="#product-desc-content" role="tab" aria-controls="product-desc-content"
+                                       aria-selected="true">Ürün Değerlendirmeleri</a>
+                                </li>
+
+                            </ul>
+
+                            {% for rating in ratings %}
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+                                         aria-labelledby="product-tab-desc">
+                                        <div class="comment-user"><i
+                                                class="fa fa-user"></i>
+                                            {{ rating.profile.user.first_name }}
 
 
+                                        </div>
+                                        <time class="comment-date"
+                                              datetime="16-12-2014 01:05"><i
+                                                class="fa fa-clock-o"></i>{{ rating.creationDate }}
+                                        </time>
+                                        <div class="product-desc-content">
+                                            <p>{{ rating.comment }}</p>
+
+                                        </div><!-- End .product-desc-content -->
+                                    </div><!-- End .tab-pane -->
+
+
+                                    <!-- End .tab-pane -->
+                                </div><!-- End .tab-content -->
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+
+                </div>
+            {% endif %}
             <div class="featured-section">
                 <div class="container">
                     <h2 class="carousel-title">{{ group.name }}</h2>
@@ -205,22 +355,44 @@
                                                 <h2 class="product-title">
                                                     <a href="{% url 'inoks:urun-detay' product.slug %}">{{ product.name }}</a>
                                                 </h2>
-                                                <div class="price-box">
-                                                    <span class="product-price">{{ product.price }}₺</span>
-                                                </div><!-- End .price-box -->
+                                                <input id="product" type="hidden" name="product"
+                                                       value={{ product.pk }}/>
+                                                {% if product.getDiscountHome > 0 %}
+                                                    <div class="price-box">
+                                                        <span class="old-price">{{ product.price }} ₺</span><br>
+                                                        <span class="product-price">{{ product.getDiscountHome }}₺</span>
+                                                    </div><!-- End .price-box -->
+                                                {% else %}
+                                                    <div class="price-box">
+
+                                                        <span class="product-price">{{ product.price }} ₺</span>
+                                                    </div><!-- End .price-box -->
+                                                {% endif %}
                                                 <div class="product-action">
+                                                    {% if product.getDiscountHome > 0 %}
+                                                        <button class="btn-icon  add-to-cart"
+                                                                style="font-family: INITIAL;"
+                                                                data-id="{{ product.id }}"
+                                                                data-name="{{ product.name }}"
+                                                                data-price=" {{ product.getDiscountHome }}"
+                                                                data-toggle="modal"
+                                                        ><i class="icon-bag"></i>Sepete
+                                                            Ekle
+                                                        </button>
 
-                                                    <button class="btn-icon add-to-cart" style="font-family: INITIAL;"
-                                                            data-id="{{ product.id }}"
-                                                            data-name="{{ product.name }}"
-                                                            data-price=" {{ product.price }}"
-                                                            data-toggle="modal"
-                                                    ><i class="icon-bag"></i>Sepete
-                                                        Ekle
-                                                    </button>
+                                                    {% else %}
+                                                        <button class="btn-icon  add-to-cart"
+                                                                style="font-family: INITIAL;"
+                                                                data-id="{{ product.id }}"
+                                                                data-name="{{ product.name }}"
+                                                                data-price=" {{ product.price }}"
+                                                                data-toggle="modal"
+                                                        ><i class="icon-bag"></i>Sepete
+                                                            Ekle
+                                                        </button>
 
-
-                                                </div>
+                                                    {% endif %}
+                                                </div><!-- End .product-details -->
 
                                             </div><!-- End .product-details -->
                                         </div>
@@ -249,7 +421,37 @@
     </div><!-- End .product-single-container -->
     <!-- End .container -->
     <script>
+        function add_favorite(product) {
 
+
+            $.ajax({
+                url: "{% url 'inoks:favori-urun-ekle' %}",
+                type: "post", // or "get"
+                data: {
+                    product: product,
+
+                },
+                success: function (result) {
+                    debugger;
+
+                    if (result.status === 'Success') {
+
+                        if (result.code === 100) {
+                            let html = '<li class="success ">Ürün favorilerime eklendi</li>';
+                            document.getElementById('msg').innerHTML = html;
+
+                        } else {
+                            let html = '<li class="success ">Ürün favorilerimde mevcut</li>';
+                            document.getElementById('msg').innerHTML = html;
+                        }
+                        document.getElementById("favorite_msg").style.display = '';
+
+                    } else {
+                        swal("Başarılı", result.messages, "error");
+                    }
+                }
+            });
+        }
 
     </script>
 

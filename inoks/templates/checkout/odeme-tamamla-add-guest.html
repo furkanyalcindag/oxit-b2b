@@ -68,7 +68,7 @@
                                                     <label>Adres </label>
                                                     {{ guestForm.address }}
                                                 </div><!-- End .form-group -->
-
+                                                   <input id="discount1" name="discount1" type="hidden" value=""/>
 
                                             </div>
                                         </div>
@@ -102,7 +102,7 @@
                             </div><!-- End .custom-checkbox -->
                             <br>
                             <div class="checkout-methods">
-                                <input class="btn btn-primary" onclick="odemeTamamlaGuest()" type="submit"
+                                <input class="btn btn-primary" onclick="odemeTamamlaGuest()"  type="submit"
                                        value="Ödemeyi Tamamla" formmethod="post"
                                        formnovalidate>
                             </div><!-- End .checkout-methods -->
@@ -174,12 +174,17 @@
             html += ' <tr><td>KDV</td> <td id="shipping">' + kdv.toFixed(2) + '₺</td></tr>';
             html += '<tr><td>Kargo</td> <td id="shipping">' + Number(kargo1) + '₺</td> </tr>';
             html += '<tr><td>İndirim</td><td id="total_price">' + discount + '₺</td>';
-            html += '<tfood><tr><td>Toplam</td> <td id="shipping">' + Number(total) + '₺</td> </tr>';
+            html += '<tfood><tr><td>Toplam</td> <td id="shipping">' + total.toFixed(2) + '₺</td> </tr>';
             html += '</tr></tbody></tfoot></table>';
 
+
             document.getElementById('card_product').innerHTML = html;
+            discount1 = window.btoa(discount);
+
+
 
         }
+
 
         function checkBox() {
 
@@ -204,7 +209,7 @@
 
 
         function ilceGetir() {
-
+            debugger;
             var e = document.getElementById("id_city");
 
             var il_id = e.options[e.selectedIndex].value;

@@ -1,0 +1,164 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+    <div class="container">
+
+        {% if messages %}
+            {% for message in messages %}
+
+
+                {% if message.tags == 'warning' %}
+
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if message.tags == 'success' %}
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+
+                            <div class="alert alert-info alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li class="{{ message.tags }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+
+        {% endif %}
+        <nav aria-label="breadcrumb" class="breadcrumb-nav" style="margin-bottom: 30px;">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}"><i
+                            class="icon-home"></i></a></li>
+
+                    <li class="breadcrumb-item active" aria-current="page">Favorilerim</li>
+                </ol>
+            </div>
+        </nav>
+        <div class="row">
+            <aside class="sidebar col-md-3">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+
+                    <ul class="list">
+
+                        <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                        <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                        <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                        <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                        <li><a href="{% url 'inoks:kullanici-iadelerim' %}" class="">İadelerim</a></li>
+
+                    </ul>
+
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-4 -->
+            <div class="col-md-9 ">
+                <div class="checkout-payment">
+                    <h4 class="widget-title" >Favorilerim</h4>
+                    <div class="cart-table-container">
+                        <table class="table table-cart">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Kod</th>
+                                <th>Ürün</th>
+                                <th class="price-col">Fiyat</th>
+                                <th>Marka</th>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody id="pro_table">
+                            {% for favorite in products %}
+                                <tr class="product-row">
+                                    <td>
+                                        {% if favorite.product.productImage.all %}
+
+                                            <a href="{% url 'inoks:urun-detay' favorite.product.slug %}"><img
+                                                    class="pic-1"
+                                                    style="height: 80px;width:50px"
+
+                                                    src="/media/{{ favorite.product.productImage.all.0.productImage }}"></a>
+
+                                        {% endif %}
+
+                                    </td>
+                                    <td>{{ favorite.product.code }}</td>
+                                    <td>
+                                        {{ favorite.product.name }}
+                                    </td>
+                                    {% if favorite.product.getDiscountHome > 0 %}
+                                        <td
+                                                data-id="{{ favorite.product.product.id }}"
+                                                data-name="{{ favorite.product.name }}"
+                                                data-price="{{ favorite.product.getDiscountHome }}">
+                                            {{ favorite.product.getDiscountHome }}₺
+
+                                            {% else %}
+
+                                        <td
+                                                data-id="{{ favorite.product.id }}"
+                                                data-name="{{ favorite.product.name }}"
+                                                data-price="{{ favorite.product.price }}">
+                                        {{ favorite.product.price | floatformat:'2' }}₺
+
+
+                                    {% endif %}
+                                    </td>
+                                    <td>{{ favorite.product.brand }}</td>
+                                    <td><a href="{% url 'inoks:favori-urun-sil' favorite.product.pk %}"><i
+                                            class="fa fa-heart-broken fa-2x" style="width: 100%; "></i></a></td>
+
+                                </tr>
+
+
+                            {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div><!-- End .cart-table-container -->
+
+                </div><!-- End .checkout-payment -->
+
+            </div><!-- End col-lg-8 -->
+
+        </div><!-- End .col-lg-8 -->
+    </div><!-- End .row -->
+    <script>
+
+    </script>
+{% endblock %}

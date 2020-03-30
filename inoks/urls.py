@@ -2,7 +2,8 @@ from django.conf.urls import url
 from django.urls import path
 
 from inoks.Views import ProductViews, UserViews, OrderViews, ReportViews, EarningsViews, DashboardViews, SettingViews, \
-    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews, CheckoutViews, PaymentMethodViews
+    TreeViews, RefundViews, CityViews, APIViews, HomeViews, CouponViews, CheckoutViews, PaymentMethodViews, \
+    DiscountViews, CommentViews, FavoriteViews, OptionViews
 
 app_name = 'inoks'
 
@@ -67,7 +68,7 @@ urlpatterns = [
     url(r'delete-address/(?P<pk>\d+)$', UserViews.user_delete_address, name='kullanici-adres-sil'),
     url(r'address-update/(?P<pk>\d+)$', UserViews.user_address_update, name='kullanici-adres-guncelle'),
     url(r'refund/$', RefundViews.return_add_refund, name='kullanici-urun-iade-olustur'),
-    url(r'products/$', UserViews.user_product, name='siparis-urunleri'),
+    url(r'products/(?P<pk>\d+)$', UserViews.user_products, name='siparis-urunleri'),
 
     # Urunler
     url(r'urunler/urun-ekle/$', ProductViews.return_add_products, name='urun-ekle'),
@@ -88,6 +89,16 @@ urlpatterns = [
     url(r'urunler/grupla/(?P<group_id>\d+)$', ProductViews.add_products_to_group, name='urun-grupla'),
     url(r'urunler/grup-urun-sil/(?P<group_id>\d+)/(?P<product_id>\d+)$', ProductViews.delete_product_from_group,
         name='urun-grup-sil'),
+
+    # SEÇENEKLER
+    url(r'option/$', OptionViews.add_option, name='seçenek ekle'),
+    url(r'type-values/$', OptionViews.get_typeValues, name='type-value-getir'),
+    url(r'option-product/(?P<pk>\d+)$', OptionViews.add_option_to_product, name='urune seçenek ekle'),
+
+    # İNDİRİM
+    url(r'indirim-uygula/(?P<pk>\d+)$', DiscountViews.discount, name='indirim uygula'),
+    url(r'indirimli-urun-listesi/$', DiscountViews.getDiscount_products, name='indirimli urun listesi'),
+    url(r'urunler/indirim/sil/(?P<pk>\d+)$', DiscountViews.discount_product_delete, name='indirim-sil'),
 
     # Stok
     url(r'urunler/stok-guncelle/$', ProductViews.stock_update, name='stok-guncelle'),
@@ -134,6 +145,13 @@ urlpatterns = [
     url(r'guest-user-refunds/$', UserViews.guest_my_refunds, name='misafir-kullanici-iadeleri'),
     url(r'kullanici/iadelerim/$', UserViews.user_my_refunds, name='kullanici-iadelerim'),
 
+    # degerlendirme
+    url(r'rating/(?P<pk>\d+)$', CommentViews.Comment, name='kullanici-yorum-yap'),
+
+    # favori
+    url(r'favorite-products/$', FavoriteViews.Favorites, name='favori-urunler'),
+    url(r'add-favorite/$', FavoriteViews.add_favorite_product, name='favori-urun-ekle'),
+    url(r'remove-favorite/(?P<pk>\d+)$', FavoriteViews.delete_favorite_product, name='favori-urun-sil'),
 
     # Raporlar
     url(r'raporlar/rapor-olustur/$', ReportViews.return_create_report, name='rapor-olustur'),
@@ -175,7 +193,7 @@ urlpatterns = [
     url(r'odeme-basarisiz/$', OrderViews.basarisiz_odeme, name='basarisiz-odeme'),
     url(r'havale-eft-bilgi/(?P<siparis>\d+)$', OrderViews.havale_eft, name='havale-eft-bilgi'),
 
-    # Odeme YontemleriS
+    # Odeme Yontemleri
 
     url(r'payment-method/payTr/(?P<pk>\d+)$', PaymentMethodViews.UpdatePaytr, name='payTr'),
     url(r'payment-method/bakiyem/(?P<pk>\d+)$', PaymentMethodViews.UpdateBakiyem, name='bakiyem'),
@@ -197,7 +215,7 @@ urlpatterns = [
 
     url(r'paytr/(?P<siparis>\d+)$', CheckoutViews.payment_payTr, name='payTr-make-creditCard-payment'),
     url(r'iyzico/(?P<siparis>\d+)$', CheckoutViews.payment_iyzico, name='iyzipay-make-creditcard-payment'),
-    url(r'new-address/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
+    url(r'checkout/address/$', CheckoutViews.new_address, name='odeme-tamamla-yeni-adres'),
 
     # kupon
     url(r'kupon-bilgileri/$', CouponViews.coupon_create, name='kupon'),

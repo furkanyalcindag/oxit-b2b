@@ -1,14 +1,19 @@
+from datetime import datetime
+
+import pytz
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.shortcuts import render
 
 from inoks.filters.ProductFilter import ProductFilter
-from inoks.models import ProductCategory, Product, ProductGroup, Settings
+from inoks.models import ProductCategory, Product, ProductGroup, Settings, Rating, OptionProduct
 from inoks.models.Brand import Brand
+from inoks.models.Discount import Discount
+from inoks.models.Enum import OPTION_CHOICES
 
 
 def get_home_product(request):
-    products = Product.objects.filter(isActive=1).order_by('-creationDate')[:20]
+    products = Product.objects.filter(isActive=True).order_by('-creationDate')[:21]
 
     brands = Brand.objects.all()
     categories = ProductCategory.objects.all()
@@ -39,9 +44,22 @@ def get_brand_products(request, slug):
 
 def get_product_detail(request, slug):
     product = Product.objects.get(slug=slug)
+    optionProducts = OptionProduct.objects.filter(product=product)
+    option_names = []
+    ratings = Rating.objects.filter(product=product)
     group = ProductGroup.objects.get(name="Önerilen Ürünler")
+    point = 0
+    count = 0
+    if ratings.count() > 0:
+        for rating in ratings:
+            point = point + rating.point
+            count = count + 1
+        point = point / count
+        point = point * 20
+
     return render(request, 'home/product-detail.html',
-                  {'product': product, 'group': group})
+                  {'product': product, 'group': group, 'ratings': ratings, 'point': int(point),
+                   'optionProducts': optionProducts})
 
 
 def search_category(request):

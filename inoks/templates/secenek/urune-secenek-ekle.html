@@ -1,0 +1,199 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+
+
+            {% if message.tags == 'warning' %}
+
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+
+
+            {% if message.tags == 'success' %}
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+
+    {% endif %}
+
+    <section class="content" style="margin-top: 50px;">
+
+        <div class="row">
+
+            <section class="col-lg-12 ">
+
+                <div class="box-body">
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">{{ product.name }} 'ın  Stok ve Seçenek Bilgisi</h3>
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="box-body">
+                                {% csrf_token %}
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label> </label><br>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Seçenek Adı</label><br>
+                                            <select class="form-control" name="type" id="type" onchange="get_typeValue()">
+                                                {% for product in types %}
+                                                    <option value="{{ product.type_name }}">{{ product.type_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Seçenek</label><br>
+                                            <select class="form-control" name="value" id="value_id">
+                                                <option style="width: 100%;height:40px;" value=""></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Stok</label><br>
+
+                                            <input class="form-control" type="number" id="stock" name="stock">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ürün Fiyat Farkı</label><br>
+
+                                            <input class="form-control" type="number" id="price" name="price">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ürün Liste Fiyat Farkı</label><br>
+
+                                            <input class="form-control" type="number" id="list_price" name="list_price">
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Ürün Ekle</button>
+                            </div>
+
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+
+                </div>
+            </section>
+
+
+        </div>
+        <!-- /.row (main row) -->
+
+    </section>
+
+    <script>
+
+
+        function get_typeValue() {
+
+            var e = document.getElementById("type");
+            var type_id = e.options[e.selectedIndex].value;
+            $.ajax({
+                url: "{% url 'inoks:type-value-getir' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    type_id: type_id,
+
+                },
+                success: function (result) {
+                    debugger;
+
+                    let select = document.getElementById("value_id");
+
+                    select.options[select.options.length] = new Option('Text 1', 'Value1');
+
+                    $('#value_id').empty();
+
+                    for (let i = 0; i < result.values.length; i++) {
+                        select.options[select.options.length] = new Option(result.values[i].name, result.values[i].name);
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            get_typeValue();
+            //console.log($('#ilce_id').select2('data'))
+            $('#type_id').val('{{type}}').trigger('change'); // Select the option with a value of '1'
+
+
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+
+    </script>
+{% endblock %}

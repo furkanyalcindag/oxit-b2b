@@ -1,13 +1,11 @@
-from django.contrib.auth.models import User
-from django.db import models
 
+from django.db import models
 from inoks.models import Profile, City
 from inoks.models.GuestUser import GuestUser
 from inoks.models.PaymentType import PaymentType
-from inoks.models.Cargo import Cargo
 from inoks.models.OrderSituations import OrderSituations
 from inoks.models.Product import Product
-from inoks.models.Enum import PAYMENT_CHOICES, TRANSFER
+
 
 
 class Order(models.Model):

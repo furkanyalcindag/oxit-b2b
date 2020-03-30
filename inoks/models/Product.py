@@ -1,10 +1,13 @@
+import datetime
+
 from django.db import models
 from django.template.defaultfilters import slugify
+
 
 from inoks.models.ProductImage import ProductImage
 from inoks.models.ProductCategory import ProductCategory
 from inoks.models.Brand import Brand
-from inoks.models.Enum import OLCU_CHOISES, OLCU, SPEED_CHOISES, VEHICLE_CHOISES
+from inoks.models.Enum import SPEED_CHOISES, VEHICLE_CHOISES
 
 
 class Product(models.Model):
@@ -15,18 +18,15 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     listPrice = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Ürün Liste Fiyatı', null=True,
                                     blank=True)
-    discountPrice = models.CharField(max_length=120, blank=True, null=True, verbose_name='İndirimli Fiyatı')
-    stock = models.IntegerField(blank=True, null=True, verbose_name='Stok Adeti')
+
+    stock = models.IntegerField(blank=True, null=True, verbose_name='Stok Adedi')
 
     category = models.ManyToManyField(ProductCategory, null=True, blank=True, verbose_name='Kategori')
-    discountStartDate = models.DateField(blank=True, null=True, verbose_name='İndirim Başlama Tarihi')
-    discountFinishDate = models.DateField(null=True, blank=True, verbose_name='İndirim Bitiş Tarihi')
+
     info = models.TextField(blank=True, null=True, verbose_name='Ürün Bilgileri')
     creationDate = models.DateTimeField(auto_now_add=True, verbose_name='Kayıt Tarihi')
     modificationDate = models.DateTimeField(auto_now=True, verbose_name='Güncelleme Tarihi')
-    product_size = models.CharField(max_length=120, null=True, blank=True, verbose_name="Ürün Ölçüsü",
-                                    choices=OLCU_CHOISES,
-                                    default=OLCU)
+
 
     vehicleType = models.CharField(null=True, blank=True, max_length=100, verbose_name='Araç Tipi',
                                    choices=VEHICLE_CHOISES)
@@ -38,6 +38,15 @@ class Product(models.Model):
     slug = models.SlugField(null=True, unique=True)
     isActive = models.BooleanField(default=True)
 
+    def getDiscountHome(self):
+        datetime_current = datetime.datetime.today()
+        from inoks.models.Discount import Discount
+        discount_product = Discount.objects.filter(product_id=self.id).filter(
+            creationDate__lte=datetime_current).filter(finishDate__gte=datetime_current).filter(isDiscountCustomer=True)
+        if discount_product.count() > 0:
+            return discount_product[0].discountPriceCustomer
+        else:
+            return 0
 
     def __str__(self):
         return '%s ' % self.name

@@ -10,4 +10,4 @@ class Coupon(models.Model):
     stock = models.IntegerField(blank=True, null=True, verbose_name='Kupon Adedi')
     discount = models.DecimalField(max_digits=8, decimal_places=2)
     isLimit = models.BooleanField(default=False)
-    limit =  models.DecimalField(max_digits=8, decimal_places=2, null=True)
+    limit = models.DecimalField(max_digits=8, decimal_places=2, null=True)

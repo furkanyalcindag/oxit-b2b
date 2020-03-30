@@ -13,6 +13,7 @@ from inoks.Forms.ProductCategoryForm import ProductCategoryForm
 from inoks.Forms.ProductForm import ProductForm
 from inoks.models import Product, ProductCategory, ProductGroup
 from inoks.models.Brand import Brand
+from inoks.models.Discount import Discount
 from inoks.models.ProductImage import ProductImage
 from inoks.serializers.product_serializers import ProductSerializer
 from inoks.services import general_methods
@@ -93,6 +94,9 @@ def product_delete(request, pk):
 
     else:
         return JsonResponse({'status': 'Fail', 'msg': 'Not a valid request'})
+
+
+
 
 
 @login_required

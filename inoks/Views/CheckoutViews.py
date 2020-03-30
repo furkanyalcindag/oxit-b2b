@@ -214,8 +214,8 @@ def get_payment_info_isGuest(request, pk):
     else:
 
         order.otherAddress = request.POST['invoice_address']  # Farklı fatura adresi
-        order.city = request.POST['invoice_city']
-        order.district = request.POST['invoice_district']
+        order.city = guest.city
+        order.district = guest.district
 
     order.payment_type = paymentType
     order.totalPrice = total
@@ -235,22 +235,6 @@ def get_payment_info_isGuest(request, pk):
                                     quantity=product_order.count)
         orderProduct.save()
 
-    invoice_data = {'orders': products, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
-                    'net_total': net_total, 'discount': discount,
-                    'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
-                    'payment_type': order.payment_type, 'invoice_address': order.otherAddress, 'order': order,
-                    'profile': guest}
-
-    subject, from_email, to = 'Oxit Bilişim Teknolojileri', 'burcu.dogan@oxityazilim.com', guest.email
-    text_content = 'Fatura Bilgileri '
-
-    html_body = render_to_string("mailTemplates/invoice.html", invoice_data)
-
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach_alternative(html_body, "text/html")
-    msg.send()
-
-    messages.success(request, 'Siparişiniz Başarıyla Oluştruldu.')
 
     if order.payment_type == 'Havale/EFT':
         messages.success(request, 'Sipariş başarıyla eklendi.')
@@ -260,10 +244,10 @@ def get_payment_info_isGuest(request, pk):
         paymentMethod = PaymentMethod.objects.get(isActive=True)
         if paymentMethod.name == 'Paytr':
             messages.success(request, 'Sipariş başarıyla eklendi.')
-            return redirect('inoks:kullanici-odeme-yap', siparis=order.id)
+            return redirect('inoks:payTr-make-creditCard-payment', siparis=order.pk)
         if paymentMethod.name == 'Iyzico':
             messages.success(request, 'Sipariş başarıyla eklendi.')
-            return redirect('inoks:iyzipay-make-creditcard-payment', siparis=order.id)
+            return redirect('inoks:iyzipay-make-creditcard-payment', siparis=order.pk)
 
 
     else:
@@ -274,12 +258,29 @@ def get_payment_info_isGuest(request, pk):
             product.stock = product.stock - orderProduct.quantity
             if product.stock <= 5:
                 notification = Notification()
-                notification.message = "Kod: " + product.code + " olan ürün stoğunu güncelleyin."
+                notification.message = "Kod: " + str(product.code) + " olan ürün stoğunu güncelleyin."
                 notification.save()
             product.save()
         order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
         order.save()
-        return render(request, 'checkout/odeme-tamamla.html',
+
+        invoice_data = {'orders': products, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
+                        'net_total': net_total, 'discount': discount,
+                        'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
+                        'payment_type': order.payment_type, 'invoice_address': order.otherAddress, 'order': order,
+                        'profile': guest}
+
+        subject, from_email, to = 'Oxit Bilişim Teknolojileri', 'burcu.dogan@oxityazilim.com', guest.email
+        text_content = 'Fatura Bilgileri '
+
+        html_body = render_to_string("mailTemplates/invoice.html", invoice_data)
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+
+        messages.success(request, 'Siparişiniz Başarıyla Oluştruldu.')
+    return render(request, 'checkout/odeme-tamamla.html',
                       {'orders': products, 'subtotal': subtotal, 'total': total, 'kargo1': kargo1,
                        'net_total': net_total, 'guest': guest, 'order': order, 'discount': discount,
                        'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
@@ -485,7 +486,7 @@ def get_payment_info_isUser(request):
         paymentMethod = PaymentMethod.objects.get(isActive=True)
         if paymentMethod.name == 'Paytr':
             messages.success(request, 'Sipariş başarıyla eklendi.')
-            return redirect('inoks:kullanici-odeme-yap', siparis=order.id)
+            return redirect('inoks:payTr-make-creditCard-payment', siparis=order.id)
         if paymentMethod.name == 'Iyzico':
             messages.success(request, 'Sipariş başarıyla eklendi.')
             return redirect('inoks:iyzipay-make-creditcard-payment', siparis=order.id)
@@ -499,7 +500,7 @@ def get_payment_info_isUser(request):
             product.stock = product.stock - orderProduct.quantity
             if product.stock <= 5:
                 notification = Notification()
-                notification.message = "Kod: " + product.code + " olan ürün stoğunu güncelleyin.Stok: " + product.stock + ""
+                notification.message = "Kod: " + str(product.code) + " olan ürün stoğunu güncelleyin.Stok: " + str(product.stock) + ""
             product.save()
         order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
         order.save()

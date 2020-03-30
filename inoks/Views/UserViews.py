@@ -21,7 +21,7 @@ from inoks.Forms.ProfileForm import ProfileForm
 from inoks.Forms.ProfileUpdateForm import ProfileUpdateForm
 from inoks.Forms.ProfileUpdateMemberForm import ProfileUpdateMemberForm
 from inoks.Forms.UserUpdateForm import UserUpdateForm
-from inoks.models import Profile, Settings, Order, Refund, OrderProduct, Notification
+from inoks.models import Profile, Settings, Order, Refund, OrderProduct, Notification, Rating
 from inoks.models.Address import Address
 from inoks.models.AddressObject import AddressObject
 from inoks.models.AddressProfile import AddressProfile
@@ -524,7 +524,6 @@ def user_logout(request):
 
 def user_profil(request):
     user = request.user
-
     user_form = UserUpdateForm(request.POST or None, instance=user)
     profile = Profile.objects.get(user=user)
     profile_form = LoginProfileUpdateForm(request.POST or None, instance=profile)
@@ -591,18 +590,13 @@ def user_my_orders(request):
     return render(request, 'kullanici/kullanici-siparisleri.html', {'orders': orders})
 
 
-def user_product(request):
-    current_user = request.user
-    userprofile = Profile.objects.get(user=current_user)
-    orderss = Order.objects.filter(profile_id=userprofile.id)
+def user_products(request, pk):
+    order = Order.objects.get(pk=pk)
+    order_product = OrderProduct.objects.filter(order=order)
+    ratings = Rating.objects.all()
 
-    orders = []
-    order_product = ""
-    for order in orderss:
-        orders.append(order)
-        order_product = OrderProduct.objects.filter(order=order)
-
-    return render(request, 'mailTemplates/invoice.html', {'order_product': order_product, 'orders': orders})
+    return render(request, 'kullanici/kullanici-siparis-urunleri.html',
+                  {'order_product': order_product, 'orders': order, 'ratings': ratings})
 
 
 @login_required
@@ -642,6 +636,7 @@ def add_user_address(request):
                   {'address_form': address_form})
 
 
+@login_required
 def get_address(request):
     current_user = request.user
     perm = general_methods.control_access(request)
