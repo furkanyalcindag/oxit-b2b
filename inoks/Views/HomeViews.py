@@ -6,7 +6,7 @@ from django.db.models import Count, Q
 from django.shortcuts import render
 
 from inoks.filters.ProductFilter import ProductFilter
-from inoks.models import ProductCategory, Product, ProductGroup, Settings, Rating, OptionProduct
+from inoks.models import ProductCategory, Product, ProductGroup, Settings, Rating, OptionProduct, Option
 from inoks.models.Brand import Brand
 from inoks.models.Discount import Discount
 from inoks.models.Enum import OPTION_CHOICES
@@ -44,8 +44,17 @@ def get_brand_products(request, slug):
 
 def get_product_detail(request, slug):
     product = Product.objects.get(slug=slug)
-    optionProducts = OptionProduct.objects.filter(product=product)
-    option_names = []
+    options = Option.objects.all()
+    option_dict = dict()
+    option_products = []
+    for option in options:
+        optionProducts = OptionProduct.objects.filter(product=product).filter(option_value__option_id=option.pk)
+        if optionProducts.count() > 0:
+            option_products.append(optionProducts)
+
+            if len(option_products) > 0:
+                option_dict[option.type_name] = optionProducts
+
     ratings = Rating.objects.filter(product=product)
     group = ProductGroup.objects.get(name="Önerilen Ürünler")
     point = 0
@@ -57,9 +66,15 @@ def get_product_detail(request, slug):
         point = point / count
         point = point * 20
 
+    if request.method == 'POST':
+        selected = request.POST['option']
+        return render(request, 'home/product-detail.html',
+                      {'product': product, 'group': group, 'ratings': ratings, 'point': int(point),
+                       'options': option_dict, 'selected': selected})
+
     return render(request, 'home/product-detail.html',
                   {'product': product, 'group': group, 'ratings': ratings, 'point': int(point),
-                   'optionProducts': optionProducts})
+                   'options': option_dict})
 
 
 def search_category(request):

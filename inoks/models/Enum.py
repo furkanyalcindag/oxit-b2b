@@ -93,20 +93,16 @@ OPTION1 = 'Seçenek'
 OPTION2 = 'Radyo Düğmesi'
 OPTION3 = 'Onay Kutusu'
 OPTION4 = 'Metin'
-OPTION5 = 'Metin Alanı'
-OPTION6 = 'Dosya'
-OPTION7 = 'Tarih'
-OPTION8 = 'Zaman'
-OPTION9 = 'Tarih Zaman'
+OPTION5 = 'Dosya'
+OPTION6 = 'Tarih'
+
 
 OPTION_CHOICES = (
     (OPTION1, 'Seçenek'),
     (OPTION2, 'Radyo Düğmesi'),
     (OPTION3, 'Onay Kutusu'),
     (OPTION4, 'Metin'),
-    (OPTION5, 'Metin Alanı'),
-    (OPTION6, 'Dosya'),
-    (OPTION7, 'Tarih'),
-    (OPTION8, 'Zaman'),
-    (OPTION9, 'Tarih Zaman')
+    (OPTION5, 'Dosya'),
+    (OPTION6, 'Tarih'),
+
 )

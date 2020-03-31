@@ -7874,7 +7874,8 @@ a:focus {
 }
 
 .add-wishlist::before {
-    content: '\e88a'
+    content: '\e88a';
+    font-family: 'porto';
 }
 
 .add-compare::before {

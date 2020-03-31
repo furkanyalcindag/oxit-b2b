@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -5,10 +7,12 @@ from rest_framework.decorators import api_view
 
 from inoks.Forms.OptionForm import OptionForm
 from inoks.models import Option, OptionValue, Product, OptionProduct
-from inoks.serializers.DistrictSerializer import DistrictSerializer
+from inoks.serializers.OptionProductSerializer import OptionProductSerializer
+
+from inoks.serializers.OptionValueSerializer import OptionValueSerializer
 
 
-def add_option(request):
+def add_option(request):  # şeçenekleri ekliyoruz
     option_form = OptionForm()
     if request.method == 'POST':
         option_form = OptionForm(request.POST)
@@ -29,7 +33,7 @@ def add_option(request):
     return render(request, 'secenek/secenek-ekle.html', {'option_form': option_form})
 
 
-def add_option_to_product(request, pk):
+def add_option_to_product(request, pk):  # ürünlere secenek ekliyoruz
     products = Product.objects.all()
     types = Option.objects.all()
     product = Product.objects.get(pk=pk)
@@ -42,6 +46,11 @@ def add_option_to_product(request, pk):
 
         price = request.POST['price']
         list_price = request.POST['list_price']
+
+        if price == None or " ":
+            price = 0.0
+        if list_price == None or " ":
+            list_price = 0.0
 
         option_product = OptionProduct()
         option_product.product = product
@@ -56,7 +65,7 @@ def add_option_to_product(request, pk):
 
 
 @api_view(http_method_names=['POST'])
-def get_typeValues(request):
+def get_typeValues(request):  # seçenek adına göre(option->type_name) değerlerini getiriyoruz (optionValue->name)
     if request.POST:
         try:
 
@@ -64,7 +73,27 @@ def get_typeValues(request):
             option = Option.objects.get(type_name=type_id)
             values = OptionValue.objects.filter(option=option)
 
-            data = DistrictSerializer(values, many=True)
+            data = OptionValueSerializer(values, many=True)
+
+            responseData = dict()
+            responseData['values'] = data.data
+
+            return JsonResponse(responseData, safe=True)
+
+        except Exception as e:
+
+            return JsonResponse({'status': 'Fail', 'msg': e})
+
+
+@api_view(http_method_names=['POST'])
+def get_price_of_option(request):
+    if request.POST:
+        try:
+            option_name = request.POST.get('option')
+            option = OptionValue.objects.get(name=option_name)
+            values = OptionProduct.objects.filter(option_value=option)
+
+            data = OptionProductSerializer(values, many=True)
 
             responseData = dict()
             responseData['values'] = data.data

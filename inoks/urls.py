@@ -93,6 +93,7 @@ urlpatterns = [
     # SEÇENEKLER
     url(r'option/$', OptionViews.add_option, name='seçenek ekle'),
     url(r'type-values/$', OptionViews.get_typeValues, name='type-value-getir'),
+    url(r'option-price/$', OptionViews.get_price_of_option, name='secenegin-fiyatını-getir'),
     url(r'option-product/(?P<pk>\d+)$', OptionViews.add_option_to_product, name='urune seçenek ekle'),
 
     # İNDİRİM

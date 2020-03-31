@@ -1,5 +1,6 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
+    {% load static %}
     <style>
 
         .checked {
@@ -7,6 +8,8 @@
         }
 
     </style>
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+
     <div class="container">
         {% if messages %}
             {% for message in messages %}
@@ -126,17 +129,19 @@
                             </div>
                         {% endif %}
                         {% if product.getDiscountHome > 0 %}
-                            <div class="price-box">
-                                <!--   <span class="old-price">$81.00 ₺</span> -->
+                            <div class="price-box" id="price-box">
+
                                 <span class="old-price">{{ product.price }} ₺</span>
-                                <span class="product-price">{{ product.getDiscountHome }}₺</span>
+                                <span class="product-price" id="price">{{ product.getDiscountHome }}₺</span>
+                                <input type="hidden" id="price1" value="{{ product.getDiscountHome }}">
 
                             </div><!-- End .price-box -->
                         {% else %}
                             <div class="price-box">
                                 <!--   <span class="old-price">$81.00 ₺</span> -->
 
-                                <span class="product-price">{{ product.price }} ₺</span>
+                                <span class="product-price" id="price">{{ product.price }} ₺</span>
+                                <input type="hidden" id="price1" value="{{ product.price }}">
                             </div><!-- End .price-box -->
                         {% endif %}
                         <table class="table table-size">
@@ -193,11 +198,38 @@
                             </tbody>
                         </table>
                         <br>
-                     <select class="form-control" name="type" id="type">
-                                        {% for option in optionProducts %}
-                                            <option value="">{{ option.option_value.name}}</option><br>
-                                    {% endfor %}
+                        <form action="{% url 'inoks:urun-detay' product.pk %}" method="post" id="form">
+                            {% for key,value in options.items %}
+                                <h5>{{ key }}</h5>
+
+                                {% if value.0.option_value.option.type == 'Seçenek' %}
+                                    <select name="option" id="option" class="form-control"
+                                            onchange="get_price_of_option()">
+                                        <option value="">----</option>
+                                        {% for option in value %}
+
+                                            <option value="{{ option.option_value.name }}">{{ option.option_value.name }} </option>
+                                        {% endfor %}
                                     </select>
+                                {% endif %}
+                                {% for valuee in value %}
+                                    {% if valuee.option_value.option.type == 'Radyo Düğmesi' %}
+                                        <input type="radio" name="option" id="option"
+                                               value="{{ value.option_value.name }}">
+                                    {% elif valuee.option_value.option.type == 'Onay Kutusu' %}
+                                        <input type="checkbox" value="{{ value.option_value.name }}" id="option">
+                                    {% elif valuee.option_value.option.type == 'Metin' %}
+                                        <input type="text" class="form-control" id="option" name="option">
+                                    {% elif valuee.option_value.option.type == 'Dosya' %}
+                                        <input type="file" class="form-control" id="option " name="option" value="">
+                                    {% elif valuee.option_value.option.type == 'Tarih' %}
+                                        <input type="date" class="form-control" id="option" name="option" value="">
+                                    {% else %}
+                                    {% endif %}
+                                {% endfor %}
+
+                            {% endfor %}
+                        </form>
                         <div class="product-action product-all-icons">
 
 
@@ -212,8 +244,10 @@
                                     Ekle
                                 </button>
 
-                                <button onclick="add_favorite({{ product.pk }})"><i
-                                        class="fa fa-heart  fa-2x" style="margin: 15px;"></i></button>
+                                 <a class="paction add-wishlist" style="margin: 10px;"
+                                   title="Favorilerime Ekle" onclick="add_favorite({{ product.pk }})">
+
+                                </a>
                             {% else %}
                                 <button class="btn-icon add-to-cart" style="font-family: INITIAL;"
                                         data-id="{{ product.id }}"
@@ -223,10 +257,11 @@
                                 ><i class="icon-bag"></i>Sepete
                                     Ekle
                                 </button>
+                                <a class="paction add-wishlist" style="margin: 10px;"
+                                   title="Favorilerime Ekle" onclick="add_favorite({{ product.pk }})">
 
-                                <button onclick="add_favorite({{ product.pk }})"><i
-                                        class="fa fa-heart  fa-2x" style="margin: 15px;"></i>
-                                </button>
+                                </a>
+
 
                             {% endif %}
 
@@ -420,10 +455,11 @@
 
     </div><!-- End .product-single-container -->
     <!-- End .container -->
+
     <script>
+
+
         function add_favorite(product) {
-
-
             $.ajax({
                 url: "{% url 'inoks:favori-urun-ekle' %}",
                 type: "post", // or "get"
@@ -452,6 +488,85 @@
                 }
             });
         }
+
+
+        function get_price_of_option() {
+
+            var e = document.getElementById("option");
+
+
+            var option = e.options[e.selectedIndex].value;
+            $.ajax({
+                url: "{% url 'inoks:secenegin-fiyatını-getir' %}",
+                type: "post", // or "get"
+                async: false,
+                data: {
+                    option: option,
+
+                },
+                success: function (result) {
+                    let price = parseFloat(document.getElementById("price1").value);
+
+
+                    debugger;
+                    for (let i = 0; i < result.values.length; i++) {
+
+
+                        let total = (parseFloat(result.values[i].price) + price).toFixed(2);
+
+                        let html = '<span class="product-price" id="price" >' + total + '₺</span>';
+                        document.getElementById("price").innerHTML = html;
+                    }
+
+                },
+                error: function () {
+                    let price = document.getElementById("price1").value;
+                    let html = '<span class="product-price" id="price">' + price + '₺</span>';
+                    document.getElementById("price").innerHTML = html;
+                }
+
+
+            });
+        }
+
+        $(document).ready(function () {
+            get_typeValue();
+
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
 
     </script>
 
