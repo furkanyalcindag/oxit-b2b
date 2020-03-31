@@ -1,6 +1,7 @@
 {% extends 'base_layout_2.html' %}
 {% block content %}
 
+
     <div class="home-top-container">
 
         <div class="home-slider owl-carousel owl-carousel-lazy">
@@ -22,191 +23,218 @@
 
 
     </div>
+    <div class="info-boxes-container">
+        <div class="container">
+            <div class="info-box">
+                <i class="icon-shipping"></i>
+
+                <div class="info-box-content">
+                    <h4>ÜCRETSİZ KARGO </h4>
+                    <p>Tüm Türkiye'ye ücretsiz kargo</p>
+                </div><!-- End .info-box-content -->
+            </div><!-- End .info-box -->
+
+            <div class="info-box">
+                <i class="icon-support"></i>
+
+                <div class="info-box-content">
+                    <h4>%100 GÜVENLİ ALIŞVERİŞ </h4>
+                    <p>256Bit SSL Sertifikası ile güvenli</p>
+                </div><!-- End .info-box-content -->
+            </div><!-- End .info-box -->
+
+            <div class="info-box">
+
+                <i class="icon-us-dollar"></i>
+                <div class="info-box-content">
+                    <h4>UYGUN ÖDEME SEÇENEKLERİ</h4>
+                    <p>Kredi kartına taksit seçenekleri</p>
+                </div><!-- End .info-box-content -->
+            </div><!-- End .info-box -->
+        </div><!-- End .container -->
+    </div>
+
+
+
+    <div class="banners-group">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="banner banner-image">
+                        <a href="/product/yaz-lastigi">
+                            <img src="/media/yaz-kategori.png" alt="oxit">
+                        </a>
+                    </div><!-- End .banner -->
+
+
+                </div><!-- End .col-lg-3 -->
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="banner banner-image">
+                        <a href="/product/kis-lastigi">
+                            <img src="/media/kis-kategori.png" alt="oxit">
+                        </a>
+                    </div><!-- End .banner -->
+
+
+                </div><!-- End .col-lg-3 -->
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="banner banner-image">
+                        <a href="/product/4-mevsim">
+                            <img src="/media/4-mevsim-kategori.png" alt="oxit">
+                        </a>
+                    </div><!-- End .banner -->
+
+
+                </div><!-- End .col-lg-3 -->
+
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="banner banner-image">
+                        <a href="/product/4-mevsim">
+                            <img src="/media/4-4-kategori.png" alt="oxit">
+                        </a>
+                    </div><!-- End .banner -->
+
+
+                </div><!-- End .col-lg-3 -->
+
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="banner banner-image">
+                        <a href="/product/4-mevsim">
+                            <img src="/media/ticari-kategori.png" alt="oxit">
+                        </a>
+                    </div><!-- End .banner -->
+
+
+                </div><!-- End .col-lg-3 -->
+
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="banner banner-image">
+                        <a href="/product/4-mevsim">
+                            <img src="/media/binek-kategori.png" alt="oxit">
+                        </a>
+                    </div><!-- End .banner -->
+
+
+                </div><!-- End .col-lg-3 -->
+
+
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .banners-group -->
+
+
 
     <div class="container">
         <div class="row">
-            <main class="main">
+            <div class="col-lg-9">
+
+                <div class="row row-sm">
+                    {% for product in products %}
+                        <div class="col-6 col-md-4 col-xl-3">
+                            <div class="product-default">
+                                <figure>
+                                    {% if product.productImage.all %}
+
+                                        <a href="{% url 'inoks:urun-detay' product.slug %}"><img
+                                                class="pic-1"
+                                                style="height: auto;width:100%"
+
+                                                src="/media/{{ product.productImage.all.0.productImage }}"></a>
+
+                                    {% endif %}
+                                </figure>
+                                <div class="product-details">
+                                    <!-- End .product-container -->
+                                    <h2 class="product-title">
+                                        <a href="{% url 'inoks:urun-detay' product.slug %}"
+                                           style="padding: 10px; white-space: normal;">{{ product.name }}</a>
+                                    </h2>
+                                    <h2 class="product-title">
+                                        <b>
+                                            <a href="{% url 'inoks:urun-detay' product.slug %}"> {{ product.brand }}</a>
+                                        </b>
+                                    </h2>
+                                    <div class="price-box">
+                                        <span class="product-price">{{ product.price }} ₺</span>
+                                    </div><!-- End .price-box -->
+                                    <div class="product-action">
+                                        <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+                                        <button class="btn-icon  btn-add-cart add-to-cart" style="font-family: INITIAL;"
+                                                data-id="{{ product.id }}"
+                                                data-name="{{ product.name }}"
+                                                data-price=" {{ product.price }}"
+                                                data-toggle="modal"
+                                        ><i class="icon-bag"></i>Sepete
+                                            Ekle
+                                        </button>
 
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-9">
 
-                            <div class="row row-sm">
-                                {% for product in products %}
-                                    <div class="col-6 col-md-4 col-xl-3">
-                                        <div class="product-default">
-                                            <figure>
-                                                {% if product.productImage.all %}
+                                        <a href="ajax/product-quick-view.html" class="btn-quickview"
+                                           title="Quick View"><i
+                                                class="fas fa-external-link-alt"></i></a>
 
-                                                    <a href="{% url 'inoks:urun-detay' product.slug %}"><img
-                                                            class="pic-1"
-                                                            style="height: 200px;width: 150px"
-
-                                                            src="/media/{{ product.productImage.all.0.productImage }}"></a>
-
-                                                {% endif %}
-                                            </figure>
-                                            <div class="product-details">
-                                                <!-- End .product-container -->
-                                                <h2 class="product-title">
-                                                    <a href="{% url 'inoks:urun-detay' product.slug %}"
-                                                       style="padding: 10px; white-space: normal;">{{ product.name }}</a>
-                                                </h2>
-                                                <h2 class="product-title">
-                                                    <b>
-                                                        <a href="{% url 'inoks:urun-detay' product.slug %}"> {{ product.brand }}</a>
-                                                    </b>
-                                                </h2>
-                                                {% if product.getDiscountHome > 0 %}
-                                                    <div class="price-box">
-                                                        <span class="old-price">{{ product.price }} ₺</span><br>
-                                                        <span class="product-price">{{ product.getDiscountHome }}₺</span>
-                                                    </div><!-- End .price-box -->
-                                                {% else %}
-                                                    <div class="price-box">
-
-                                                        <span class="product-price">{{ product.price }} ₺</span>
-                                                    </div><!-- End .price-box -->
-                                                {% endif %}
-                                                <div class="product-action">
-                                                    {% if product.getDiscountHome > 0 %}
-                                                    <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
-                                                            data-id="{{ product.id }}"
-                                                            data-name="{{ product.name }}"
-                                                            data-price=" {{ product.getDiscountHome }}"
-                                                            data-toggle="modal"
-                                                    ><i class="icon-bag"></i>Sepete
-                                                        Ekle
-                                                    </button>
-                                                    {% else %}
-                                                    <button class="btn-icon  add-to-cart" style="font-family: INITIAL;"
-                                                            data-id="{{ product.id }}"
-                                                            data-name="{{ product.name }}"
-                                                            data-price=" {{ product.price }}"
-                                                            data-toggle="modal"
-                                                    ><i class="icon-bag"></i>Sepete
-                                                        Ekle
-                                                    </button>
-                                                    {% endif %}
-
-
-                                                </div>
-                                            </div><!-- End .product-details -->
-                                        </div>
                                     </div>
-                                {% endfor %}
+                                </div><!-- End .product-details -->
                             </div>
-
-                        </div><!-- End .col-lg-9 -->
-
-                        <aside class="sidebar-shop col-lg-3 order-lg-first">
-                            <div class="pin-wrapper" style="height: 1567.3px;">
-                                <div class="sidebar-wrapper sticky-active sticky-absolute sticky-transition"
-                                     style="border-bottom: 0px none rgb(122, 125, 130); width: 270px; top: -10px; position: absolute;">
-                                    <div class="widget">
-                                        <h3 class="widget-title">
-                                            <a data-toggle="collapse" href="#widget-body-1" role="button"
-                                               aria-expanded="true" aria-controls="widget-body-1">Kategoriler</a>
-                                        </h3>
-                                        {% for cat in categories %}
-                                            <div class="collapse show" id="widget-body-1">
-
-                                                <ul class="cat-list">
-                                                    <li>
-                                                        <a href="{% url 'inoks:kategori-urunleri' cat.slug %}"> {{ cat.name }}</a>
-                                                    </li>
-                                                </ul>
-
-                                            </div>
-                                        {% endfor %}
-
-                                    </div>
-
-                                    <div class="widget">
-                                        <h3 class="widget-title">
-                                            <a data-toggle="collapse" href="#widget-body-2" role="button"
-                                               aria-expanded="true" aria-controls="widget-body-2">Price</a>
-                                        </h3>
-
-                                        <div class="collapse show" id="widget-body-2">
-                                            <div class="widget-body">
-                                                <form action="#">
-                                                    <div class="price-slider-wrapper">
-                                                        <div id="price-slider"
-                                                             class="noUi-target noUi-ltr noUi-horizontal">
-                                                            <div class="noUi-base">
-                                                                <div class="noUi-connects">
-                                                                    <div class="noUi-connect"
-                                                                         style="transform: translate(20%, 0px) scale(0.5, 1);"></div>
-                                                                </div>
-                                                                <div class="noUi-origin"
-                                                                     style="transform: translate(-80%, 0px); z-index: 5;">
-                                                                    <div class="noUi-handle noUi-handle-lower"
-                                                                         data-handle="0" tabindex="0" role="slider"
-                                                                         aria-orientation="horizontal"
-                                                                         aria-valuemin="0.0" aria-valuemax="60.0"
-                                                                         aria-valuenow="20.0"
-                                                                         aria-valuetext="200.00"></div>
-                                                                </div>
-                                                                <div class="noUi-origin"
-                                                                     style="transform: translate(-30%, 0px); z-index: 4;">
-                                                                    <div class="noUi-handle noUi-handle-upper"
-                                                                         data-handle="1" tabindex="0" role="slider"
-                                                                         aria-orientation="horizontal"
-                                                                         aria-valuemin="30.0" aria-valuemax="100.0"
-                                                                         aria-valuenow="70.0"
-                                                                         aria-valuetext="700.00"></div>
-                                                                </div>
-                                                            </div>
-                                                        </div><!-- End #price-slider -->
-                                                    </div><!-- End .price-slider-wrapper -->
-
-                                                    <div class="filter-price-action">
-                                                        <button type="submit" class="btn btn-primary">Filter
-                                                        </button>
-
-                                                        <div class="filter-price-text">
-                                                            <span id="filter-price-range">$200.00 - $700.00</span>
-                                                        </div><!-- End .filter-price-text -->
-                                                    </div><!-- End .filter-price-action -->
-                                                </form>
-                                            </div><!-- End .widget-body -->
-                                        </div><!-- End .collapse -->
-                                    </div><!-- End .widget -->
-
-
-                                    <div class="widget">
-                                        <h3 class="widget-title">
-                                            <a data-toggle="collapse" href="#widget-body-4" role="button"
-                                               aria-expanded="true" aria-controls="widget-body-4">Markalar</a>
-                                        </h3>
-
-                                        <div class="collapse show" id="widget-body-4">
-                                            <div class="widget-body">
-                                                {% for brand in brands %}
-                                                    <ul class="cat-list">
-                                                        <li>
-                                                            <a href="{% url 'inoks:markanin-urunleri' brand.slug %}">{{ brand.name }}
-                                                                <span>{{ brand.count }}</span></a></li>
-
-                                                    </ul>
-                                                {% endfor %}
-                                            </div><!-- End .widget-body -->
-                                        </div><!-- End .collapse -->
-                                    </div><!-- End .widget -->
-
-
-                                </div>
-                            </div><!-- End .sidebar-wrapper -->
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
+                        </div>
+                    {% endfor %}
                 </div>
 
-                <div class="mb-5"></div><!-- margin -->
-            </main>
-        </div>
+            </div><!-- End .col-lg-9 -->
+
+            <aside class="sidebar-shop col-lg-3 order-lg-first">
+                <div class="pin-wrapper" style="height: 1567.3px;">
+                    <div class="sidebar-wrapper sticky-active sticky-absolute sticky-transition">
+
+
+                        <div class="side-custom-menu">
+                            <h2>Kategoriler</h2>
+
+                            <div class="side-menu-body">
+                                <ul>
+                                    {% for cat in categories %}
+                                        <li><a href="{% url 'inoks:kategori-urunleri' cat.slug %}"><i
+                                                class="fa fa-arrow-right"></i>{{ cat.name }}</a></li>
+
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div><!-- End .side-menu-body -->
+                        </div>
+
+
+                        <div class="side-custom-menu">
+                            <h2>Markalar</h2>
+
+                            <div class="side-menu-body">
+                                <ul>
+                                    {% for brand in brands %}
+                                        <li><a href="{% url 'inoks:markanin-urunleri' brand.slug %}">
+                                            <i class="fa fa-arrow-right"></i>{{ brand.name }} </a></li>
+
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div><!-- End .side-menu-body -->
+                        </div>
+
+
+                    </div>
+                </div><!-- End .sidebar-wrapper -->
+            </aside><!-- End .col-lg-3 -->
+        </div><!-- End .row -->
     </div>
+
+    <div class="mb-5"></div><!-- margin -->
+
 
 
 
