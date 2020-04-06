@@ -48,6 +48,19 @@ class Product(models.Model):
         else:
             return 0
 
+    def getOptionProduct(self):
+        from inoks.models.OptionProduct import OptionProduct
+        from inoks.models.Option import Option
+        option_product = OptionProduct()
+        options = Option.objects.all()
+        for option in options:
+            option_product = OptionProduct.objects.filter(product_id=self.id).filter(option_value__option_id=option.pk)
+
+        if option_product.count() > 0:
+            return option_product
+        else:
+            return 0
+
     def __str__(self):
         return '%s ' % self.name
 

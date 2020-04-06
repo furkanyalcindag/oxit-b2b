@@ -128,6 +128,7 @@ urlpatterns = [
     url(r'siparisler/sepet-siparis-ekle/$', OrderViews.return_add_orders_from_cart, name='kart-siparis-ekle'),
     url(r'siparis-durumu-guncelle/$', OrderViews.siparis_durumu_guncelle, name="siparis-durumu-guncelle"),
     url(r'kargo-bilgi/(?P<pk>\d+)$', OrderViews.kargoBilgi, name='kargo-bilgi'),
+    url(r'siparis-detay/(?P<pk>\d+)$', OrderViews.get_admin_order_detail, name='admin-siparis-detay'),
 
     # İadeler
     url(r'iadeler/iade-olustur/$', RefundViews.return_add_refund, name='iade-olustur'),

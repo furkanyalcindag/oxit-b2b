@@ -1,6 +1,6 @@
 from django.db import models
 
-from inoks.models import Product
+from inoks.models.Product import Product
 from inoks.models.OptionValue import OptionValue
 
 

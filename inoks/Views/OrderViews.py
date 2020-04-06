@@ -874,3 +874,9 @@ def cargo_delete(request, pk):
     cargo.delete()
     messages.success(request, 'Kargo Bilgisi Silindi.')
     return redirect('inoks:kargo-ücret-bilgileri')
+
+
+def get_admin_order_detail(request, pk):
+    order = Order.objects.get(pk=pk)
+    orderProducts =OrderProduct.objects.filter(order_id=order.pk)
+    return render(request, 'siparisler/admin-siparis-detay.html', {'order': order, 'products': orderProducts})

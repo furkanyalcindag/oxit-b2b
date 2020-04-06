@@ -188,7 +188,7 @@
                                 <th>Sipariş Tarihi</th>
                                 <th>Ürünler</th>
                                 <th>Tutar</th>
-                                <th>Onayla/Reddet</th>
+                                <th>Onayla/Detay/Reddet</th>
 
                             </tr>
                             </thead>
@@ -231,7 +231,7 @@
                                                         class="fa fa-align-left"></i> Onayla </a>
 
                                                 <a class="btn btn-info"
-                                                   onclick="getPendingOrder({{ pending_order.pk }})"><i
+                                                   href="{% url 'inoks:admin-siparis-detay' pending_order.pk%}"><i
                                                         class="fa fa-align-left"></i> Detay </a>
 
                                                 <a class="btn btn-danger"

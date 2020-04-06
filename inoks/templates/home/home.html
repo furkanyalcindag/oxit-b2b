@@ -170,37 +170,56 @@
                                             <span class="product-price">{{ product.price }} ₺</span>
                                         </div><!-- End .price-box -->
                                     {% endif %}
-                                    <div class="product-action"  >
-                                        {% if product.getDiscountHome > 0 %}
-                                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                                            <button class="btn-icon  btn-add-cart add-to-cart"
-                                                    style="font-family: INITIAL;"
-                                                    data-id="{{ product.id }}"
-                                                    data-name="{{ product.name }}"
-                                                    data-price=" {{ product.getDiscountHome }}"
-                                                    data-toggle="modal"
-                                            ><i class="icon-bag"></i>Sepete
-                                                Ekle
-                                            </button>
-                                            <a href="ajax/product-quick-view.html" class="btn-quickview"
-                                           title="Quick View"><i
-                                                class="fas fa-external-link-alt"></i></a>
-                                        {% else %}
-                                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                                            <button class="btn-icon  btn-add-cart add-to-cart"
-                                                    style="font-family: INITIAL;"
-                                                    data-id="{{ product.id }}"
-                                                    data-name="{{ product.name }}"
-                                                    data-price=" {{ product.price }}"
-                                                    data-toggle="modal"
-                                            ><i class="icon-bag"></i>Sepete
-                                                Ekle
-                                            </button>
-                                            <a href="ajax/product-quick-view.html" class="btn-quickview"
-                                           title="Quick View"><i
-                                                class="fas fa-external-link-alt"></i></a>
-                                        {% endif %}
 
+                                    <div class="product-action">
+                                        {% if product.getOptionProduct %}
+                                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+
+                                            <a href="{% url 'inoks:urun-detay' product.slug %}"
+                                               class="btn-icon  btn-add-cart add-to-cart"
+                                               style="font-family: INITIAL;"
+
+                                            ><i class="icon-bag"></i>Sepete
+                                                Ekle
+                                            </a>
+                                            <a href="ajax/product-quick-view.html" class="btn-quickview"
+                                               title="Quick View"><i
+                                                    class="fas fa-external-link-alt"></i></a>
+                                        {% else %}
+
+                                            {% if product.getDiscountHome > 0 %}
+
+                                                <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+
+                                                <button class="btn-icon  btn-add-cart add-to-cart"
+                                                        style="font-family: INITIAL;"
+                                                        data-id="{{ product.id }}"
+                                                        data-name="{{ product.name }}"
+                                                        data-price=" {{ product.getDiscountHome }}"
+                                                        data-toggle="modal"
+                                                ><i class="icon-bag"></i>Sepete
+                                                    Ekle
+                                                </button>
+                                                <a href="ajax/product-quick-view.html" class="btn-quickview"
+                                                   title="Quick View"><i
+                                                        class="fas fa-external-link-alt"></i></a>
+                                            {% else %}
+
+                                                <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+                                                <button class="btn-icon  btn-add-cart add-to-cart"
+                                                        style="font-family: INITIAL;"
+                                                        data-id="{{ product.id }}"
+                                                        data-name="{{ product.name }}"
+                                                        data-price=" {{ product.price }}"
+                                                        data-toggle="modal"
+                                                ><i class="icon-bag"></i>Sepete
+                                                    Ekle
+                                                </button>
+                                                <a href="ajax/product-quick-view.html" class="btn-quickview"
+                                                   title="Quick View"><i
+                                                        class="fas fa-external-link-alt"></i></a>
+                                            {% endif %}
+                                        {% endif %}
 
                                     </div>
                                 </div><!-- End .product-details -->

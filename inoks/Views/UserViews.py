@@ -577,7 +577,7 @@ def user_my_orders(request):
         return redirect('accounts:login')
     current_user = request.user
     userprofile = Profile.objects.get(user=current_user)
-    orderss = Order.objects.filter(profile_id=userprofile.id)
+    orderss = Order.objects.filter(profile_id=userprofile.id).order_by('-creationDate')
 
     orders = []
 

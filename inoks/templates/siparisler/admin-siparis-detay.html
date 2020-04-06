@@ -1,0 +1,109 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+    <section class="content">
+        <div class="row">
+
+            <section class="col-lg-12 ">
+                <div class="box-body">
+                    <div class="card-header">
+                        Fatura
+                        <strong>{{ order.creationDate }}</strong><br>
+                        <span class="float-right"> <strong>Status:</strong> Pending</span>
+
+                    </div>
+                    <div class="card-body">
+
+                       <h3>Sipariş Bilgileri</h3>
+                       <div class="box box-primary">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+
+                                <tr>
+                                    <th>#</th>
+                                    <th>Ürün</th>
+                                    <th>Fiyat</th>
+                                    <th>Adet</th>
+                                    <th>Toplam</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in products %}
+                                    <tr >
+                                        <td >{{ forloop.counter0 }}</td>
+                                        <td >{{ product.product.name }}</td>
+                                        <td >{{ product.product.price |floatformat:'2' }}₺</td>
+
+                                        <td >
+                                            <input value="{{ product.quantity }}"
+                                                   style="width: 39px;margin-left: 67px;" readonly>
+                                        </td>
+                                        <td >{{ product.totalProductPrice|floatformat:'2' }}₺</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+
+                        <div class="row">
+                             <div class="box box-primary">
+                                <table class="table table-clear" >
+                                    <tbody>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Toplam Sipariş</strong>
+                                        </td>
+                                        <td class="right">{{ order.netTotal|floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>KDV</strong>
+                                        </td>
+                                        <td class="right">{{ order.kdv|floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>İndirim</strong>
+                                        </td>
+                                        <td class="right">{{ order.discount |floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Kargo</strong>
+                                        </td>
+                                        <td class="right">{{ order.cargo |floatformat:'2' }}₺</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Ödeme Yöntemi</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>{{ order.payment_type.name }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Toplam Tutar</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>{{ order.totalPrice |floatformat:'2' }}</strong>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        </div>
+    </section>
+
+{% endblock %}
