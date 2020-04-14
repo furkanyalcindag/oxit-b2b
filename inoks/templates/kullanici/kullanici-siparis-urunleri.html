@@ -160,30 +160,27 @@
                                                 {% csrf_token %}
 
 
-                                                <a><span onclick="myFunction(1,{{ product.product.pk }})"
+                                                <a><span onclick="Star(1,{{ product.product.pk }})"
                                                          class="fa fa-star checked"
                                                          id="{{ product.product.pk }}1"></span></a>
-                                                <a onclick="myFunction(2,{{ product.product.pk }})"><span
+                                                <a onclick="Star(2,{{ product.product.pk }})"><span
                                                         class="fa fa-star checked "
                                                         id="{{ product.product.pk }}2"></span></a>
-                                                <a onclick="myFunction(3,{{ product.product.pk }})"><span
+                                                <a onclick="Star(3,{{ product.product.pk }})"><span
                                                         class="fa fa-star checked "
                                                         id="{{ product.product.pk }}3"></span></a>
-                                                <a onclick="myFunction(4,{{ product.product.pk }})"><span
+                                                <a onclick="Star(4,{{ product.product.pk }})"><span
                                                         class="fa fa-star checked "
                                                         id="{{ product.product.pk }}4"></span></a>
-                                                <a onclick="myFunction(5,{{ product.product.pk }})"><span
+                                                <a onclick="Star(5,{{ product.product.pk }})"><span
                                                         class="fa fa-star checked "
                                                         id="{{ product.product.pk }}5"></span></a>
 
 
-                                                <input type="hidden" name="star" class="rating-value"
-                                                       id="stars" value="">
-
                                                 <div class="input-group">
                                                    <textarea name="text" style="margin-right: 20px;" cols="40"
                                                              rows="5"> </textarea>
-
+                                                     <input type="hidden" name="point" id="stars" >
                                                     <button type="submit"
                                                             style="font-weight:bold; width: 100px;height: 30px; margin-top: 20px;"
                                                             class="btn btn-outline-success btn-sm">Yorum Yap
@@ -227,11 +224,10 @@
         }
 
 
-        function myFunction(star, order) {
+        function Star(star, order) {
 
 
             debugger;
-            let point;
             order = order.toString();
             if (star === 1) {
                 let element = document.getElementById(order + 1);
@@ -242,8 +238,8 @@
 
                 }
                 element.classList.add("checked");
-                point = 1;
-                document.getElementById("stars").value = point;
+                $('input[name="point"]').val('1');
+
 
 
             } else if (star === 2) {
@@ -257,8 +253,7 @@
 
                 element.classList.add("checked");
                 element2.classList.add("checked");
-                point = 2;
-                 document.getElementById("stars").value = point;
+               $('input[name="point"]').val('2');
 
             } else if (star === 3) {
                 let element = document.getElementById(order + 1);
@@ -273,8 +268,7 @@
                 element.classList.add("checked");
                 element2.classList.add("checked");
                 element3.classList.add("checked");
-                point = 3;
-                document.getElementById("stars").value = point;
+               $('input[name="point"]').val('3');
             } else if (star === 4) {
                 let element = document.getElementById(order + 1);
                 let element2 = document.getElementById(order + 2);
@@ -290,8 +284,7 @@
                 element2.classList.add("checked");
                 element3.classList.add("checked");
                 element4.classList.add("checked");
-                point = 4;
-                  document.getElementById("stars").value = point;
+                $('input[name="point"]').val('4');
             } else {
 
                 let element = document.getElementById(order + 1);
@@ -310,46 +303,11 @@
                 element3.classList.add("checked");
                 element4.classList.add("checked");
                 element5.classList.add("checked");
-                point = 5;
-               document.getElementById("stars").value = point;
+                $('input[name="point"]').val('5');
             }
 
 
         }
-
-
-        function getCookie(name) {
-            var cookieValue = null;
-            var i = 0;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (i; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        var csrftoken = getCookie('csrftoken');
-
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        $.ajaxSetup({
-            crossDomain: false, // obviates need for sameOrigin test
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type)) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
 
     </script>
 {% endblock %}

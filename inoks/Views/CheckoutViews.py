@@ -281,10 +281,10 @@ def get_payment_info_isGuest(request, pk):
 
         messages.success(request, 'Siparişiniz Başarıyla Oluştruldu.')
     return render(request, 'checkout/odeme-tamamla.html',
-                      {'orders': products, 'subtotal': subtotal, 'total': total, 'kargo1': kargo1,
-                       'net_total': net_total, 'guest': guest, 'order': order, 'discount': discount,
-                       'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
-                       'payment_type': order.payment_type, 'invoice_address': order.otherAddress, 'city_invoice': city})
+                  {'orders': products, 'subtotal': subtotal, 'total': total, 'kargo1': kargo1,
+                   'net_total': net_total, 'guest': guest, 'order': order, 'discount': discount,
+                   'kdv': kdv, 'address': order.address, 'city': order.city, 'district': order.district,
+                   'payment_type': order.payment_type, 'invoice_address': order.otherAddress, 'city_invoice': city})
 
 
 def guest_post(request):
@@ -448,7 +448,7 @@ def get_payment_info_isUser(request):
     order.city = address_city
     order.kdv = kdv
     order.discount = discount
-    order.net_total = net_total
+    order.netTotal = net_total
     order.subTotal = subtotal
     order.isGuest = False
     order.district = address_district
@@ -456,9 +456,10 @@ def get_payment_info_isUser(request):
 
     # siparişin ürünleri
     for product_order in products:
+        totalProductPrice = product_order.count * product_order.price
         product = Product.objects.get(pk=product_order.id)
         orderProduct = OrderProduct(order=order, product=product,
-                                    quantity=product_order.count)
+                                    quantity=product_order.count, totalProductPrice=totalProductPrice)
         orderProduct.save()
 
     """invoice_data = {'orders': products, 'subtotal': Decimal(subtotal), 'total': Decimal(total),
@@ -500,7 +501,8 @@ def get_payment_info_isUser(request):
             product.stock = product.stock - orderProduct.quantity
             if product.stock <= 5:
                 notification = Notification()
-                notification.message = "Kod: " + str(product.code) + " olan ürün stoğunu güncelleyin.Stok: " + str(product.stock) + ""
+                notification.message = "Kod: " + str(product.code) + " olan ürün stoğunu güncelleyin.Stok: " + str(
+                    product.stock) + ""
             product.save()
         order.order_situations.add(OrderSituations.objects.get(name="Onay Bekliyor"))
         order.save()

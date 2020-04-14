@@ -148,10 +148,10 @@ urlpatterns = [
     url(r'kullanici/iadelerim/$', UserViews.user_my_refunds, name='kullanici-iadelerim'),
 
     # degerlendirme
-    url(r'rating/(?P<pk>\d+)$', CommentViews.Comment, name='kullanici-yorum-yap'),
+    url(r'rating/(?P<pk>\d+)$', CommentViews.make_comment, name='kullanici-yorum-yap'),
 
-    # favori
-    url(r'favorite-products/$', FavoriteViews.Favorites, name='favori-urunler'),
+    # favori urunler
+    url(r'favorite-products/$', FavoriteViews.favorites, name='favori-urunler'),
     url(r'add-favorite/$', FavoriteViews.add_favorite_product, name='favori-urun-ekle'),
     url(r'remove-favorite/(?P<pk>\d+)$', FavoriteViews.delete_favorite_product, name='favori-urun-sil'),
 

@@ -1,0 +1,313 @@
+{% extends 'base_layout_2.html' %}
+{% block content %}
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+    <div class="container">
+
+
+        <nav aria-label="breadcrumb" class="breadcrumb-nav" style="margin-bottom: 30px;">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'inoks:kullanici-urun-sayfasi' %}"><i
+                            class="icon-home"></i></a></li>
+
+                    <li class="breadcrumb-item active" aria-current="page">Siparişlerim</li>
+                </ol>
+            </div>
+        </nav>
+        <div class="row">
+            <aside class="sidebar col-md-2">
+                <div class="widget widget-dashboard">
+                    <h3 class="widget-title">Hesabım</h3>
+
+                    <ul class="list">
+
+                        <li><a href="{% url 'inoks:kullanici-profil' %}" class="">Kullanıcı Bilgileri</a></li>
+                        <li><a href="{% url 'inoks:sifre-guncelle' %}" class="">Şifre Değişikliği</a></li>
+                        <li><a href="{% url 'inoks:kullanici-adres-bilgileri' %}" class="">Adreslerim</a></li>
+                        <li><a href="{% url 'inoks:kullanici-siparisleri' %}" class="">Siparişlerim</a></li>
+                        <li><a href="#" class="{% url 'inoks:kullanici-iadelerim' %}">İadelerim</a></li>
+
+                    </ul>
+
+                </div><!-- End .widget -->
+            </aside><!-- End .col-lg-4 -->
+            <div class="col-md-10 ">
+            {% if messages %}
+            {% for message in messages %}
+
+
+                {% if message.tags == 'warning' %}
+
+                    <div class="alert " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Hata !</h4>
+
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if message.tags == 'success' %}
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+
+                            <div class="alert  " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i> Başarılı !</h4>
+
+
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li class="{{ message.tags }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+
+        {% endif %}
+                <div class="checkout-payment">
+
+                    <div class="cart-table-container">
+                        <table class="table table-cart">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Kod</th>
+                                <th>Ürün</th>
+                                <th class="price-col">Fiyat</th>
+                                <th>Marka</th>
+                                <th>Puan</th>
+                                <th>Yorum</th>
+                            </tr>
+                            </thead>
+                            <tbody id="pro_table">
+
+                            <tr class="product-row">
+                                <td>
+
+                                    <figure>
+                                        {% if product.productImage.all %}
+
+                                            <a href="{% url 'inoks:urun-detay' product.slug %}"><img
+                                                    class="pic-1"
+                                                    style="height: 80px;width:100px"
+
+                                                    src="/media/{{ product.productImage.all.0.productImage }}"></a>
+
+                                        {% endif %}
+                                    </figure>
+                                </td>
+                                <td>{{ product.code }}</td>
+                                <td>
+                                    {{ product.name }}
+                                </td>
+                                {% if product.getDiscountHome > 0 %}
+                                    <td
+                                            data-id="{{ product.id }}"
+                                            data-name="{{ product.name }}"
+                                            data-price="{{ product.getDiscountHome }}">
+                                        {{ product.getDiscountHome }}₺
+
+                                        {% else %}
+
+                                    <td
+                                            data-id="{{ product.id }}"
+                                            data-name="{{ product.name }}"
+                                            data-price="{{ product.price }}">
+                                    {{ product.price | floatformat:'2' }}₺
+
+
+                                {% endif %}
+                                </td>
+                                <td>{{ product.brand }}</td>
+                                <td>
+                                        <div class="ratings-container">
+                                            <div class="product-ratings">
+                                                <span class="ratings" style="width:{{ point }}%"></span>
+                                                <!-- End .ratings -->
+
+                                            </div><!-- End .product-ratings -->
+                                        </div>
+                                </td>
+                                <td>
+                                    <div class="product-desc-content">
+                                        <text>{{ rating.comment }}</text>
+
+                                    </div><!-- End .product-desc-content --></td>
+
+                            </tr>
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div><!-- End .cart-table-container -->
+
+                </div><!-- End .checkout-payment -->
+
+            </div><!-- End col-lg-8 -->
+
+        </div><!-- End .col-lg-8 -->
+    </div><!-- End .row -->
+    <script>
+
+
+        function showHide(id) {
+            debugger;
+            var el = document.getElementById(id);
+            if (el && el.style.display === 'block')
+                el.style.display = 'none';
+            else
+                el.style.display = 'block';
+        }
+
+
+        function myFunction(star, order) {
+
+
+            debugger;
+            let point;
+            order = order.toString();
+            if (star === 1) {
+                let element = document.getElementById(order + 1);
+                for (let i = 1; i < 6; i++) {
+                    let element = document.getElementById(order + i);
+                    element.classList.remove("checked");
+
+
+                }
+                element.classList.add("checked");
+                point = 1;
+                document.getElementById("stars").value = point;
+
+
+            } else if (star === 2) {
+                let element = document.getElementById(order + 1);
+                let element2 = document.getElementById(order + 2);
+                for (let i = 1; i < 6; i++) {
+                    let element2 = document.getElementById(order + i);
+                    element2.classList.remove("checked");
+
+                }
+
+                element.classList.add("checked");
+                element2.classList.add("checked");
+                point = 2;
+                document.getElementById("stars").value = point;
+
+            } else if (star === 3) {
+                let element = document.getElementById(order + 1);
+                let element2 = document.getElementById(order + 2);
+                let element3 = document.getElementById(order + 3);
+                for (let i = 1; i < 6; i++) {
+                    let element3 = document.getElementById(order + i);
+                    element3.classList.remove("checked");
+
+                }
+
+                element.classList.add("checked");
+                element2.classList.add("checked");
+                element3.classList.add("checked");
+                point = 3;
+                document.getElementById("stars").value = point;
+            } else if (star === 4) {
+                let element = document.getElementById(order + 1);
+                let element2 = document.getElementById(order + 2);
+                let element3 = document.getElementById(order + 3);
+                let element4 = document.getElementById(order + 4);
+                for (let i = 1; i < 6; i++) {
+                    let element4 = document.getElementById(order.toString() + i);
+                    element4.classList.remove("checked");
+
+                }
+
+                element.classList.add("checked");
+                element2.classList.add("checked");
+                element3.classList.add("checked");
+                element4.classList.add("checked");
+                point = 4;
+                document.getElementById("stars").value = point;
+            } else {
+
+                let element = document.getElementById(order + 1);
+                let element2 = document.getElementById(order + 2);
+                let element3 = document.getElementById(order + 3);
+                let element4 = document.getElementById(order + 4);
+                let element5 = document.getElementById(order + 5);
+                for (let i = 1; i < 6; i++) {
+                    let element5 = document.getElementById(order + i);
+                    element5.classList.remove("checked");
+
+                }
+
+                element.classList.add("checked");
+                element2.classList.add("checked");
+                element3.classList.add("checked");
+                element4.classList.add("checked");
+                element5.classList.add("checked");
+                point = 5;
+                document.getElementById("stars").value = point;
+            }
+
+
+        }
+
+
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+    </script>
+{% endblock %}

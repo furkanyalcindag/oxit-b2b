@@ -10,7 +10,7 @@ from inoks.services import general_methods
 
 
 @login_required
-def Favorites(request):
+def favorites(request):
     perm = general_methods.control_access(request)
 
     if not perm:
